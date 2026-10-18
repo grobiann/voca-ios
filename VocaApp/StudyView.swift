@@ -33,7 +33,7 @@ struct StudyView: View {
                 if let word, let item {
                     HStack {
                         Text(item.direction.label).font(.caption.weight(.semibold))
-                        Spacer(); Text("남은 카드 \(stack.queue.count)").font(.caption)
+                        Spacer(); Text("학습 풀 \(stack.queue.count)/10 · 남은 \(stack.remainingCount)").font(.caption)
                     }.foregroundStyle(.secondary)
                     ZStack {
                         ForEach(0..<2) { index in
@@ -72,7 +72,8 @@ struct StudyView: View {
                                 .onEnded { value in
                                     guard revealed && !exiting else { return }
                                     let threshold = min(110.0, geometry.size.width * 0.27)
-                                    if abs(value.translation.width) > threshold || (abs(value.translation.width) > 25 && abs(value.predictedEndTranslation.width) > 220) {
+                                    if abs(value.translation.width) > abs(value.translation.height),
+                                       abs(value.translation.width) > threshold || (abs(value.translation.width) > 25 && abs(value.predictedEndTranslation.width) > 220) {
                                         answer(value.translation.width > 0, width: geometry.size.width)
                                     } else { withAnimation(.spring(response: 0.38, dampingFraction: 0.72)) { offset = .zero } }
                                 })
@@ -113,11 +114,14 @@ struct StudyView: View {
                     Text(japaneseFirst ? word.japanese : word.korean)
                         .font(.system(size: revealed ? 24 : 38, weight: revealed ? .medium : .semibold, design: .rounded))
                         .foregroundStyle(revealed ? .secondary : .primary)
+                    if (japaneseFirst || revealed), let reading = word.reading, !reading.isEmpty {
+                        Text(reading).font(.subheadline).foregroundStyle(.secondary)
+                    }
                     if revealed {
                         Rectangle().fill(Palette.accent.opacity(0.15)).frame(width: 36, height: 3)
                         Text(japaneseFirst ? word.korean : word.japanese).font(.system(size: 34, weight: .semibold, design: .rounded))
                     }
-                    if japaneseFirst || revealed {
+                    if (japaneseFirst || revealed) && !word.example.isEmpty {
                         Text(word.example).font(.body).foregroundStyle(.secondary).lineSpacing(6)
                     }
                 }.frame(maxWidth: .infinity).multilineTextAlignment(.center).padding(.vertical, 12)

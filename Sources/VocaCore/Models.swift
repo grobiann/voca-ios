@@ -5,6 +5,11 @@ public struct Word: Identifiable, Codable, Equatable, Sendable {
     public var japanese: String
     public var korean: String
     public var example: String
+    public var reading: String?
+    public var source: String?
+    public var license: String?
+    public var exampleSource: String?
+    public var translationStatus: String?
     public init(id: UUID = UUID(), japanese: String, korean: String, example: String) {
         self.id = id; self.japanese = japanese; self.korean = korean; self.example = example
     }
@@ -25,6 +30,9 @@ public struct Stack: Identifiable, Codable, Equatable, Sendable {
     public var mastered: Set<ReviewItem>
     public var queue: [ReviewItem]
     public var sourceID: UUID?
+    public var recentWordIDs: [UUID]?
+    public static let poolLimit = 10
+    public var remainingCount: Int { allItems.filter { !mastered.contains($0) }.count }
     public init(id: UUID = UUID(), title: String, words: [Word] = [], sourceID: UUID? = nil) {
         self.id = id; self.title = title; self.words = words; self.mastered = []; self.queue = []; self.sourceID = sourceID
     }
@@ -36,16 +44,44 @@ public struct Stack: Identifiable, Codable, Equatable, Sendable {
     public mutating func prepare() {
         let valid = Set(allItems)
         mastered.formIntersection(valid)
-        var seen = Set<ReviewItem>()
-        queue = queue.filter { valid.contains($0) && !mastered.contains($0) && seen.insert($0).inserted }
-        queue += allItems.filter { !mastered.contains($0) && !seen.contains($0) }
+        var seenWords = Set<UUID>()
+        queue = Array(queue.filter {
+            valid.contains($0) && !mastered.contains($0) && seenWords.insert($0.wordID).inserted
+        }.prefix(Self.poolLimit))
+        refill()
+    }
+    private mutating func refill() {
+        let activeWords = Set(queue.map(\.wordID))
+        let recent = recentWordIDs ?? []
+        var pending = allItems.filter { !mastered.contains($0) && !activeWords.contains($0.wordID) }
+        // Avoid admitting the reverse direction immediately after answering its partner.
+        let cooled = pending.filter { !recent.contains($0.wordID) }
+        if !cooled.isEmpty { pending = cooled }
+        else if !queue.isEmpty { return }
+        else {
+            pending.sort { (recent.firstIndex(of: $0.wordID) ?? -1) < (recent.firstIndex(of: $1.wordID) ?? -1) }
+        }
+        var admitted = activeWords
+        for item in pending where queue.count < Self.poolLimit {
+            if admitted.insert(item.wordID).inserted { queue.append(item) }
+        }
     }
     public mutating func answer(known: Bool) {
         guard !queue.isEmpty else { return }
         let current = queue.removeFirst()
-        if known { mastered.insert(current) } else { queue.insert(current, at: min(3, queue.count)) }
+        if known {
+            mastered.insert(current)
+            var recent = (recentWordIDs ?? []).filter { $0 != current.wordID }
+            recent.append(current.wordID)
+            recentWordIDs = Array(recent.suffix(Self.poolLimit))
+            refill()
+        } else {
+            // Retry only within the current pool; an incorrect answer never admits a new word.
+            queue.insert(current, at: min(3, queue.count))
+        }
     }
-    public mutating func reset() { mastered = []; queue = []; prepare() }
+    public mutating func reset() { mastered = []; queue = []; recentWordIDs = []; prepare() }
+
 }
 public struct Library: Identifiable, Codable, Equatable, Sendable {
     public var id: UUID

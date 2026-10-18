@@ -73,42 +73,63 @@ struct LibraryDetailView: View {
     @State private var uploaded = false
     private var library: Library? { (local ? store.archive.libraries : store.archive.server).first { $0.id == libraryID } }
     var body: some View {
-        List {
+        ScrollView {
             if let library {
-                Section {
-                    Text(library.subtitle).foregroundStyle(.secondary)
-                    Text("\(library.stacks.count)개 스택 · \(library.wordCount)개 단어")
-                    if local {
-                        Button { store.publish(library); uploaded = true } label: { Label("서버에 올리기", systemImage: "arrow.up.circle") }.disabled(library.wordCount == 0)
-                        Text("현재는 기기 안의 가짜 서버에 저장되며 둘러보기에 표시됩니다.").font(.caption).foregroundStyle(.secondary)
-                    }
-                }
-                Section("스택") {
-                    ForEach(library.stacks) { stack in
-                        VStack(alignment: .leading, spacing: 12) {
-                            if local {
-                                NavigationLink { LibraryStackEditor(libraryID: library.id, stackID: stack.id) } label: {
-                                    VStack(alignment: .leading) { Text(stack.title).font(.headline); Text("\(stack.words.count)개 단어 · 카드 관리").font(.caption).foregroundStyle(.secondary) }
-                                }
+                LazyVStack(spacing: 0) {
+                    VStack(spacing: 10) {
+                        Text(library.title).font(.largeTitle.bold())
+                        Text("\(library.stacks.count)개 스택 · \(library.wordCount)개 단어").foregroundStyle(.secondary)
+                        if library.stacks.flatMap(\.words).contains(where: { $0.source == "https://github.com/evanclan/OpenJLPT" }) {
+                            Text("한국어 자동번역 · 예문 일부 AI 작성 · 미검수").font(.caption).foregroundStyle(.secondary)
+                            Link("OpenJLPT 및 원본 출처 · CC BY-SA 4.0", destination: URL(string: "https://github.com/evanclan/OpenJLPT/blob/main/NOTICE.md")!).font(.caption)
+                        }
+                        if local {
+                            Button { store.publish(library); uploaded = true } label: { Label("서버에 올리기", systemImage: "arrow.up.circle") }.disabled(library.wordCount == 0)
+                            Text("이 기기의 둘러보기에 저장됩니다.").font(.caption).foregroundStyle(.secondary)
+                        }
+                    }.padding(28)
+                    ForEach(Array(library.stacks.enumerated()), id: \.element.id) { index, stack in
+                        if index > 0 {
+                            Image(systemName: "chevron.down.2").font(.title2.bold()).foregroundStyle(Palette.accent.opacity(0.25)).frame(height: 65)
+                        }
+                        let enrolled = store.archive.stacks.first { $0.sourceID == stack.id || $0.id == stack.id }
+                        VStack(spacing: 18) {
+                            ZStack {
+                                Circle().stroke(Palette.accent.opacity(0.12), lineWidth: 7)
+                                Circle().trim(from: 0, to: enrolled?.progress ?? 0)
+                                    .stroke(Palette.accent, style: StrokeStyle(lineWidth: 7, lineCap: .round)).rotationEffect(.degrees(-90))
+                                Image(systemName: enrolled?.isComplete == true ? "checkmark.seal.fill" : "text.book.closed")
+                                    .font(.system(size: 40, weight: .light)).foregroundStyle(Palette.accent)
+                            }.frame(width: 106, height: 106).accessibilityHidden(true)
+                            Text(stack.title).font(.title3.bold())
+                            Text("\(stack.words.count)개 단어 · \(enrolled?.isComplete == true ? "완료" : enrolled == nil ? "아직 시작하지 않았어요" : "학습 중 \(Int((enrolled?.progress ?? 0) * 100))%")")
+                                .font(.subheadline).foregroundStyle(.secondary)
+                            Text(stack.words.prefix(3).map(\.japanese).joined(separator: " · ")).font(.caption).foregroundStyle(.secondary)
+                            if let enrolled {
+                                NavigationLink { StackDetailView(stackID: enrolled.id) } label: {
+                                    Label(enrolled.isComplete ? "완료한 스택 보기" : "학습 이어가기", systemImage: enrolled.isComplete ? "checkmark" : "play.fill")
+                                }.buttonStyle(PrimaryButton())
                             } else {
-                                Text(stack.title).font(.headline)
-                                Text(stack.words.prefix(3).map(\.japanese).joined(separator: " · ")).font(.caption).foregroundStyle(.secondary)
+                                Button { store.enroll(stack) } label: { Label("내 스택에 추가", systemImage: "plus") }
+                                    .buttonStyle(PrimaryButton()).disabled(stack.words.isEmpty)
                             }
-                            Button { store.enroll(stack) } label: { Label(store.isEnrolled(stack) ? "내 스택에 등록됨" : "내 스택에 추가", systemImage: store.isEnrolled(stack) ? "checkmark" : "plus") }
-                                .disabled(store.isEnrolled(stack) || stack.words.isEmpty)
-                        }.padding(.vertical, 6)
+                            if local {
+                                NavigationLink("카드 관리") { LibraryStackEditor(libraryID: library.id, stackID: stack.id) }.font(.caption)
+                            }
+                        }.padding(26).frame(maxWidth: .infinity).background(.background, in: RoundedRectangle(cornerRadius: 26))
                     }
-                    if local { Button("스택 만들기", systemImage: "plus") { add = true } }
-                }
+                    if local { Button("스택 만들기", systemImage: "plus") { add = true }.padding(26) }
+                }.padding(.horizontal, 22).padding(.bottom, 24)
             }
-        }.navigationTitle(library?.title ?? "라이브러리")
+        }.background(Palette.canvas).navigationTitle("스택 목록").toolbarTitleDisplayMode(.inline)
             .sheet(isPresented: $add) { NameSheet(title: "새 스택", placeholder: "스택 이름") { name in
                 guard let i = store.archive.libraries.firstIndex(where: { $0.id == libraryID }) else { return }
                 store.archive.libraries[i].stacks.append(Stack(title: name)); store.save()
             } }
-            .alert("둘러보기에 등록했어요", isPresented: $uploaded) { Button("확인", role: .cancel) {} } message: { Text("이 기기에서 가짜 서버의 목록을 확인할 수 있어요.") }
+            .alert("둘러보기에 등록했어요", isPresented: $uploaded) { Button("확인", role: .cancel) {} }
     }
 }
+
 struct LibraryStackEditor: View {
     @Environment(AppStore.self) private var store
     let libraryID: UUID; let stackID: UUID
@@ -131,7 +152,9 @@ struct SheetImportView: View {
     @Environment(AppStore.self) private var store
     @Environment(\.dismiss) private var dismiss
     @State private var link = ""
-    @State private var name = "Google Sheets 단어장"
+    @State private var name = "N5"
+    @State private var selectedID = ""
+    @State private var tabs: [SheetURL.Tab] = []
     @State private var loading = false
     @State private var error: String?
     @State private var task: Task<Void, Never>?
@@ -139,16 +162,26 @@ struct SheetImportView: View {
         NavigationStack {
             Form {
                 Section("Google Sheets") {
-                    TextField("라이브러리 이름", text: $name)
                     TextField("https://docs.google.com/spreadsheets/…", text: $link).keyboardType(.URL).textInputAutocapitalization(.never).autocorrectionDisabled()
+                        .accessibilityIdentifier("sheetLink")
+                        .onChange(of: link) { _, _ in task?.cancel(); tabs = []; selectedID = "" }
+                    Button("JLPT N5–N1 단어장 링크 사용") {
+                        link = "https://docs.google.com/spreadsheets/d/1CZiD8VuxZ6iqrMeBGREO-MAhStjL-dOIJQsj2SiP-Q4/edit"
+                    }
+                    if !tabs.isEmpty {
+                        Picker("가져올 시트", selection: $selectedID) {
+                            ForEach(tabs) { Text($0.name).tag($0.id) }
+                        }.onChange(of: selectedID) { _, value in name = tabs.first { $0.id == value }?.name ?? "" }
+                        TextField("라이브러리 이름", text: $name)
+                    }
                 }
                 Section {
-                    Text("시트를 ‘링크가 있는 모든 사용자: 뷰어’로 공유하거나 웹에 게시해 주세요. 선택한 탭의 데이터를 가져옵니다.")
-                    Text("첫 행: japanese, korean, example\n선택 열: stack (스택 이름)").font(.system(.caption, design: .monospaced))
-                    Text("가져온 데이터는 로컬 사본으로 저장되며 자동 동기화되지 않습니다.").font(.caption).foregroundStyle(.secondary)
+                    Text("시트를 ‘링크가 있는 모든 사용자: 뷰어’로 공유하고 원본 링크를 입력해 주세요. 파일의 실제 시트 목록에서 하나를 선택합니다.")
+                    Text("필수 열: japanese, korean, example\n스택 구분: stack_id, stack\n카드 식별: card_id · 읽기: reading").font(.system(.caption, design: .monospaced))
+                    Text("JLPT 단어장은 비공식 공개 목록이며 한국어 자동번역과 일부 작성 예문은 미검수입니다. 가져온 데이터는 로컬 사본으로 저장되며 자동 동기화되지 않습니다.").font(.caption).foregroundStyle(.secondary)
                 }
                 if let error { Section { Text(error).foregroundStyle(.red) } }
-                Button { load() } label: { if loading { ProgressView() } else { Text("가져오기") } }.disabled(loading || link.isEmpty || name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                Button { load() } label: { if loading { ProgressView() } else { Text(tabs.isEmpty ? "시트 목록 확인" : "가져오기") } }.disabled(loading || link.isEmpty || (!tabs.isEmpty && name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty))
             }.navigationTitle("시트에서 가져오기").toolbar { ToolbarItem(placement: .cancellationAction) { Button("닫기") { task?.cancel(); dismiss() } } }
         }.onDisappear { task?.cancel() }
     }
@@ -157,16 +190,33 @@ struct SheetImportView: View {
         task = Task { @MainActor in
             defer { loading = false }
             do {
-                let url = try SheetURL.csvURL(from: link)
+                if tabs.isEmpty {
+                    var request = URLRequest(url: try SheetURL.manifestURL(from: link)); request.timeoutInterval = 30
+                    let (data, response) = try await URLSession.shared.data(for: request)
+                    try Task.checkCancellation()
+                    guard (response as? HTTPURLResponse)?.statusCode == 200, data.count <= 5_000_000 else {
+                        throw ImportFailure.invalid("시트 목록을 읽을 수 없습니다. 링크와 공유 설정을 확인해 주세요.")
+                    }
+                    tabs = try SheetURL.tabs(from: data)
+                    selectedID = tabs.first?.id ?? ""
+                    name = tabs.first?.name ?? ""
+                    return
+                }
+                guard let selected = tabs.first(where: { $0.id == selectedID }) else { return }
+                let selectedSheet = selected.name
+                let url = try SheetURL.csvURL(from: link, tab: selected)
                 var request = URLRequest(url: url); request.timeoutInterval = 30
                 let (data, response) = try await URLSession.shared.data(for: request)
                 try Task.checkCancellation()
                 guard let http = response as? HTTPURLResponse, http.statusCode == 200,
                       !(http.mimeType ?? "").contains("html") else { throw ImportFailure.invalid("시트를 읽을 수 없습니다. 공유 설정과 링크를 확인해 주세요.") }
                 guard data.count <= 10_000_000 else { throw ImportFailure.invalid("10MB 이하의 시트를 가져와 주세요.") }
-                var library = try LibraryImporter.read(data, filename: "sheet.csv")
+                var library = try LibraryImporter.read(data, filename: selectedSheet + ".csv", namespace: url.absoluteString)
                 library.title = name.trimmingCharacters(in: .whitespacesAndNewlines)
-                store.archive.libraries.append(library); store.save(); dismiss()
+                if let i = store.archive.libraries.firstIndex(where: { $0.id == library.id }) {
+                    store.archive.libraries[i] = library
+                } else { store.archive.libraries.append(library) }
+                store.save(); dismiss()
             } catch is CancellationError { }
             catch { self.error = error.localizedDescription }
         }

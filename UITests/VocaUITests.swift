@@ -29,8 +29,11 @@ import XCTest
         XCTAssertTrue(app.staticTexts["작은 일본어 생활"].waitForExistence(timeout: 5))
         screenshot("04-Library")
         app.staticTexts["작은 일본어 생활"].tap()
+        app.swipeUp()
         app.buttons["내 스택에 추가"].tap()
-        XCTAssertEqual(app.buttons.matching(NSPredicate(format: "label == %@", "내 스택에 등록됨")).count, 2)
+        XCTAssertFalse(app.buttons["내 스택에 추가"].exists)
+        XCTAssertTrue(app.buttons["학습 이어가기"].firstMatch.exists)
+        screenshot("08-Stack-Path")
         app.tabBars.buttons["계정"].tap()
         XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", "양방향 정답")).firstMatch.waitForExistence(timeout: 5))
         screenshot("05-Account")
@@ -57,6 +60,33 @@ import XCTest
         app.launch()
         XCTAssertTrue(app.buttons["학습 시작"].waitForExistence(timeout: 5))
         XCTAssertFalse(app.buttons["학습 시작"].isEnabled)
+    }
+    func testLiveSheetImport() throws {
+        guard ProcessInfo.processInfo.environment["VOCA_LIVE_SHEET_TEST"] == "1" else {
+            throw XCTSkip("Opt-in network integration test: TEST_RUNNER_VOCA_LIVE_SHEET_TEST=1")
+        }
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
+        app.launch()
+        app.tabBars.buttons["라이브러리"].tap()
+        app.buttons["만들기 또는 가져오기"].tap()
+        app.buttons["Google Sheets 링크"].tap()
+        app.buttons["JLPT N5–N1 단어장 링크 사용"].tap()
+        app.buttons["시트 목록 확인"].tap()
+        XCTAssertTrue(app.buttons["가져오기"].waitForExistence(timeout: 30))
+        screenshot("09-Sheet-Selection")
+        app.buttons["가져오기"].tap()
+        XCTAssertTrue(app.staticTexts["스택 34개   ·   단어 674개"].waitForExistence(timeout: 35))
+        app.staticTexts["N5"].tap()
+        XCTAssertTrue(app.staticTexts["N5 단어 001"].waitForExistence(timeout: 5))
+        app.buttons["내 스택에 추가"].firstMatch.tap()
+        XCTAssertTrue(app.buttons["학습 이어가기"].waitForExistence(timeout: 5))
+        screenshot("10-JLPT-Stack-Path")
+        app.buttons["학습 이어가기"].tap()
+        app.buttons["학습 시작"].tap()
+        XCTAssertTrue(app.staticTexts["会う"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["학습 풀 10/10 · 남은 40"].exists)
+        screenshot("11-JLPT-Study-Pool")
     }
     private func screenshot(_ name: String) {
         Thread.sleep(forTimeInterval: 0.7)

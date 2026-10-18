@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA0000000000000000000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000002 /* Assets.xcassets */; };
 		150E56DB1814EA78AEFABB7B /* VocaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7DB309FE8721C76049DE800 /* VocaUITests.swift */; };
 		394993D80E46A8310F75A0D6 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D5EBC90D7184DF03F34C4E6 /* AccountView.swift */; };
 		3FBDC09599AEC0B07DFBCF3E /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DA3F99A0A68A54366AEA57E /* Models.swift */; };
@@ -53,6 +54,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AA0000000000000000000002 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		07EE0498A004A41FB802F806 /* SheetURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetURL.swift; sourceTree = "<group>"; };
 		0D5EBC90D7184DF03F34C4E6 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		0DA3F99A0A68A54366AEA57E /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 		0CC916A091D00B5716B2441A /* VocaApp */ = {
 			isa = PBXGroup;
 			children = (
+				AA0000000000000000000002 /* Assets.xcassets */,
 				0D5EBC90D7184DF03F34C4E6 /* AccountView.swift */,
 				33D4B8EFE414FC06B466D46B /* AppStore.swift */,
 				32FE33C4134807AC0D8507AF /* LearnView.swift */,
@@ -157,6 +160,7 @@
 			buildConfigurationList = 84226485A17ADFB0285C107E /* Build configuration list for PBXNativeTarget "voca-ios" */;
 			buildPhases = (
 				EF3083721DD59B51A0491062 /* Sources */,
+				AA0000000000000000000003 /* Resources */,
 				5ECFDC315F05C08380133A8C /* Frameworks */,
 				2D6B921DEC23077D2A80D272 /* Embed Frameworks */,
 			);
@@ -231,6 +235,10 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AA0000000000000000000003 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (AA0000000000000000000001 /* Assets.xcassets in Resources */,); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		379975A2B4062FD644B1F40A /* Sources */ = {
