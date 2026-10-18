@@ -53,12 +53,16 @@ public struct Stack: Identifiable, Codable, Equatable, Sendable {
     private mutating func refill() {
         let activeWords = Set(queue.map(\.wordID))
         let recent = recentWordIDs ?? []
-        let pending = allItems.filter { !mastered.contains($0) && !activeWords.contains($0.wordID) }
-        // Prefer fresh words, then older answers; recency never prevents filling an empty slot.
-        let candidates = pending.filter { !recent.contains($0.wordID) }
-            + recent.flatMap { id in pending.filter { $0.wordID == id } }
+        var pending = allItems.filter { !mastered.contains($0) && !activeWords.contains($0.wordID) }
+        // Avoid admitting the reverse direction immediately after answering its partner.
+        let cooled = pending.filter { !recent.contains($0.wordID) }
+        if !cooled.isEmpty { pending = cooled }
+        else if !queue.isEmpty { return }
+        else {
+            pending.sort { (recent.firstIndex(of: $0.wordID) ?? -1) < (recent.firstIndex(of: $1.wordID) ?? -1) }
+        }
         var admitted = activeWords
-        for item in candidates where queue.count < Self.poolLimit {
+        for item in pending where queue.count < Self.poolLimit {
             if admitted.insert(item.wordID).inserted { queue.append(item) }
         }
     }
@@ -70,11 +74,11 @@ public struct Stack: Identifiable, Codable, Equatable, Sendable {
             var recent = (recentWordIDs ?? []).filter { $0 != current.wordID }
             recent.append(current.wordID)
             recentWordIDs = Array(recent.suffix(Self.poolLimit))
+            refill()
         } else {
-            // Keep incorrect items in the pool rather than replacing them with new words.
+            // Retry only within the current pool; an incorrect answer never admits a new word.
             queue.insert(current, at: min(3, queue.count))
         }
-        refill()
     }
     public mutating func reset() { mastered = []; queue = []; recentWordIDs = []; prepare() }
 
