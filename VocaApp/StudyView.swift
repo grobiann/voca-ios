@@ -1,0 +1,162 @@
+import SwiftUI
+import VocaCore
+
+struct StudyView: View {
+    @Environment(AppStore.self) private var store
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    let stackID: UUID
+    @State private var stack = Stack(title: "")
+    @State private var revealed = false
+    @State private var offset: CGSize = .zero
+    @State private var exiting = false
+    @State private var undo: Stack?
+    @State private var advanceTask: Task<Void, Never>?
+    private var item: ReviewItem? { stack.queue.first }
+    private var word: Word? { stack.words.first { $0.id == item?.wordID } }
+    var body: some View {
+        GeometryReader { geometry in
+            VStack(spacing: 20) {
+                HStack {
+                    Button { dismiss() } label: { Image(systemName: "xmark").font(.headline).frame(width: 44, height: 44).background(.background, in: Circle()) }.accessibilityLabel("학습 닫기")
+                    Spacer()
+                    VStack(spacing: 4) {
+                        Text(stack.title).font(.subheadline.bold()).lineLimit(1)
+                        Text("\(stack.mastered.count) / \(stack.words.count * 2) 완료").font(.caption).foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    Button {
+                        if let undo { stack = undo; store.update(stack); self.undo = nil; revealed = false; offset = .zero }
+                    } label: { Image(systemName: "arrow.uturn.backward").frame(width: 44, height: 44) }.disabled(undo == nil || exiting).accessibilityLabel("이전 응답 취소")
+                }
+                ProgressView(value: stack.progress).tint(Palette.accent)
+                if let word, let item {
+                    HStack {
+                        Text(item.direction.label).font(.caption.weight(.semibold))
+                        Spacer(); Text("남은 카드 \(stack.queue.count)").font(.caption)
+                    }.foregroundStyle(.secondary)
+                    ZStack {
+                        ForEach(0..<2) { index in
+                            RoundedRectangle(cornerRadius: 30).fill(Color(uiColor: .secondarySystemGroupedBackground))
+                                .overlay(RoundedRectangle(cornerRadius: 30).stroke(.primary.opacity(0.05)))
+                                .rotationEffect(.degrees(index == 0 ? -3 : 3)).padding(.horizontal, 8).offset(y: 8)
+                        }
+                        if stack.queue.count > 1,
+                           let nextWord = stack.words.first(where: { $0.id == stack.queue[1].wordID }) {
+                            VStack(spacing: 24) {
+                                Text(stack.queue[1].direction == .japaneseToKorean ? nextWord.japanese : nextWord.korean)
+                                    .font(.system(size: 38, weight: .semibold, design: .rounded))
+                                if stack.queue[1].direction == .japaneseToKorean {
+                                    Text(nextWord.example).font(.body).foregroundStyle(.secondary)
+                                }
+                            }.multilineTextAlignment(.center).padding(28)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 30))
+                                .scaleEffect(0.96 + min(abs(offset.width) / 400, 1) * 0.04)
+                                .accessibilityHidden(true)
+                        }
+                        card(word, item: item)
+                            .overlay(alignment: offset.width >= 0 ? .topLeading : .topTrailing) {
+                                Text(offset.width >= 0 ? "알았어요" : "다시 볼게요")
+                                    .font(Font.title2.weight(.bold)).foregroundStyle(offset.width >= 0 ? Palette.accent : Palette.orange)
+                                    .padding(12).overlay(RoundedRectangle(cornerRadius: 12).stroke(lineWidth: 3))
+                                    .rotationEffect(.degrees(offset.width >= 0 ? -12 : 12)).padding(24)
+                                    .opacity(revealed ? Double(min(abs(offset.width) / 90, 1)) : 0)
+                            }
+                            .offset(offset).rotationEffect(.degrees(reduceMotion ? 0 : Double(offset.width / 22)))
+                            .simultaneousGesture(DragGesture(minimumDistance: 14)
+                                .onChanged { value in
+                                    guard revealed && !exiting, abs(value.translation.width) > abs(value.translation.height) else { return }
+                                    offset = CGSize(width: value.translation.width, height: value.translation.height * 0.15)
+                                }
+                                .onEnded { value in
+                                    guard revealed && !exiting else { return }
+                                    let threshold = min(110.0, geometry.size.width * 0.27)
+                                    if abs(value.translation.width) > threshold || (abs(value.translation.width) > 25 && abs(value.predictedEndTranslation.width) > 220) {
+                                        answer(value.translation.width > 0, width: geometry.size.width)
+                                    } else { withAnimation(.spring(response: 0.38, dampingFraction: 0.72)) { offset = .zero } }
+                                })
+                    }.padding(.vertical, 8)
+                    HStack(spacing: 14) {
+                        responseButton("다시 볼게요", icon: "arrow.left", known: false, width: geometry.size.width)
+                        responseButton("알았어요", icon: "arrow.right", known: true, width: geometry.size.width)
+                    }.disabled(!revealed || exiting).opacity(revealed ? 1 : 0.35)
+                    Text(revealed ? "모르면 왼쪽, 알면 오른쪽으로 밀어 주세요" : "카드를 누르면 뜻을 확인할 수 있어요")
+                        .font(.caption).foregroundStyle(.secondary)
+                } else {
+                    Spacer()
+                    Image(systemName: "checkmark.seal.fill").font(.system(size: 76)).foregroundStyle(Palette.accent)
+                    Text("스택을 모두 익혔어요!").font(.title.bold())
+                    Text("\(stack.words.count)개의 표현을 양방향으로 학습했어요.").foregroundStyle(.secondary).multilineTextAlignment(.center)
+                    Spacer()
+                    Button("학습 마치기") { dismiss() }.buttonStyle(PrimaryButton())
+                }
+            }.padding(24).frame(maxWidth: 650).frame(maxWidth: .infinity).background(Palette.canvas)
+        }.onAppear {
+            if let saved = store.archive.stacks.first(where: { $0.id == stackID }) { stack = saved; stack.prepare(); store.update(stack) }
+        }.onDisappear { advanceTask?.cancel() }
+    }
+    private func card(_ word: Word, item: ReviewItem) -> some View {
+        let japaneseFirst = item.direction == .japaneseToKorean
+        return VStack(spacing: 22) {
+            HStack {
+                Text(revealed ? "ANSWER" : "THINK IN \(japaneseFirst ? "JAPANESE" : "KOREAN")")
+                    .font(.system(size: 10, weight: .bold, design: .monospaced)).tracking(2).foregroundStyle(.secondary)
+                Spacer()
+                if japaneseFirst || revealed {
+                    Button { store.speak(word.japanese) } label: { Image(systemName: "speaker.wave.2").font(.title3).frame(width: 44, height: 44) }.accessibilityLabel("일본어 발음 듣기")
+                }
+            }
+            Spacer(minLength: 4)
+            ScrollView {
+                VStack(spacing: 24) {
+                    Text(japaneseFirst ? word.japanese : word.korean)
+                        .font(.system(size: revealed ? 24 : 38, weight: revealed ? .medium : .semibold, design: .rounded))
+                        .foregroundStyle(revealed ? .secondary : .primary)
+                    if revealed {
+                        Rectangle().fill(Palette.accent.opacity(0.15)).frame(width: 36, height: 3)
+                        Text(japaneseFirst ? word.korean : word.japanese).font(.system(size: 34, weight: .semibold, design: .rounded))
+                    }
+                    if japaneseFirst || revealed {
+                        Text(word.example).font(.body).foregroundStyle(.secondary).lineSpacing(6)
+                    }
+                }.frame(maxWidth: .infinity).multilineTextAlignment(.center).padding(.vertical, 12)
+            }.defaultScrollAnchor(.center)
+            Spacer(minLength: 4)
+            Label(revealed ? "기억을 확인해 보세요" : "탭해서 뒤집기", systemImage: revealed ? "sparkle" : "hand.tap")
+                .font(.caption).foregroundStyle(.tertiary)
+        }.padding(28).frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 30))
+            .overlay(RoundedRectangle(cornerRadius: 30).stroke(.primary.opacity(0.06)))
+            .shadow(color: .black.opacity(0.06), radius: 20, y: 10)
+            .contentShape(RoundedRectangle(cornerRadius: 30))
+            .accessibilityIdentifier("studyCard")
+            .onTapGesture { reveal() }
+            .accessibilityAction(named: "정답 보기") { reveal() }
+    }
+    private func reveal() {
+        guard !revealed && !exiting else { return }
+        store.feedback()
+        withAnimation(reduceMotion ? nil : .spring(response: 0.36, dampingFraction: 0.86)) { revealed = true }
+    }
+    private func responseButton(_ title: String, icon: String, known: Bool, width: CGFloat) -> some View {
+        Button { answer(known, width: width) } label: {
+            Label(title, systemImage: icon).font(.subheadline.bold()).frame(maxWidth: .infinity).padding(.vertical, 18)
+                .foregroundStyle(known ? Palette.accent : Palette.orange)
+                .background((known ? Palette.accent : Palette.orange).opacity(0.09), in: RoundedRectangle(cornerRadius: 18))
+        }
+    }
+    private func answer(_ known: Bool, width: CGFloat) {
+        guard revealed && !exiting else { return }
+        exiting = true; store.feedback(.medium)
+        withAnimation(reduceMotion ? .linear(duration: 0.1) : .easeIn(duration: 0.23)) {
+            offset = CGSize(width: (known ? 1 : -1) * (width + 180), height: 40)
+        }
+        advanceTask = Task { @MainActor in
+            do { try await Task.sleep(for: .milliseconds(reduceMotion ? 100 : 240)) } catch { return }
+            undo = stack; stack.answer(known: known); store.update(stack)
+            var transaction = Transaction(); transaction.disablesAnimations = true
+            withTransaction(transaction) { revealed = false; offset = .zero; exiting = false }
+        }
+    }
+}

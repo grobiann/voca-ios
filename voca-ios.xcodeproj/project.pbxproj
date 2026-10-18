@@ -1,0 +1,570 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		150E56DB1814EA78AEFABB7B /* VocaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7DB309FE8721C76049DE800 /* VocaUITests.swift */; };
+		394993D80E46A8310F75A0D6 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D5EBC90D7184DF03F34C4E6 /* AccountView.swift */; };
+		3FBDC09599AEC0B07DFBCF3E /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DA3F99A0A68A54366AEA57E /* Models.swift */; };
+		4257EBFA24EF9317C08A50DB /* VocaCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 718BB6F0DBD2308788F4DB6E /* VocaCore.framework */; };
+		4C6ECAD3B7AD956670A55614 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E28BEA33488E5798C6B994 /* LibraryView.swift */; };
+		713C05571780CD6BCFEC30C9 /* SheetURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EE0498A004A41FB802F806 /* SheetURL.swift */; };
+		75B4479DEF7AF82B3BB58C46 /* StudyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B8148A66BA0041F57C78AC0 /* StudyView.swift */; };
+		A9D8AB9A9D50523605743C03 /* LibraryImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91175FE22664C92743552113 /* LibraryImporter.swift */; };
+		BF5E7B959D0FBCEAC9E13976 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D4B8EFE414FC06B466D46B /* AppStore.swift */; };
+		E4388A4FE3AB4B6857CD191F /* LearnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FE33C4134807AC0D8507AF /* LearnView.swift */; };
+		EC619806BB307F91B512C3C2 /* VocaCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 718BB6F0DBD2308788F4DB6E /* VocaCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F81C7E9E6877A303FC1BCBDC /* VocaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DE0F4683544D0E34772370 /* VocaApp.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A6A82D6E93931EB7A122D68E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 774E001C05A6E46246163A6D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 84455AECF17937F2EF44B083;
+			remoteInfo = "voca-ios";
+		};
+		ABA0A8F8C2A31EE6D7882754 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 774E001C05A6E46246163A6D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4FE0358F7984CEA0F35F22FD;
+			remoteInfo = VocaCore;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2D6B921DEC23077D2A80D272 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				EC619806BB307F91B512C3C2 /* VocaCore.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		07EE0498A004A41FB802F806 /* SheetURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetURL.swift; sourceTree = "<group>"; };
+		0D5EBC90D7184DF03F34C4E6 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
+		0DA3F99A0A68A54366AEA57E /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		28DE0F4683544D0E34772370 /* VocaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaApp.swift; sourceTree = "<group>"; };
+		32FE33C4134807AC0D8507AF /* LearnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnView.swift; sourceTree = "<group>"; };
+		33D4B8EFE414FC06B466D46B /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
+		3B8148A66BA0041F57C78AC0 /* StudyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyView.swift; sourceTree = "<group>"; };
+		718BB6F0DBD2308788F4DB6E /* VocaCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VocaCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		91175FE22664C92743552113 /* LibraryImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryImporter.swift; sourceTree = "<group>"; };
+		BD3BA1709A9AE2107D852F28 /* voca-ios.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "voca-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF7592C7246B8858215ABD1F /* VocaUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = VocaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D7DB309FE8721C76049DE800 /* VocaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaUITests.swift; sourceTree = "<group>"; };
+		F8E28BEA33488E5798C6B994 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5ECFDC315F05C08380133A8C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4257EBFA24EF9317C08A50DB /* VocaCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0CC916A091D00B5716B2441A /* VocaApp */ = {
+			isa = PBXGroup;
+			children = (
+				0D5EBC90D7184DF03F34C4E6 /* AccountView.swift */,
+				33D4B8EFE414FC06B466D46B /* AppStore.swift */,
+				32FE33C4134807AC0D8507AF /* LearnView.swift */,
+				F8E28BEA33488E5798C6B994 /* LibraryView.swift */,
+				3B8148A66BA0041F57C78AC0 /* StudyView.swift */,
+				28DE0F4683544D0E34772370 /* VocaApp.swift */,
+			);
+			path = VocaApp;
+			sourceTree = "<group>";
+		};
+		1FECF4D727B3F2CC5DFC73C7 /* UITests */ = {
+			isa = PBXGroup;
+			children = (
+				D7DB309FE8721C76049DE800 /* VocaUITests.swift */,
+			);
+			path = UITests;
+			sourceTree = "<group>";
+		};
+		843B00A1080FD5D3251B961C /* VocaCore */ = {
+			isa = PBXGroup;
+			children = (
+				91175FE22664C92743552113 /* LibraryImporter.swift */,
+				0DA3F99A0A68A54366AEA57E /* Models.swift */,
+				07EE0498A004A41FB802F806 /* SheetURL.swift */,
+			);
+			name = VocaCore;
+			path = Sources/VocaCore;
+			sourceTree = "<group>";
+		};
+		A07C1303558740F533BD335A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BD3BA1709A9AE2107D852F28 /* voca-ios.app */,
+				718BB6F0DBD2308788F4DB6E /* VocaCore.framework */,
+				BF7592C7246B8858215ABD1F /* VocaUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C05155AEBEAE5366F004637F = {
+			isa = PBXGroup;
+			children = (
+				1FECF4D727B3F2CC5DFC73C7 /* UITests */,
+				0CC916A091D00B5716B2441A /* VocaApp */,
+				843B00A1080FD5D3251B961C /* VocaCore */,
+				A07C1303558740F533BD335A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4FE0358F7984CEA0F35F22FD /* VocaCore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 67B406D0BE054235F412811B /* Build configuration list for PBXNativeTarget "VocaCore" */;
+			buildPhases = (
+				379975A2B4062FD644B1F40A /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VocaCore;
+			packageProductDependencies = (
+			);
+			productName = VocaCore;
+			productReference = 718BB6F0DBD2308788F4DB6E /* VocaCore.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		84455AECF17937F2EF44B083 /* voca-ios */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 84226485A17ADFB0285C107E /* Build configuration list for PBXNativeTarget "voca-ios" */;
+			buildPhases = (
+				EF3083721DD59B51A0491062 /* Sources */,
+				5ECFDC315F05C08380133A8C /* Frameworks */,
+				2D6B921DEC23077D2A80D272 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2DB715FCF79C46973172161F /* PBXTargetDependency */,
+			);
+			name = "voca-ios";
+			packageProductDependencies = (
+			);
+			productName = "voca-ios";
+			productReference = BD3BA1709A9AE2107D852F28 /* voca-ios.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A19455EEE32154CAA05134F0 /* VocaUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D561573CFC65EBFE59D5632 /* Build configuration list for PBXNativeTarget "VocaUITests" */;
+			buildPhases = (
+				ABC022002E8A31AB10A6DA85 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A1F5C0E95F393B98E3C99D34 /* PBXTargetDependency */,
+			);
+			name = VocaUITests;
+			packageProductDependencies = (
+			);
+			productName = VocaUITests;
+			productReference = BF7592C7246B8858215ABD1F /* VocaUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		774E001C05A6E46246163A6D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					4FE0358F7984CEA0F35F22FD = {
+						DevelopmentTeam = "";
+					};
+					84455AECF17937F2EF44B083 = {
+						DevelopmentTeam = "";
+					};
+					A19455EEE32154CAA05134F0 = {
+						DevelopmentTeam = "";
+						TestTargetID = 84455AECF17937F2EF44B083;
+					};
+				};
+			};
+			buildConfigurationList = 0DDA287406F3552B6FBF7291 /* Build configuration list for PBXProject "voca-ios" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = C05155AEBEAE5366F004637F;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = A07C1303558740F533BD335A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4FE0358F7984CEA0F35F22FD /* VocaCore */,
+				84455AECF17937F2EF44B083 /* voca-ios */,
+				A19455EEE32154CAA05134F0 /* VocaUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		379975A2B4062FD644B1F40A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D8AB9A9D50523605743C03 /* LibraryImporter.swift in Sources */,
+				3FBDC09599AEC0B07DFBCF3E /* Models.swift in Sources */,
+				713C05571780CD6BCFEC30C9 /* SheetURL.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ABC022002E8A31AB10A6DA85 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				150E56DB1814EA78AEFABB7B /* VocaUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EF3083721DD59B51A0491062 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				394993D80E46A8310F75A0D6 /* AccountView.swift in Sources */,
+				BF5E7B959D0FBCEAC9E13976 /* AppStore.swift in Sources */,
+				E4388A4FE3AB4B6857CD191F /* LearnView.swift in Sources */,
+				4C6ECAD3B7AD956670A55614 /* LibraryView.swift in Sources */,
+				75B4479DEF7AF82B3BB58C46 /* StudyView.swift in Sources */,
+				F81C7E9E6877A303FC1BCBDC /* VocaApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2DB715FCF79C46973172161F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4FE0358F7984CEA0F35F22FD /* VocaCore */;
+			targetProxy = ABA0A8F8C2A31EE6D7882754 /* PBXContainerItemProxy */;
+		};
+		A1F5C0E95F393B98E3C99D34 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 84455AECF17937F2EF44B083 /* voca-ios */;
+			targetProxy = A6A82D6E93931EB7A122D68E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1D8D1A2F0A878D61860D3DFA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.grobiann.VocaUITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "voca-ios";
+			};
+			name = Release;
+		};
+		206D5E03F7BC78AC5349B078 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.grobiann.VocaCore;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		39AB5D05389925C5D956D61D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		4246B1253709C9770F0AB1C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.grobiann.VocaUITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "voca-ios";
+			};
+			name = Debug;
+		};
+		7A648B244A41E8593530DD6C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "voca-ios";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.grobiann.voca-ios";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7AD93105D538552086EE5207 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.grobiann.VocaCore;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		88A30319154CAE1BB5925D76 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		E6D7A39E7021B3927A9DEB10 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "voca-ios";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.grobiann.voca-ios";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0DDA287406F3552B6FBF7291 /* Build configuration list for PBXProject "voca-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				88A30319154CAE1BB5925D76 /* Debug */,
+				39AB5D05389925C5D956D61D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		1D561573CFC65EBFE59D5632 /* Build configuration list for PBXNativeTarget "VocaUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4246B1253709C9770F0AB1C9 /* Debug */,
+				1D8D1A2F0A878D61860D3DFA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		67B406D0BE054235F412811B /* Build configuration list for PBXNativeTarget "VocaCore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7AD93105D538552086EE5207 /* Debug */,
+				206D5E03F7BC78AC5349B078 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		84226485A17ADFB0285C107E /* Build configuration list for PBXNativeTarget "voca-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E6D7A39E7021B3927A9DEB10 /* Debug */,
+				7A648B244A41E8593530DD6C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 774E001C05A6E46246163A6D /* Project object */;
+}

@@ -1,0 +1,12 @@
+{
+  "title": "여행 일본어",
+  "stacks": [
+    {
+      "title": "카페에서",
+      "cards": [
+        {"japanese": "おすすめ", "korean": "추천", "example": "おすすめの飲み物は何ですか。"},
+        {"japanese": "持ち帰り", "korean": "포장, 테이크아웃", "example": "持ち帰りでお願いします。"}
+      ]
+    }
+  ]
+}
