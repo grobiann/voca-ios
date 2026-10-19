@@ -68,9 +68,11 @@ struct LibraryView: View {
 }
 struct LibraryDetailView: View {
     @Environment(AppStore.self) private var store
+    @Environment(\.dismiss) private var dismiss
     var libraryID: UUID; var local: Bool
     @State private var add = false
     @State private var uploaded = false
+    @State private var deletingLibrary = false
     private var library: Library? { (local ? store.archive.libraries : store.archive.server).first { $0.id == libraryID } }
     var body: some View {
         ScrollView {
@@ -120,6 +122,12 @@ struct LibraryDetailView: View {
                         }.padding(26).frame(maxWidth: .infinity).background(.background, in: RoundedRectangle(cornerRadius: 26))
                     }
                     if local { Button("스택 만들기", systemImage: "plus") { add = true }.padding(26) }
+                    if local {
+                        Button("이 라이브러리 제거", systemImage: "trash", role: .destructive) { deletingLibrary = true }
+                            .padding(.top, 32)
+                        Text("내 스택에 추가한 학습 사본과 둘러보기의 라이브러리는 유지됩니다.")
+                            .font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.center)
+                    }
                 }.padding(.horizontal, 22).padding(.bottom, 24)
             }
         }.background(Palette.canvas).navigationTitle("스택 목록").toolbarTitleDisplayMode(.inline)
@@ -127,12 +135,21 @@ struct LibraryDetailView: View {
                 if let library {
                     NavigationLink { WordReportComposer(library: library, stacks: library.stacks) } label: { Label("라이브러리 오류 제보", systemImage: "flag") }
                 }
+                if local {
+                    Menu {
+                        Button("라이브러리 제거", systemImage: "trash", role: .destructive) { deletingLibrary = true }
+                    } label: { Image(systemName: "ellipsis.circle") }
+                    .accessibilityLabel("라이브러리 관리")
+                }
             }
             .sheet(isPresented: $add) { NameSheet(title: "새 스택", placeholder: "스택 이름") { name in
                 guard let i = store.archive.libraries.firstIndex(where: { $0.id == libraryID }) else { return }
                 store.archive.libraries[i].stacks.append(Stack(title: name)); store.save()
             } }
             .alert("둘러보기에 등록했어요", isPresented: $uploaded) { Button("확인", role: .cancel) {} }
+            .confirmationDialog("라이브러리를 제거할까요?", isPresented: $deletingLibrary, titleVisibility: .visible) {
+                Button("이 기기에서 라이브러리 제거", role: .destructive) { store.removeLibrary(libraryID); dismiss() }
+            } message: { Text("내 스택에 추가한 카드는 유지됩니다. 둘러보기에 올린 사본도 유지됩니다.") }
     }
 }
 

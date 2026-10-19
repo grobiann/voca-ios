@@ -1,5 +1,58 @@
 import XCTest
 @MainActor final class VocaUITests: XCTestCase {
+    func testRemoveCardsAndStack() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
+        app.launch()
+        app.tabBars.buttons["학습"].tap()
+        app.buttons["학습 시작"].tap()
+        app.staticTexts["おはようございます"].tap()
+        app.buttons["알았어요"].tap()
+        XCTAssertTrue(app.staticTexts["1 / 8 완료"].waitForExistence(timeout: 5))
+        app.buttons["학습 닫기"].tap()
+        app.staticTexts["하루를 시작하는 말"].firstMatch.tap()
+        app.buttons["おはようございます 카드 삭제"].tap()
+        app.buttons["카드 삭제"].tap()
+        XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: app.buttons["おはようございます 카드 삭제"])], timeout: 5), .completed)
+        XCTAssertTrue(app.staticTexts["0 / 6 방향 완료"].exists)
+        app.swipeUp()
+        app.buttons["내 스택에서 제거"].tap()
+        app.buttons["스택과 학습 기록 삭제"].tap()
+        XCTAssertTrue(app.staticTexts["내 스택"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.staticTexts["하루를 시작하는 말"].exists)
+        app.terminate()
+        app.launchArguments = ["--uitesting-resume"]
+        app.launch()
+        XCTAssertFalse(app.staticTexts["하루를 시작하는 말"].exists)
+        app.tabBars.buttons["라이브러리"].tap()
+        app.buttons["둘러보기"].tap()
+        app.staticTexts["작은 일본어 생활"].tap()
+        XCTAssertTrue(app.staticTexts["하루를 시작하는 말"].waitForExistence(timeout: 5))
+    }
+    func testRemoveDownloadedLibraryKeepsEnrolledStack() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
+        app.launch()
+        app.tabBars.buttons["라이브러리"].tap()
+        app.buttons["만들기 또는 가져오기"].tap()
+        app.buttons["직접 만들기"].tap()
+        let name = app.textFields["라이브러리 이름"]
+        XCTAssertTrue(name.waitForExistence(timeout: 5))
+        name.tap(); name.typeText("삭제 테스트")
+        app.buttons["만들기"].tap()
+        app.staticTexts["삭제 테스트"].tap()
+        app.swipeUp()
+        app.buttons["이 라이브러리 제거"].tap()
+        app.buttons["이 기기에서 라이브러리 제거"].tap()
+        XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: app.staticTexts["삭제 테스트"])], timeout: 5), .completed)
+        app.terminate()
+        app.launchArguments = ["--uitesting-resume"]
+        app.launch()
+        app.tabBars.buttons["라이브러리"].tap()
+        XCTAssertFalse(app.staticTexts["삭제 테스트"].exists)
+        app.tabBars.buttons["학습"].tap()
+        XCTAssertTrue(app.staticTexts["하루를 시작하는 말"].exists)
+    }
     func testPoolCopyAndReportPersistence() {
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting"]

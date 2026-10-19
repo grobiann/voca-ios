@@ -45,6 +45,20 @@ import AVFoundation
         guard let i = archive.stacks.firstIndex(where: { $0.id == stack.id }) else { return }
         archive.stacks[i] = stack; save()
     }
+    func removeWord(_ wordID: UUID, from stackID: UUID) {
+        guard let i = archive.stacks.firstIndex(where: { $0.id == stackID }) else { return }
+        archive.stacks[i].words.removeAll { $0.id == wordID }
+        archive.stacks[i].prepare(poolSize: poolSize)
+        save()
+    }
+    func removeStack(_ stackID: UUID) {
+        archive.stacks.removeAll { $0.id == stackID }
+        save()
+    }
+    func removeLibrary(_ libraryID: UUID) {
+        archive.libraries.removeAll { $0.id == libraryID }
+        save()
+    }
     func enroll(_ stack: Stack) {
         guard !isEnrolled(stack) else { return }
         var copy = Stack(title: stack.title, words: stack.words, sourceID: stack.id)

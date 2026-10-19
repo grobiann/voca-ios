@@ -81,10 +81,13 @@ struct StackRow: View {
 }
 struct StackDetailView: View {
     @Environment(AppStore.self) private var store
+    @Environment(\.dismiss) private var dismiss
     let stackID: UUID
     @State private var add = false
     @State private var study = false
     @State private var reset = false
+    @State private var deletingStack = false
+    @State private var deletingWord: Word?
     private var stack: Stack? { store.archive.stacks.first { $0.id == stackID } }
     var body: some View {
         Group {
@@ -103,7 +106,14 @@ struct StackDetailView: View {
                     Section("카드 \(stack.words.count)개") {
                         ForEach(stack.words) { word in
                             VStack(alignment: .leading, spacing: 6) {
-                                HStack { Text(word.japanese).font(.headline).textSelection(.enabled); Spacer(); CopyJapaneseButton(text: word.japanese) }
+                                HStack {
+                                    Text(word.japanese).font(.headline).textSelection(.enabled)
+                                    Spacer()
+                                    CopyJapaneseButton(text: word.japanese)
+                                    Button(role: .destructive) { deletingWord = word } label: {
+                                        Image(systemName: "trash").frame(width: 44, height: 44)
+                                    }.buttonStyle(.borderless).accessibilityLabel("\(word.japanese) 카드 삭제")
+                                }
                                 Text(word.korean)
                                 Text(word.example).font(.caption).foregroundStyle(.secondary)
                             }.padding(.vertical, 6)
@@ -112,6 +122,9 @@ struct StackDetailView: View {
                         }
                         Button { add = true } label: { Label("카드 추가", systemImage: "plus") }
                     }
+                    Section {
+                        Button("내 스택에서 제거", systemImage: "trash", role: .destructive) { deletingStack = true }
+                    } footer: { Text("스택을 제거하면 이 스택의 학습 기록도 삭제됩니다. 라이브러리의 원본은 유지됩니다.") }
                 }.navigationTitle(stack.title).toolbar {
                     NavigationLink {
                         WordReportComposer(library: (store.archive.libraries + store.archive.server).first { $0.stacks.contains { $0.id == (stack.sourceID ?? stack.id) } }, stacks: [stack])
@@ -126,6 +139,16 @@ struct StackDetailView: View {
         .confirmationDialog("완료 기록을 초기화하고 다시 학습할까요?", isPresented: $reset, titleVisibility: .visible) {
             Button("다시 학습하기") { if var updated = stack { updated.reset(poolSize: store.poolSize); store.update(updated); study = true } }
         }
+        .confirmationDialog("내 스택에서 제거할까요?", isPresented: $deletingStack, titleVisibility: .visible) {
+            Button("스택과 학습 기록 삭제", role: .destructive) { store.removeStack(stackID); dismiss() }
+        } message: { Text("라이브러리의 원본 카드는 그대로 남습니다.") }
+        .confirmationDialog("\(deletingWord?.japanese ?? "") 카드를 삭제할까요?", isPresented: Binding(
+            get: { deletingWord != nil }, set: { if !$0 { deletingWord = nil } }
+        ), titleVisibility: .visible) {
+            if let deletingWord {
+                Button("카드 삭제", role: .destructive) { store.removeWord(deletingWord.id, from: stackID); self.deletingWord = nil }
+            }
+        } message: { Text("이 카드의 학습 기록도 지워집니다. 라이브러리의 원본은 유지됩니다.") }
     }
 }
 struct NameSheet: View {
