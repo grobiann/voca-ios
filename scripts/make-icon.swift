@@ -3,7 +3,8 @@ let size = 1024
 let context = CGContext(data: nil, width: size, height: size, bitsPerComponent: 8, bytesPerRow: size * 4, space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue)!
 NSGraphicsContext.saveGraphicsState()
 NSGraphicsContext.current = NSGraphicsContext(cgContext: context, flipped: false)
-NSGradient(starting: NSColor(red: 0.11, green: 0.28, blue: 0.23, alpha: 1), ending: NSColor(red: 0.24, green: 0.48, blue: 0.37, alpha: 1))!.draw(in: NSBezierPath(rect: NSRect(x: 0, y: 0, width: size, height: size)), angle: 45)
+// Keep the card mark prominent with a quiet, pale green background.
+NSGradient(starting: NSColor(red: 0.78, green: 0.88, blue: 0.83, alpha: 1), ending: NSColor(red: 0.91, green: 0.95, blue: 0.92, alpha: 1))!.draw(in: NSBezierPath(rect: NSRect(x: 0, y: 0, width: size, height: size)), angle: 45)
 func card(_ rect: NSRect, angle: CGFloat, color: NSColor) {
     NSGraphicsContext.saveGraphicsState()
     let transform = AffineTransform(translationByX: 512, byY: 512)
