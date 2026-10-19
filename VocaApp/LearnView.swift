@@ -1,6 +1,20 @@
 import SwiftUI
 import VocaCore
 
+struct CopyJapaneseButton: View {
+    let text: String
+    @State private var copied = false
+    var body: some View {
+        Button {
+            UIPasteboard.general.string = text
+            copied = true
+        } label: {
+            Image(systemName: copied ? "checkmark" : "doc.on.doc").frame(width: 44, height: 44)
+        }.buttonStyle(.borderless).accessibilityLabel(copied ? "일본어 복사 완료" : "일본어 복사")
+            .onChange(of: text) { _, _ in copied = false }
+    }
+}
+
 struct LearnView: View {
     @Environment(AppStore.self) private var store
     @State private var studying: Stack?
@@ -89,23 +103,28 @@ struct StackDetailView: View {
                     Section("카드 \(stack.words.count)개") {
                         ForEach(stack.words) { word in
                             VStack(alignment: .leading, spacing: 6) {
-                                Text(word.japanese).font(.headline); Text(word.korean)
+                                HStack { Text(word.japanese).font(.headline).textSelection(.enabled); Spacer(); CopyJapaneseButton(text: word.japanese) }
+                                Text(word.korean)
                                 Text(word.example).font(.caption).foregroundStyle(.secondary)
                             }.padding(.vertical, 6)
                         }.onDelete { indices in
-                            var updated = stack; updated.words.remove(atOffsets: indices); updated.prepare(); store.update(updated)
+                            var updated = stack; updated.words.remove(atOffsets: indices); updated.prepare(poolSize: store.poolSize); store.update(updated)
                         }
                         Button { add = true } label: { Label("카드 추가", systemImage: "plus") }
                     }
-                }.navigationTitle(stack.title)
+                }.navigationTitle(stack.title).toolbar {
+                    NavigationLink {
+                        WordReportComposer(library: (store.archive.libraries + store.archive.server).first { $0.stacks.contains { $0.id == (stack.sourceID ?? stack.id) } }, stacks: [stack])
+                    } label: { Label("틀린 단어 제보", systemImage: "flag") }
+                }
             }
         }
         .sheet(isPresented: $add) { CardEditor { word in
-            guard var updated = stack else { return }; updated.words.append(word); updated.prepare(); store.update(updated)
+            guard var updated = stack else { return }; updated.words.append(word); updated.prepare(poolSize: store.poolSize); store.update(updated)
         } }
         .fullScreenCover(isPresented: $study) { StudyView(stackID: stackID) }
         .confirmationDialog("완료 기록을 초기화하고 다시 학습할까요?", isPresented: $reset, titleVisibility: .visible) {
-            Button("다시 학습하기") { if var updated = stack { updated.reset(); store.update(updated); study = true } }
+            Button("다시 학습하기") { if var updated = stack { updated.reset(poolSize: store.poolSize); store.update(updated); study = true } }
         }
     }
 }

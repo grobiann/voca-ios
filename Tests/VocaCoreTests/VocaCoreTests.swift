@@ -46,14 +46,14 @@ final class VocaCoreTests: XCTestCase {
         stack.prepare()
         let initial = Set(stack.queue.map(\.wordID))
         for _ in 0..<120 { stack.answer(known: false); XCTAssertEqual(Set(stack.queue.map(\.wordID)), initial) }
-        XCTAssertEqual(stack.queue.count, 10)
+        XCTAssertEqual(stack.queue.count, 20)
         let answered = stack.queue[0].wordID
         stack.answer(known: true)
-        XCTAssertEqual(stack.queue.count, 10)
+        XCTAssertEqual(stack.queue.count, 20)
         XCTAssertFalse(stack.queue.contains { $0.wordID == answered })
         XCTAssertNotEqual(Set(stack.queue.map(\.wordID)), initial)
         while !stack.queue.isEmpty {
-            XCTAssertLessThanOrEqual(stack.queue.count, 10)
+            XCTAssertLessThanOrEqual(stack.queue.count, 20)
             XCTAssertEqual(Set(stack.queue.map(\.wordID)).count, stack.queue.count)
             stack.answer(known: true)
         }
@@ -72,6 +72,30 @@ final class VocaCoreTests: XCTestCase {
         let saved = try JSONEncoder().encode(stack)
         var restored = try JSONDecoder().decode(Stack.self, from: saved)
         restored.prepare(); XCTAssertEqual(restored, stack)
+    }
+    func testConfigurablePoolAndArchiveCompatibility() throws {
+        var stack = Stack(title: "Pool", words: (0..<60).map { Word(japanese: "語\($0)", korean: "말", example: "") })
+        stack.prepare(); XCTAssertEqual(stack.queue.count, 20)
+        stack.answer(known: true)
+        let mastered = stack.mastered
+        stack.prepare(poolSize: 5); XCTAssertEqual(stack.queue.count, 5)
+        stack.prepare(poolSize: 30); XCTAssertEqual(stack.queue.count, 30)
+        XCTAssertEqual(stack.mastered, mastered)
+        let initial = Set(stack.queue)
+        stack.answer(known: false, poolSize: 30); XCTAssertEqual(Set(stack.queue), initial)
+        stack.prepare(poolSize: 1)
+        var answers = 0
+        while !stack.queue.isEmpty && answers < 120 { stack.answer(known: true, poolSize: 1); answers += 1 }
+        XCTAssertTrue(stack.isComplete)
+        let old = try JSONDecoder().decode(Archive.self, from: Data("{\"stacks\":[],\"libraries\":[],\"server\":[]}".utf8))
+        XCTAssertNil(old.studyPoolSize); XCTAssertNil(old.wordReports)
+        var archive = Archive.sample
+        archive.studyPoolSize = 30
+        let report = WordReport(library: archive.server.first, stack: archive.stacks[0], word: archive.stacks[0].words[0], message: "뜻 확인")
+        archive.wordReports = [report]
+        let restored = try JSONDecoder().decode(Archive.self, from: JSONEncoder().encode(archive))
+        XCTAssertEqual(restored.studyPoolSize, 30); XCTAssertEqual(restored.wordReports, [report])
+        XCTAssertTrue(report.shareText.contains("뜻 확인"))
     }
     func testStableSheetIDsAndStackGrouping() throws {
         let csv = "stack_id,stack,card_id,japanese,korean,example\na,같은 이름,1,猫,고양이,\nb,같은 이름,2,犬,개,"

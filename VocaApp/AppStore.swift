@@ -9,6 +9,14 @@ import AVFoundation
     private let location: URL
     private var storageReadable = true
     private let speaker = AVSpeechSynthesizer()
+    var poolSize: Int {
+        get { min(100, max(1, archive.studyPoolSize ?? Stack.poolLimit)) }
+        set {
+            archive.studyPoolSize = min(100, max(1, newValue))
+            for i in archive.stacks.indices { archive.stacks[i].prepare(poolSize: poolSize) }
+            save()
+        }
+    }
     init() {
         #if DEBUG
         let testing = ProcessInfo.processInfo.arguments.contains("--uitesting") || ProcessInfo.processInfo.arguments.contains("--uitesting-resume")
@@ -40,7 +48,7 @@ import AVFoundation
     func enroll(_ stack: Stack) {
         guard !isEnrolled(stack) else { return }
         var copy = Stack(title: stack.title, words: stack.words, sourceID: stack.id)
-        copy.prepare(); archive.stacks.append(copy); save()
+        copy.prepare(poolSize: poolSize); archive.stacks.append(copy); save()
     }
     func isEnrolled(_ stack: Stack) -> Bool { archive.stacks.contains { $0.sourceID == stack.id || $0.id == stack.id } }
     func publish(_ library: Library) {

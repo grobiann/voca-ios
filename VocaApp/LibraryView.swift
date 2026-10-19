@@ -105,6 +105,7 @@ struct LibraryDetailView: View {
                             Text("\(stack.words.count)개 단어 · \(enrolled?.isComplete == true ? "완료" : enrolled == nil ? "아직 시작하지 않았어요" : "학습 중 \(Int((enrolled?.progress ?? 0) * 100))%")")
                                 .font(.subheadline).foregroundStyle(.secondary)
                             Text(stack.words.prefix(3).map(\.japanese).joined(separator: " · ")).font(.caption).foregroundStyle(.secondary)
+                            NavigationLink("틀린 단어 제보") { WordReportComposer(library: library, stacks: [stack]) }.font(.caption)
                             if let enrolled {
                                 NavigationLink { StackDetailView(stackID: enrolled.id) } label: {
                                     Label(enrolled.isComplete ? "완료한 스택 보기" : "학습 이어가기", systemImage: enrolled.isComplete ? "checkmark" : "play.fill")
@@ -122,6 +123,11 @@ struct LibraryDetailView: View {
                 }.padding(.horizontal, 22).padding(.bottom, 24)
             }
         }.background(Palette.canvas).navigationTitle("스택 목록").toolbarTitleDisplayMode(.inline)
+            .toolbar {
+                if let library {
+                    NavigationLink { WordReportComposer(library: library, stacks: library.stacks) } label: { Label("라이브러리 오류 제보", systemImage: "flag") }
+                }
+            }
             .sheet(isPresented: $add) { NameSheet(title: "새 스택", placeholder: "스택 이름") { name in
                 guard let i = store.archive.libraries.firstIndex(where: { $0.id == libraryID }) else { return }
                 store.archive.libraries[i].stacks.append(Stack(title: name)); store.save()
@@ -138,7 +144,10 @@ struct LibraryStackEditor: View {
     var body: some View {
         List {
             ForEach(stack?.words ?? []) { word in
-                VStack(alignment: .leading, spacing: 6) { Text(word.japanese).font(.headline); Text(word.korean); Text(word.example).font(.caption).foregroundStyle(.secondary) }
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack { Text(word.japanese).font(.headline).textSelection(.enabled); Spacer(); CopyJapaneseButton(text: word.japanese) }
+                    Text(word.korean); Text(word.example).font(.caption).foregroundStyle(.secondary)
+                }
             }.onDelete { offsets in mutate { $0.words.remove(atOffsets: offsets) } }
             Button("카드 추가", systemImage: "plus") { add = true }
         }.navigationTitle(stack?.title ?? "스택").sheet(isPresented: $add) { CardEditor { word in mutate { $0.words.append(word) } } }

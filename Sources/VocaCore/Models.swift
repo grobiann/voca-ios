@@ -31,7 +31,7 @@ public struct Stack: Identifiable, Codable, Equatable, Sendable {
     public var queue: [ReviewItem]
     public var sourceID: UUID?
     public var recentWordIDs: [UUID]?
-    public static let poolLimit = 10
+    public static let poolLimit = 20
     public var remainingCount: Int { allItems.filter { !mastered.contains($0) }.count }
     public init(id: UUID = UUID(), title: String, words: [Word] = [], sourceID: UUID? = nil) {
         self.id = id; self.title = title; self.words = words; self.mastered = []; self.queue = []; self.sourceID = sourceID
@@ -41,16 +41,16 @@ public struct Stack: Identifiable, Codable, Equatable, Sendable {
     }
     public var isComplete: Bool { !words.isEmpty && allItems.allSatisfy { mastered.contains($0) } }
     public var progress: Double { allItems.isEmpty ? 0 : Double(allItems.filter { mastered.contains($0) }.count) / Double(allItems.count) }
-    public mutating func prepare() {
+    public mutating func prepare(poolSize: Int = Self.poolLimit) {
         let valid = Set(allItems)
         mastered.formIntersection(valid)
         var seenWords = Set<UUID>()
         queue = Array(queue.filter {
             valid.contains($0) && !mastered.contains($0) && seenWords.insert($0.wordID).inserted
-        }.prefix(Self.poolLimit))
-        refill()
+        }.prefix(max(1, poolSize)))
+        refill(poolSize: max(1, poolSize))
     }
-    private mutating func refill() {
+    private mutating func refill(poolSize: Int) {
         let activeWords = Set(queue.map(\.wordID))
         let recent = recentWordIDs ?? []
         var pending = allItems.filter { !mastered.contains($0) && !activeWords.contains($0.wordID) }
@@ -62,25 +62,25 @@ public struct Stack: Identifiable, Codable, Equatable, Sendable {
             pending.sort { (recent.firstIndex(of: $0.wordID) ?? -1) < (recent.firstIndex(of: $1.wordID) ?? -1) }
         }
         var admitted = activeWords
-        for item in pending where queue.count < Self.poolLimit {
+        for item in pending where queue.count < poolSize {
             if admitted.insert(item.wordID).inserted { queue.append(item) }
         }
     }
-    public mutating func answer(known: Bool) {
+    public mutating func answer(known: Bool, poolSize: Int = Self.poolLimit) {
         guard !queue.isEmpty else { return }
         let current = queue.removeFirst()
         if known {
             mastered.insert(current)
             var recent = (recentWordIDs ?? []).filter { $0 != current.wordID }
             recent.append(current.wordID)
-            recentWordIDs = Array(recent.suffix(Self.poolLimit))
-            refill()
+            recentWordIDs = Array(recent.suffix(max(1, poolSize)))
+            refill(poolSize: max(1, poolSize))
         } else {
             // Retry only within the current pool; an incorrect answer never admits a new word.
             queue.insert(current, at: min(3, queue.count))
         }
     }
-    public mutating func reset() { mastered = []; queue = []; recentWordIDs = []; prepare() }
+    public mutating func reset(poolSize: Int = Self.poolLimit) { mastered = []; queue = []; recentWordIDs = []; prepare(poolSize: poolSize) }
 
 }
 public struct Library: Identifiable, Codable, Equatable, Sendable {
@@ -94,6 +94,8 @@ public struct Library: Identifiable, Codable, Equatable, Sendable {
     public var wordCount: Int { stacks.reduce(0) { $0 + $1.words.count } }
 }
 public struct Archive: Codable, Sendable {
+    public var studyPoolSize: Int?
+    public var wordReports: [WordReport]?
     public var stacks: [Stack]
     public var libraries: [Library]
     public var server: [Library]
@@ -110,5 +112,24 @@ public struct Archive: Codable, Sendable {
             Word(japanese: "おすすめ", korean: "추천", example: "おすすめの飲み物は何ですか。"),
             Word(japanese: "持ち帰り", korean: "포장, 테이크아웃", example: "持ち帰りでお願いします。")])
         return Archive(stacks: [daily], server: [Library(title: "작은 일본어 생활", subtitle: "매일 만나는 표현부터, 가볍게", stacks: [daily, travel])])
+    }
+}
+
+public struct WordReport: Identifiable, Codable, Equatable, Sendable {
+    public var id = UUID()
+    public var createdAt = Date()
+    public var libraryID: UUID?
+    public var libraryTitle: String?
+    public var stackID: UUID
+    public var stackTitle: String
+    public var word: Word
+    public var message: String
+    public init(library: Library?, stack: Stack, word: Word, message: String) {
+        libraryID = library?.id; libraryTitle = library?.title
+        stackID = stack.sourceID ?? stack.id; stackTitle = stack.title
+        self.word = word; self.message = message
+    }
+    public var shareText: String {
+        "틀린 단어 제보\n라이브러리: \(libraryTitle ?? "내 스택")\n스택: \(stackTitle)\n일본어: \(word.japanese)\n읽기: \(word.reading ?? "")\n한국어: \(word.korean)\n예문: \(word.example)\n제보 내용: \(message)\n단어 ID: \(word.id)\n스택 ID: \(stackID)\n출처: \(word.source ?? "직접 등록")"
     }
 }

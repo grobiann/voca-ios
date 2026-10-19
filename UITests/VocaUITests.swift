@@ -1,5 +1,42 @@
 import XCTest
 @MainActor final class VocaUITests: XCTestCase {
+    func testPoolCopyAndReportPersistence() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
+        app.launch()
+        app.tabBars.buttons["계정"].tap()
+        XCTAssertTrue(app.steppers.firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["학습 풀 크기: 20개"].exists)
+        app.steppers.firstMatch.buttons["Increment"].tap()
+        XCTAssertTrue(app.staticTexts["학습 풀 크기: 21개"].exists)
+        app.tabBars.buttons["학습"].tap()
+        app.buttons["학습 시작"].tap()
+        app.buttons["일본어 복사"].tap()
+        XCTAssertTrue(app.buttons["일본어 복사 완료"].exists)
+        XCTAssertFalse(app.buttons["알았어요"].isEnabled)
+        XCTAssertTrue(app.staticTexts["학습 풀 4/21 · 남은 8"].exists)
+        app.buttons["학습 닫기"].tap()
+        app.tabBars.buttons["라이브러리"].tap()
+        app.buttons["둘러보기"].tap()
+        app.staticTexts["작은 일본어 생활"].tap()
+        app.buttons["라이브러리 오류 제보"].tap()
+        app.buttons.containing(.staticText, identifier: "おはようございます").firstMatch.tap()
+        app.swipeUp()
+        let field = app.descendants(matching: .any)["reportMessage"].firstMatch
+        XCTAssertTrue(field.waitForExistence(timeout: 5))
+        field.tap(); field.typeText("Meaning correction")
+        app.buttons["제보 저장"].tap()
+        app.terminate()
+        app.launchArguments = ["--uitesting-resume"]
+        app.launch()
+        app.tabBars.buttons["계정"].tap()
+        XCTAssertTrue(app.staticTexts["학습 풀 크기: 21개"].exists)
+        app.swipeUp()
+        app.buttons["단어 오류 제보함"].tap()
+        XCTAssertTrue(app.staticTexts["Meaning correction"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["제보 공유"].exists)
+        screenshot("12-Word-Report")
+    }
     func testStudyAndLibrary() {
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting"]
@@ -85,7 +122,7 @@ import XCTest
         app.buttons["학습 이어가기"].tap()
         app.buttons["학습 시작"].tap()
         XCTAssertTrue(app.staticTexts["会う"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.staticTexts["학습 풀 10/10 · 남은 40"].exists)
+        XCTAssertTrue(app.staticTexts["학습 풀 20/20 · 남은 40"].exists)
         screenshot("11-JLPT-Study-Pool")
     }
     private func screenshot(_ name: String) {

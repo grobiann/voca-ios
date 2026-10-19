@@ -33,7 +33,7 @@ struct StudyView: View {
                 if let word, let item {
                     HStack {
                         Text(item.direction.label).font(.caption.weight(.semibold))
-                        Spacer(); Text("학습 풀 \(stack.queue.count)/10 · 남은 \(stack.remainingCount)").font(.caption)
+                        Spacer(); Text("학습 풀 \(stack.queue.count)/\(store.poolSize) · 남은 \(stack.remainingCount)").font(.caption)
                     }.foregroundStyle(.secondary)
                     ZStack {
                         ForEach(0..<2) { index in
@@ -94,7 +94,7 @@ struct StudyView: View {
                 }
             }.padding(24).frame(maxWidth: 650).frame(maxWidth: .infinity).background(Palette.canvas)
         }.onAppear {
-            if let saved = store.archive.stacks.first(where: { $0.id == stackID }) { stack = saved; stack.prepare(); store.update(stack) }
+            if let saved = store.archive.stacks.first(where: { $0.id == stackID }) { stack = saved; stack.prepare(poolSize: store.poolSize); store.update(stack) }
         }.onDisappear { advanceTask?.cancel() }
     }
     private func card(_ word: Word, item: ReviewItem) -> some View {
@@ -105,6 +105,7 @@ struct StudyView: View {
                     .font(.system(size: 10, weight: .bold, design: .monospaced)).tracking(2).foregroundStyle(.secondary)
                 Spacer()
                 if japaneseFirst || revealed {
+                    CopyJapaneseButton(text: word.japanese).id(word.id)
                     Button { store.speak(word.japanese) } label: { Image(systemName: "speaker.wave.2").font(.title3).frame(width: 44, height: 44) }.accessibilityLabel("일본어 발음 듣기")
                 }
             }
@@ -158,7 +159,7 @@ struct StudyView: View {
         }
         advanceTask = Task { @MainActor in
             do { try await Task.sleep(for: .milliseconds(reduceMotion ? 100 : 240)) } catch { return }
-            undo = stack; stack.answer(known: known); store.update(stack)
+            undo = stack; stack.answer(known: known, poolSize: store.poolSize); store.update(stack)
             var transaction = Transaction(); transaction.disablesAnimations = true
             withTransaction(transaction) { revealed = false; offset = .zero; exiting = false }
         }
