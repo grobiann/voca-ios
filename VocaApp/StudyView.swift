@@ -67,26 +67,7 @@ struct StudyView: View {
                                 }.padding(24).allowsHitTesting(false)
                             }
                             .offset(offset).rotationEffect(.degrees(reduceMotion ? 0 : Double(offset.width / 22)))
-                            .simultaneousGesture(DragGesture(minimumDistance: 14)
-                                .onChanged { value in
-                                    guard revealed && !exiting else { return }
-                                    if !draggingHorizontally {
-                                        guard abs(value.translation.width) > abs(value.translation.height) else { return }
-                                        draggingHorizontally = true
-                                    }
-                                    offset = CGSize(width: value.translation.width, height: value.translation.height * 0.15)
-                                }
-                                .onEnded { value in
-                                    guard revealed && !exiting else { return }
-                                    defer { draggingHorizontally = false }
-                                    let threshold = min(110.0, geometry.size.width * 0.27)
-                                    let width = value.translation.width
-                                    let predicted = value.predictedEndTranslation.width
-                                    let flick = abs(width) > 35 && abs(predicted) > 220 && width.sign == predicted.sign
-                                    if draggingHorizontally && (abs(width) > threshold || flick) {
-                                        answer(value.translation.width > 0, width: geometry.size.width)
-                                    } else { withAnimation(.spring(response: 0.38, dampingFraction: 0.72)) { offset = .zero } }
-                                })
+                            .simultaneousGesture(revealed ? swipeGesture(width: geometry.size.width) : nil)
                     }.padding(.vertical, 8)
                     HStack(spacing: 14) {
                         responseButton("다시 볼게요", icon: "arrow.left", known: false, width: geometry.size.width)
@@ -120,12 +101,8 @@ struct StudyView: View {
         return ZStack {
             if revealed {
                 cardSurface(word, japaneseFirst: japaneseFirst, showingAnswer: true)
-                    .zIndex(0)
-                    .transition(.asymmetric(insertion: .identity, removal: .opacity))
             } else {
                 cardSurface(word, japaneseFirst: japaneseFirst, showingAnswer: false)
-                    .zIndex(1)
-                    .transition(.asymmetric(insertion: .identity, removal: .opacity))
             }
         }
             .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 30))
@@ -192,8 +169,29 @@ struct StudyView: View {
     }
     private func reveal() {
         guard !revealed && !exiting else { return }
-        store.feedback()
-        withAnimation(reduceMotion ? nil : .easeOut(duration: 0.12)) { revealed = true }
+        revealed = true
+    }
+    private func swipeGesture(width: CGFloat) -> some Gesture {
+        DragGesture(minimumDistance: 14)
+            .onChanged { value in
+                guard revealed && !exiting else { return }
+                if !draggingHorizontally {
+                    guard abs(value.translation.width) > abs(value.translation.height) else { return }
+                    draggingHorizontally = true
+                }
+                offset = CGSize(width: value.translation.width, height: value.translation.height * 0.15)
+            }
+            .onEnded { value in
+                guard revealed && !exiting else { return }
+                defer { draggingHorizontally = false }
+                let threshold = min(110.0, width * 0.27)
+                let translation = value.translation.width
+                let predicted = value.predictedEndTranslation.width
+                let flick = abs(translation) > 35 && abs(predicted) > 220 && translation.sign == predicted.sign
+                if draggingHorizontally && (abs(translation) > threshold || flick) {
+                    answer(translation > 0, width: width)
+                } else { withAnimation(.spring(response: 0.38, dampingFraction: 0.72)) { offset = .zero } }
+            }
     }
     private func swipeStamp(_ title: String, color: Color, angle: Double) -> some View {
         Text(title).font(.title2.bold()).foregroundStyle(color)
