@@ -64,7 +64,10 @@ struct StudyView: View {
                                     Spacer()
                                     swipeStamp("다시 볼게요", color: Palette.orange, angle: 12)
                                         .opacity(revealed ? Double(min(max(-offset.width, 0) / 90, 1)) : 0)
-                                }.padding(24).allowsHitTesting(false)
+                                }
+                                .padding(.horizontal, 24)
+                                .padding(.top, 92)
+                                .allowsHitTesting(false)
                             }
                             .offset(offset).rotationEffect(.degrees(reduceMotion ? 0 : Double(offset.width / 22)))
                             .simultaneousGesture(revealed ? swipeGesture(width: geometry.size.width) : nil)
