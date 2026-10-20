@@ -57,7 +57,7 @@ struct StudyView: View {
                                 .accessibilityHidden(true)
                         }
                         card(word, item: item)
-                            .overlay {
+                            .overlay(alignment: .top) {
                                 HStack {
                                     swipeStamp("알았어요", color: Palette.accent, angle: -12)
                                         .opacity(revealed ? Double(min(max(offset.width, 0) / 90, 1)) : 0)
