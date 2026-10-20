@@ -76,6 +76,17 @@ import AVFoundation
         utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP"); utterance.rate = 0.43
         speaker.speak(utterance)
     }
+    func searchJapanese(_ text: String) {
+        var components = URLComponents(string: "https://www.google.com/search")!
+        components.queryItems = [URLQueryItem(name: "q", value: text)]
+        guard let webURL = components.url,
+              var chrome = URLComponents(url: webURL, resolvingAgainstBaseURL: false) else { return }
+        chrome.scheme = "googlechromes"
+        guard let chromeURL = chrome.url else { return }
+        UIApplication.shared.open(chromeURL, options: [:]) { opened in
+            if !opened { UIApplication.shared.open(webURL) }
+        }
+    }
     func feedback(_ style: UIImpactFeedbackGenerator.FeedbackStyle = .light) {
         if haptics { UIImpactFeedbackGenerator(style: style).impactOccurred() }
     }

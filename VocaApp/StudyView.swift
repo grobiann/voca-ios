@@ -106,6 +106,7 @@ struct StudyView: View {
                 Spacer()
                 if japaneseFirst || revealed {
                     CopyJapaneseButton(text: word.japanese).id(word.id)
+                    SearchJapaneseButton(text: word.japanese)
                     Button { store.speak(word.japanese) } label: { Image(systemName: "speaker.wave.2").font(.title3).frame(width: 44, height: 44) }.accessibilityLabel("일본어 발음 듣기")
                 }
             }

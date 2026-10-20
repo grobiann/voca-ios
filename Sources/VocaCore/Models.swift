@@ -31,6 +31,7 @@ public struct Stack: Identifiable, Codable, Equatable, Sendable {
     public var queue: [ReviewItem]
     public var sourceID: UUID?
     public var recentWordIDs: [UUID]?
+    public var hasShuffledQueue: Bool?
     public static let poolLimit = 20
     public var remainingCount: Int { allItems.filter { !mastered.contains($0) }.count }
     public init(id: UUID = UUID(), title: String, words: [Word] = [], sourceID: UUID? = nil) {
@@ -48,22 +49,29 @@ public struct Stack: Identifiable, Codable, Equatable, Sendable {
         queue = Array(queue.filter {
             valid.contains($0) && !mastered.contains($0) && seenWords.insert($0.wordID).inserted
         }.prefix(max(1, poolSize)))
+        // Older saved queues were ordered by the source sheet. Shuffle once when migrating.
+        if hasShuffledQueue != true { queue.shuffle(); hasShuffledQueue = true }
+        if recentWordIDs == nil { recentWordIDs = [] }
         refill(poolSize: max(1, poolSize))
     }
     private mutating func refill(poolSize: Int) {
-        let activeWords = Set(queue.map(\.wordID))
+        var activeWords = Set(queue.map(\.wordID))
         let recent = recentWordIDs ?? []
-        var pending = allItems.filter { !mastered.contains($0) && !activeWords.contains($0.wordID) }
-        // Avoid admitting the reverse direction immediately after answering its partner.
-        let cooled = pending.filter { !recent.contains($0.wordID) }
-        if !cooled.isEmpty { pending = cooled }
-        else if !queue.isEmpty { return }
-        else {
-            pending.sort { (recent.firstIndex(of: $0.wordID) ?? -1) < (recent.firstIndex(of: $1.wordID) ?? -1) }
-        }
-        var admitted = activeWords
-        for item in pending where queue.count < poolSize {
-            if admitted.insert(item.wordID).inserted { queue.append(item) }
+        while queue.count < poolSize {
+            let pending = allItems.filter { !mastered.contains($0) && !activeWords.contains($0.wordID) }
+            guard !pending.isEmpty else { break }
+            // Prefer unseen Japanese fronts. When only reverse cards remain, use the
+            // oldest answered word first so a just-answered word waits longest.
+            let fronts = pending.filter { $0.direction == .japaneseToKorean }
+            let candidates = fronts.isEmpty ? pending : fronts
+            let oldest = candidates.map { recent.firstIndex(of: $0.wordID) ?? -1 }.min() ?? -1
+            guard let next = candidates.filter({ (recent.firstIndex(of: $0.wordID) ?? -1) == oldest }).randomElement() else { break }
+            activeWords.insert(next.wordID)
+            // A replacement may enter the pool immediately, but cannot become
+            // the next or second-next card while enough other cards exist.
+            let firstSlot = min(3, queue.count)
+            let lastSlot = queue.count
+            queue.insert(next, at: Int.random(in: firstSlot...lastSlot))
         }
     }
     public mutating func answer(known: Bool, poolSize: Int = Self.poolLimit) {
@@ -77,10 +85,10 @@ public struct Stack: Identifiable, Codable, Equatable, Sendable {
             refill(poolSize: max(1, poolSize))
         } else {
             // Retry only within the current pool; an incorrect answer never admits a new word.
-            queue.insert(current, at: min(3, queue.count))
+            queue.insert(current, at: Int.random(in: min(3, queue.count)...queue.count))
         }
     }
-    public mutating func reset(poolSize: Int = Self.poolLimit) { mastered = []; queue = []; recentWordIDs = []; prepare(poolSize: poolSize) }
+    public mutating func reset(poolSize: Int = Self.poolLimit) { mastered = []; queue = []; recentWordIDs = []; hasShuffledQueue = nil; prepare(poolSize: poolSize) }
 
 }
 public struct Library: Identifiable, Codable, Equatable, Sendable {

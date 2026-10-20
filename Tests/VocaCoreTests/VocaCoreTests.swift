@@ -5,7 +5,7 @@ final class VocaCoreTests: XCTestCase {
         var stack = Archive.sample.stacks[0]; stack.prepare()
         XCTAssertEqual(stack.queue.count, stack.words.count)
         let first = stack.queue[0]; stack.answer(known: false)
-        XCTAssertEqual(stack.queue[3], first)
+        XCTAssertTrue(stack.queue.dropFirst(3).contains(first))
         XCTAssertEqual(stack.mastered.count, 0)
         for _ in 0..<stack.words.count { stack.answer(known: true) }
         XCTAssertFalse(stack.isComplete)
@@ -20,6 +20,18 @@ final class VocaCoreTests: XCTestCase {
         restored.prepare(); XCTAssertEqual(restored, stack)
         restored.words.removeAll(); restored.prepare()
         XCTAssertTrue(restored.queue.isEmpty); XCTAssertTrue(restored.mastered.isEmpty); XCTAssertFalse(restored.isComplete)
+    }
+    func testDeletingMasteredWordPrunesItsReviewState() {
+        var stack = Archive.sample.stacks[0]
+        stack.prepare()
+        let reviewed = stack.queue[0].wordID
+        stack.answer(known: true)
+        XCTAssertEqual(stack.mastered.count, 1)
+        stack.words.removeAll { $0.id == reviewed }
+        stack.prepare()
+        XCTAssertEqual(stack.mastered.count, 0)
+        XCTAssertFalse(stack.queue.contains { $0.wordID == reviewed })
+        XCTAssertEqual(stack.allItems.count, 6)
     }
     func testCSVQuotesNewlinesAndGroups() throws {
         let csv = "\u{FEFF}stack,japanese,korean,example\r\n인사,こんにちは,안녕하세요,\"こんにちは、田中さん。\"\r\n카페,注文,주문,\"一つ、\"\"お願いします\"\"。\nありがとう。\"\r\n"
@@ -59,6 +71,25 @@ final class VocaCoreTests: XCTestCase {
         }
         XCTAssertTrue(stack.isComplete)
     }
+    func testTwentyWordPoolStaysFullAndAnswersAreMixed() {
+        var stack = Stack(title: "Twenty", words: (0..<20).map { Word(japanese: "語\($0)", korean: "말\($0)", example: "例") })
+        stack.prepare()
+        XCTAssertEqual(stack.queue.count, 20)
+        XCTAssertEqual(Set(stack.queue.map(\.wordID)).count, 20)
+        for _ in 0..<30 {
+            let current = stack.queue[0]
+            stack.answer(known: true)
+            XCTAssertFalse(stack.queue.prefix(2).contains { $0.wordID == current.wordID })
+            XCTAssertEqual(Set(stack.queue.map(\.wordID)).count, stack.queue.count)
+            let distinctPending = Set(stack.allItems.filter { !stack.mastered.contains($0) }.map(\.wordID)).count
+            XCTAssertEqual(stack.queue.count, min(20, distinctPending))
+        }
+        let before = Set(stack.queue)
+        let wrong = stack.queue[0]
+        stack.answer(known: false)
+        XCTAssertEqual(Set(stack.queue), before)
+        XCTAssertFalse(stack.queue.prefix(2).contains(wrong))
+    }
     func testSmallPoolSeparatesReverseAndLegacyQueueMigrates() throws {
         var stack = Archive.sample.stacks[0]
         stack.queue = stack.allItems // saved by version 1
@@ -66,7 +97,7 @@ final class VocaCoreTests: XCTestCase {
         XCTAssertEqual(stack.queue.count, 4)
         let first = stack.queue[0]
         stack.answer(known: true)
-        XCTAssertFalse(stack.queue.contains { $0.wordID == first.wordID })
+        XCTAssertFalse(stack.queue.prefix(2).contains { $0.wordID == first.wordID })
         for _ in 0..<3 { stack.answer(known: true) }
         XCTAssertTrue(stack.queue.allSatisfy { $0.direction == .koreanToJapanese })
         let saved = try JSONEncoder().encode(stack)

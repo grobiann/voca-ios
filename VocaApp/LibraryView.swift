@@ -162,7 +162,12 @@ struct LibraryStackEditor: View {
         List {
             ForEach(stack?.words ?? []) { word in
                 VStack(alignment: .leading, spacing: 6) {
-                    HStack { Text(word.japanese).font(.headline).textSelection(.enabled); Spacer(); CopyJapaneseButton(text: word.japanese) }
+                    HStack {
+                        Text(word.japanese).font(.headline).textSelection(.enabled)
+                        Spacer()
+                        CopyJapaneseButton(text: word.japanese)
+                        SearchJapaneseButton(text: word.japanese)
+                    }
                     Text(word.korean); Text(word.example).font(.caption).foregroundStyle(.secondary)
                 }
             }.onDelete { offsets in mutate { $0.words.remove(atOffsets: offsets) } }

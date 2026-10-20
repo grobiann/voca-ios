@@ -15,6 +15,16 @@ struct CopyJapaneseButton: View {
     }
 }
 
+struct SearchJapaneseButton: View {
+    @Environment(AppStore.self) private var store
+    let text: String
+    var body: some View {
+        Button { store.searchJapanese(text) } label: {
+            Image(systemName: "magnifyingglass").frame(width: 44, height: 44)
+        }.buttonStyle(.borderless).accessibilityLabel("\(text) 구글 검색")
+    }
+}
+
 struct LearnView: View {
     @Environment(AppStore.self) private var store
     @State private var studying: Stack?
@@ -110,6 +120,7 @@ struct StackDetailView: View {
                                     Text(word.japanese).font(.headline).textSelection(.enabled)
                                     Spacer()
                                     CopyJapaneseButton(text: word.japanese)
+                                    SearchJapaneseButton(text: word.japanese)
                                     Button(role: .destructive) { deletingWord = word } label: {
                                         Image(systemName: "trash").frame(width: 44, height: 44)
                                     }.buttonStyle(.borderless).accessibilityLabel("\(word.japanese) 카드 삭제")
