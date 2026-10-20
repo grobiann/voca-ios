@@ -9,6 +9,7 @@ struct StudyView: View {
     @State private var stack = Stack(title: "")
     @State private var revealed = false
     @State private var offset: CGSize = .zero
+    @State private var draggingHorizontally = false
     @State private var exiting = false
     @State private var undo: Stack?
     @State private var advanceTask: Task<Void, Never>?
@@ -56,24 +57,33 @@ struct StudyView: View {
                                 .accessibilityHidden(true)
                         }
                         card(word, item: item)
-                            .overlay(alignment: offset.width >= 0 ? .topLeading : .topTrailing) {
-                                Text(offset.width >= 0 ? "알았어요" : "다시 볼게요")
-                                    .font(Font.title2.weight(.bold)).foregroundStyle(offset.width >= 0 ? Palette.accent : Palette.orange)
-                                    .padding(12).overlay(RoundedRectangle(cornerRadius: 12).stroke(lineWidth: 3))
-                                    .rotationEffect(.degrees(offset.width >= 0 ? -12 : 12)).padding(24)
-                                    .opacity(revealed ? Double(min(abs(offset.width) / 90, 1)) : 0)
+                            .overlay {
+                                HStack {
+                                    swipeStamp("알았어요", color: Palette.accent, angle: -12)
+                                        .opacity(revealed ? Double(min(max(offset.width, 0) / 90, 1)) : 0)
+                                    Spacer()
+                                    swipeStamp("다시 볼게요", color: Palette.orange, angle: 12)
+                                        .opacity(revealed ? Double(min(max(-offset.width, 0) / 90, 1)) : 0)
+                                }.padding(24).allowsHitTesting(false)
                             }
                             .offset(offset).rotationEffect(.degrees(reduceMotion ? 0 : Double(offset.width / 22)))
                             .simultaneousGesture(DragGesture(minimumDistance: 14)
                                 .onChanged { value in
-                                    guard revealed && !exiting, abs(value.translation.width) > abs(value.translation.height) else { return }
+                                    guard revealed && !exiting else { return }
+                                    if !draggingHorizontally {
+                                        guard abs(value.translation.width) > abs(value.translation.height) else { return }
+                                        draggingHorizontally = true
+                                    }
                                     offset = CGSize(width: value.translation.width, height: value.translation.height * 0.15)
                                 }
                                 .onEnded { value in
                                     guard revealed && !exiting else { return }
+                                    defer { draggingHorizontally = false }
                                     let threshold = min(110.0, geometry.size.width * 0.27)
-                                    if abs(value.translation.width) > abs(value.translation.height),
-                                       abs(value.translation.width) > threshold || (abs(value.translation.width) > 25 && abs(value.predictedEndTranslation.width) > 220) {
+                                    let width = value.translation.width
+                                    let predicted = value.predictedEndTranslation.width
+                                    let flick = abs(width) > 35 && abs(predicted) > 220 && width.sign == predicted.sign
+                                    if draggingHorizontally && (abs(width) > threshold || flick) {
                                         answer(value.translation.width > 0, width: geometry.size.width)
                                     } else { withAnimation(.spring(response: 0.38, dampingFraction: 0.72)) { offset = .zero } }
                                 })
@@ -107,28 +117,15 @@ struct StudyView: View {
     }
     private func card(_ word: Word, item: ReviewItem) -> some View {
         let japaneseFirst = item.direction == .japaneseToKorean
-        return VStack(spacing: 22) {
-            HStack {
-                Text(revealed ? "ANSWER" : "THINK IN \(japaneseFirst ? "JAPANESE" : "KOREAN")")
-                    .font(.system(size: 10, weight: .bold, design: .monospaced)).tracking(2).foregroundStyle(.secondary)
-                Spacer()
-                if japaneseFirst || revealed {
-                    CopyJapaneseButton(text: word.japanese).id(word.id)
-                    SearchJapaneseButton(text: word.japanese)
-                    Button { store.speak(word.japanese) } label: { Image(systemName: "speaker.wave.2").font(.title3).frame(width: 44, height: 44) }.accessibilityLabel("일본어 발음 듣기")
-                }
+        return ZStack {
+            if revealed {
+                cardSurface(word, japaneseFirst: japaneseFirst, showingAnswer: true)
+                    .transition(.opacity)
+            } else {
+                cardSurface(word, japaneseFirst: japaneseFirst, showingAnswer: false)
+                    .transition(.opacity)
             }
-            ViewThatFits(in: .vertical) {
-                cardFace(word, japaneseFirst: japaneseFirst, scale: 1)
-                cardFace(word, japaneseFirst: japaneseFirst, scale: 0.82)
-                cardFace(word, japaneseFirst: japaneseFirst, scale: 0.66)
-                cardFace(word, japaneseFirst: japaneseFirst, scale: 0.58, compact: true)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .clipped()
-            Label(revealed ? "기억을 확인해 보세요" : "탭해서 뒤집기", systemImage: revealed ? "sparkle" : "hand.tap")
-                .font(.caption).foregroundStyle(.tertiary)
-        }.padding(28).frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
             .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 30))
             .overlay(RoundedRectangle(cornerRadius: 30).stroke(.primary.opacity(0.06)))
             .shadow(color: .black.opacity(0.06), radius: 20, y: 10)
@@ -137,26 +134,50 @@ struct StudyView: View {
             .onTapGesture { reveal() }
             .accessibilityAction(named: "정답 보기") { reveal() }
     }
-    private func cardFace(_ word: Word, japaneseFirst: Bool, scale: CGFloat, compact: Bool = false) -> some View {
+    private func cardSurface(_ word: Word, japaneseFirst: Bool, showingAnswer: Bool) -> some View {
+        VStack(spacing: 22) {
+            HStack {
+                Text(showingAnswer ? "ANSWER" : "THINK IN \(japaneseFirst ? "JAPANESE" : "KOREAN")")
+                    .font(.system(size: 10, weight: .bold, design: .monospaced)).tracking(2).foregroundStyle(.secondary)
+                Spacer()
+                if japaneseFirst || showingAnswer {
+                    CopyJapaneseButton(text: word.japanese).id(word.id)
+                    SearchJapaneseButton(text: word.japanese)
+                    Button { store.speak(word.japanese) } label: { Image(systemName: "speaker.wave.2").font(.title3).frame(width: 44, height: 44) }.accessibilityLabel("일본어 발음 듣기")
+                }
+            }
+            ViewThatFits(in: .vertical) {
+                cardFace(word, japaneseFirst: japaneseFirst, showingAnswer: showingAnswer, scale: 1)
+                cardFace(word, japaneseFirst: japaneseFirst, showingAnswer: showingAnswer, scale: 0.82)
+                cardFace(word, japaneseFirst: japaneseFirst, showingAnswer: showingAnswer, scale: 0.66)
+                cardFace(word, japaneseFirst: japaneseFirst, showingAnswer: showingAnswer, scale: 0.58, compact: true)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .clipped()
+            Label(showingAnswer ? "기억을 확인해 보세요" : "탭해서 뒤집기", systemImage: showingAnswer ? "sparkle" : "hand.tap")
+                .font(.caption).foregroundStyle(.tertiary)
+        }.padding(28).frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    private func cardFace(_ word: Word, japaneseFirst: Bool, showingAnswer: Bool, scale: CGFloat, compact: Bool = false) -> some View {
         VStack(spacing: compact ? 10 : 20 * scale) {
             Text(japaneseFirst ? word.japanese : word.korean)
-                .font(.system(size: (revealed ? 24 : 38) * scale, weight: revealed ? .medium : .semibold, design: .rounded))
-                .foregroundStyle(revealed ? .secondary : .primary)
+                .font(.system(size: (showingAnswer ? 24 : 38) * scale, weight: showingAnswer ? .medium : .semibold, design: .rounded))
+                .foregroundStyle(showingAnswer ? .secondary : .primary)
                 .lineLimit(compact ? 4 : nil)
                 .minimumScaleFactor(0.65)
                 .fixedSize(horizontal: false, vertical: true)
-            if (japaneseFirst || revealed), let reading = word.reading, !reading.isEmpty {
+            if (japaneseFirst || showingAnswer), let reading = word.reading, !reading.isEmpty {
                 Text(reading).font(.system(size: 17 * scale)).foregroundStyle(.secondary)
                     .lineLimit(compact ? 2 : nil).fixedSize(horizontal: false, vertical: true)
             }
-            if revealed {
+            if showingAnswer {
                 Rectangle().fill(Palette.accent.opacity(0.15)).frame(width: 36, height: 3)
                 Text(japaneseFirst ? word.korean : word.japanese)
                     .font(.system(size: 34 * scale, weight: .semibold, design: .rounded))
                     .lineLimit(compact ? 4 : nil).minimumScaleFactor(0.65)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            if (japaneseFirst || revealed) && !word.example.isEmpty {
+            if (japaneseFirst || showingAnswer) && !word.example.isEmpty {
                 Text(word.example).font(.system(size: 17 * scale)).foregroundStyle(.secondary)
                     .lineSpacing(compact ? 2 : 5)
                     .lineLimit(compact ? 5 : nil)
@@ -170,7 +191,12 @@ struct StudyView: View {
     private func reveal() {
         guard !revealed && !exiting else { return }
         store.feedback()
-        withAnimation(reduceMotion ? nil : .spring(response: 0.36, dampingFraction: 0.86)) { revealed = true }
+        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.16)) { revealed = true }
+    }
+    private func swipeStamp(_ title: String, color: Color, angle: Double) -> some View {
+        Text(title).font(.title2.bold()).foregroundStyle(color)
+            .padding(12).overlay(RoundedRectangle(cornerRadius: 12).stroke(color, lineWidth: 3))
+            .rotationEffect(.degrees(angle))
     }
     private func responseButton(_ title: String, icon: String, known: Bool, width: CGFloat) -> some View {
         Button { answer(known, width: width) } label: {
