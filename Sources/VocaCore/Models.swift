@@ -112,6 +112,25 @@ public struct Archive: Codable, Sendable {
     public init(stacks: [Stack] = [], libraries: [Library] = [], server: [Library] = []) {
         self.stacks = stacks; self.libraries = libraries; self.server = server
     }
+    @discardableResult public mutating func recordMeaningCorrection(library: Library?, stack: Stack, word: Word, correctedKorean: String) -> Bool {
+        let correction = correctedKorean.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !correction.isEmpty else { return false }
+        let report = WordReport(library: library, stack: stack, word: word, correctedKorean: correction)
+        wordReports = (wordReports ?? []) + [report]
+        var updatedMyCard = false
+        for stackIndex in stacks.indices where stacks[stackIndex].id == stack.id || stacks[stackIndex].sourceID == stack.id {
+            guard let wordIndex = stacks[stackIndex].words.firstIndex(where: { $0.id == word.id }) else { continue }
+            stacks[stackIndex].words[wordIndex].korean = correction
+            updatedMyCard = true
+        }
+        if var entries = microReviewEntries {
+            for index in entries.indices where entries[index].word.id == word.id {
+                entries[index].word.korean = correction
+            }
+            microReviewEntries = entries
+        }
+        return updatedMyCard
+    }
     public static var sample: Archive {
         let daily = Stack(title: "하루를 시작하는 말", words: [
             Word(japanese: "おはようございます", korean: "좋은 아침이에요", example: "先生、おはようございます。"),
@@ -188,12 +207,17 @@ public struct WordReport: Identifiable, Codable, Equatable, Sendable {
     public var stackTitle: String
     public var word: Word
     public var message: String
+    public var correctedKorean: String?
     public init(library: Library?, stack: Stack, word: Word, message: String) {
         libraryID = library?.id; libraryTitle = library?.title
         stackID = stack.sourceID ?? stack.id; stackTitle = stack.title
         self.word = word; self.message = message
     }
+    public init(library: Library?, stack: Stack, word: Word, correctedKorean: String) {
+        self.init(library: library, stack: stack, word: word, message: correctedKorean)
+        self.correctedKorean = correctedKorean
+    }
     public var shareText: String {
-        "틀린 단어 제보\n라이브러리: \(libraryTitle ?? "내 스택")\n스택: \(stackTitle)\n일본어: \(word.japanese)\n읽기: \(word.reading ?? "")\n한국어: \(word.korean)\n예문: \(word.example)\n제보 내용: \(message)\n단어 ID: \(word.id)\n스택 ID: \(stackID)\n출처: \(word.source ?? "직접 등록")"
+        "틀린 단어 제보\n라이브러리: \(libraryTitle ?? "내 스택")\n스택: \(stackTitle)\n일본어: \(word.japanese)\n읽기: \(word.reading ?? "")\n기존 한국어 뜻: \(word.korean)\n예문: \(word.example)\n\(correctedKorean.map { "올바른 한국어 뜻: \($0)" } ?? "제보 내용: \(message)")\n단어 ID: \(word.id)\n스택 ID: \(stackID)\n출처: \(word.source ?? "직접 등록")"
     }
 }

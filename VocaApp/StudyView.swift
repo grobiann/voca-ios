@@ -108,7 +108,9 @@ struct StudyView: View {
         }.onAppear {
             if let saved = store.archive.stacks.first(where: { $0.id == stackID }) { stack = saved; stack.prepare(poolSize: store.poolSize); store.update(stack) }
         }.onDisappear { advanceTask?.cancel() }
-        .sheet(isPresented: $reporting) {
+        .sheet(isPresented: $reporting, onDismiss: {
+            if let updated = store.archive.stacks.first(where: { $0.id == stackID }) { stack = updated }
+        }) {
             NavigationStack {
                 WordReportComposer(library: sourceLibrary, stacks: [stack], initialWordID: word?.id)
             }

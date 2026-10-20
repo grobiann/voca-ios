@@ -11,13 +11,15 @@ import XCTest
         XCTAssertFalse(app.textFields["일본어 · 한국어 검색"].exists)
         let message = app.descendants(matching: .any)["reportMessage"].firstMatch
         message.tap()
-        message.typeText("학습 중 뜻 오류 확인")
-        app.buttons["제보 저장"].tap()
+        message.typeText("학습 중 수정한 뜻")
+        app.buttons["제보 저장 및 내 카드 수정"].tap()
+        app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        XCTAssertTrue(app.staticTexts["학습 중 수정한 뜻"].waitForExistence(timeout: 5))
         app.buttons["학습 닫기"].tap()
         app.tabBars.buttons["계정"].tap()
         app.swipeUp()
         app.buttons["단어 오류 제보함"].tap()
-        XCTAssertTrue(app.staticTexts["학습 중 뜻 오류 확인"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", "학습 중 수정한 뜻")).firstMatch.waitForExistence(timeout: 5))
     }
     func testMicroReviewCompletesThreeChecks() {
         let app = XCUIApplication()
@@ -121,7 +123,7 @@ import XCTest
         let field = app.descendants(matching: .any)["reportMessage"].firstMatch
         XCTAssertTrue(field.waitForExistence(timeout: 5))
         field.tap(); field.typeText("Meaning correction")
-        app.buttons["제보 저장"].tap()
+        app.buttons["제보 저장 및 내 카드 수정"].tap()
         app.terminate()
         app.launchArguments = ["--uitesting-resume"]
         app.launch()
@@ -129,7 +131,7 @@ import XCTest
         XCTAssertTrue(app.staticTexts["학습 풀 크기: 21개"].exists)
         app.swipeUp()
         app.buttons["단어 오류 제보함"].tap()
-        XCTAssertTrue(app.staticTexts["Meaning correction"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", "Meaning correction")).firstMatch.waitForExistence(timeout: 5))
         XCTAssertTrue(app.buttons["제보 공유"].exists)
         screenshot("12-Word-Report")
     }

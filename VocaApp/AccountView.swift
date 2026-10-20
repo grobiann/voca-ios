@@ -239,7 +239,11 @@ struct WordReportList: View {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(report.word.japanese).font(.headline).textSelection(.enabled)
                         Text("\(report.libraryTitle ?? "내 스택") · \(report.stackTitle)").font(.caption).foregroundStyle(.secondary)
-                        Text(report.message)
+                        if let corrected = report.correctedKorean {
+                            Text("\(report.word.korean) → \(corrected)")
+                        } else {
+                            Text(report.message)
+                        }
                         Text(report.createdAt, style: .date).font(.caption).foregroundStyle(.secondary)
                         ShareLink(item: report.shareText) { Label("제보 공유", systemImage: "square.and.arrow.up") }
                     }.padding(.vertical, 6)
@@ -258,7 +262,7 @@ struct WordReportComposer: View {
     let initialWordID: UUID?
     @State private var selectedStackID: UUID?
     @State private var selectedWordID: UUID?
-    @State private var message = ""
+    @State private var correctedKorean = ""
     @State private var query = ""
     init(library: Library?, stacks: [Stack], initialWordID: UUID? = nil) {
         self.library = library
@@ -269,6 +273,12 @@ struct WordReportComposer: View {
     }
     private var stack: Stack? { stacks.first { $0.id == selectedStackID } ?? stacks.first }
     private var word: Word? { stack?.words.first { $0.id == selectedWordID } }
+    private var isInMyCards: Bool {
+        guard let stack, let word else { return false }
+        return store.archive.stacks.contains { mine in
+            (mine.id == stack.id || mine.sourceID == stack.id) && mine.words.contains { $0.id == word.id }
+        }
+    }
     var body: some View {
         Form {
             Section("제보 위치") {
@@ -295,15 +305,13 @@ struct WordReportComposer: View {
                 Section("선택한 카드") { Text(word.japanese); Text(word.korean); Text(word.example) }
             }
             Section {
-                TextField("틀린 부분이나 올바른 뜻을 적어 주세요", text: $message, axis: .vertical).lineLimit(3...8).accessibilityIdentifier("reportMessage")
-                Button("제보 저장") {
+                TextField("올바른 한국어 뜻을 적어 주세요", text: $correctedKorean, axis: .vertical).lineLimit(3...8).accessibilityIdentifier("reportMessage")
+                Button(isInMyCards ? "제보 저장 및 내 카드 수정" : "제보 저장") {
                     guard let stack, let word else { return }
-                    let report = WordReport(library: library, stack: stack, word: word, message: message.trimmingCharacters(in: .whitespacesAndNewlines))
-                    store.archive.wordReports = (store.archive.wordReports ?? []) + [report]
-                    store.save()
+                    store.recordMeaningCorrection(library: library, stack: stack, word: word, correctedKorean: correctedKorean)
                     if store.error == nil { dismiss() }
-                }.disabled(word == nil || message.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-            } header: { Text("오류 내용") } footer: { Text("기기에 저장되며 자동 전송되지 않습니다. 계정 탭의 제보함에서 공유할 수 있어요.") }
+                }.disabled(word == nil || correctedKorean.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            } header: { Text("올바른 뜻") } footer: { Text("제보는 기기에 저장됩니다. 내 카드에 있는 단어는 뜻이 즉시 수정되며, 라이브러리 원본은 유지됩니다.") }
         }
         .navigationTitle("틀린 단어 제보")
         .toolbar {
