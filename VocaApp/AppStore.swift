@@ -1,6 +1,7 @@
 import SwiftUI
 import VocaCore
 import AVFoundation
+import UserNotifications
 
 @MainActor @Observable final class AppStore {
     var archive: Archive
@@ -9,6 +10,18 @@ import AVFoundation
     private let location: URL
     private var storageReadable = true
     private let speaker = AVSpeechSynthesizer()
+    private var reminderTask: Task<Void, Never>?
+    var microSettings: MicroReviewSettings {
+        get { archive.microReviewSettings ?? MicroReviewSettings() }
+        set {
+            archive.microReviewSettings = newValue
+            save()
+            scheduleMicroNotifications()
+        }
+    }
+    var microEntries: [MicroReviewEntry] { archive.microReviewEntries ?? [] }
+    var activeMicroCount: Int { microEntries.filter { $0.status == .active }.count }
+    var completedMicroCount: Int { microEntries.filter { $0.status == .completed }.count }
     var poolSize: Int {
         get { min(100, max(1, archive.studyPoolSize ?? Stack.poolLimit)) }
         set {
@@ -87,7 +100,115 @@ import AVFoundation
             if !opened { UIApplication.shared.open(webURL) }
         }
     }
+    func setMicroEnabled(_ enabled: Bool) async {
+        if enabled {
+            do {
+                let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge])
+                guard granted else { error = "알림이 허용되지 않았습니다. iPhone 설정에서 voca-ios 알림을 허용해 주세요."; return }
+            } catch { self.error = "알림 권한을 확인하지 못했습니다: \(error.localizedDescription)"; return }
+        }
+        var settings = microSettings
+        settings.enabled = enabled
+        microSettings = settings
+    }
+    func addMicroWord(_ word: Word, sourceTitle: String) {
+        var entries = microEntries
+        if let i = entries.firstIndex(where: { $0.word.japanese == word.japanese && $0.word.korean == word.korean }) {
+            if entries[i].status == .active { return }
+            entries[i].word = word
+            entries[i].sourceTitle = sourceTitle
+            entries[i].restart()
+        } else { entries.append(MicroReviewEntry(word: word, sourceTitle: sourceTitle)) }
+        archive.microReviewEntries = entries
+        save(); scheduleMicroNotifications()
+    }
+    func microEntry(for word: Word) -> MicroReviewEntry? {
+        microEntries.first { $0.word.japanese == word.japanese && $0.word.korean == word.korean }
+    }
+    func nextMicroEntry(excluding ids: Set<UUID> = []) -> MicroReviewEntry? {
+        microEntries.filter { $0.status == .active && !ids.contains($0.id) }
+            .shuffled().min { ($0.lastReviewedAt ?? .distantPast) < ($1.lastReviewedAt ?? .distantPast) }
+    }
+    func answerMicro(_ id: UUID, known: Bool) {
+        guard var entries = archive.microReviewEntries,
+              let i = entries.firstIndex(where: { $0.id == id }) else { return }
+        entries[i].answer(known: known)
+        archive.microReviewEntries = entries
+        save(); scheduleMicroNotifications()
+    }
+    func stopMicro(_ id: UUID) {
+        guard var entries = archive.microReviewEntries,
+              let i = entries.firstIndex(where: { $0.id == id }) else { return }
+        entries[i].stop()
+        archive.microReviewEntries = entries
+        save(); scheduleMicroNotifications()
+    }
+    func restartMicro(_ id: UUID) {
+        guard var entries = archive.microReviewEntries,
+              let i = entries.firstIndex(where: { $0.id == id }) else { return }
+        entries[i].restart()
+        archive.microReviewEntries = entries
+        save(); scheduleMicroNotifications()
+    }
+    func removeMicro(_ id: UUID) {
+        archive.microReviewEntries?.removeAll { $0.id == id }
+        save(); scheduleMicroNotifications()
+    }
+    func scheduleMicroNotifications() {
+        let previous = reminderTask
+        previous?.cancel()
+        let settings = microSettings
+        let entries = microEntries.filter { $0.status == .active }
+        reminderTask = Task {
+            _ = await previous?.result
+            do { try await MicroNotificationScheduler.synchronize(settings: settings, entries: entries) }
+            catch is CancellationError { }
+            catch { self.error = "1-3-3 알림을 예약하지 못했습니다: \(error.localizedDescription)" }
+        }
+    }
     func feedback(_ style: UIImpactFeedbackGenerator.FeedbackStyle = .light) {
         if haptics { UIImpactFeedbackGenerator(style: style).impactOccurred() }
+    }
+}
+
+@MainActor private enum MicroNotificationScheduler {
+    static let prefix = "voca.micro."
+    static func synchronize(settings: MicroReviewSettings, entries: [MicroReviewEntry]) async throws {
+        let center = UNUserNotificationCenter.current()
+        let existing = await center.pendingNotificationRequests()
+        try Task.checkCancellation()
+        center.removePendingNotificationRequests(withIdentifiers: existing.map(\.identifier).filter { $0.hasPrefix(prefix) })
+        guard settings.enabled else { return }
+        let status = await center.notificationSettings().authorizationStatus
+        guard status == .authorized || status == .provisional else { return }
+        let dates = settings.upcomingDates(after: Date())
+        let slotsPerDay = Int(ceil(Double((settings.endHour - settings.startHour) * 60) / Double(settings.intervalMinutes)))
+        let repeating = slotsPerDay * (settings.includesWeekends ? 1 : 5) <= 60
+        var usedSlots = Set<String>()
+        for (index, date) in dates.enumerated() {
+            try Task.checkCancellation()
+            let fields: Set<Calendar.Component> = repeating
+                ? (settings.includesWeekends ? [.hour, .minute] : [.weekday, .hour, .minute])
+                : [.year, .month, .day, .hour, .minute]
+            let parts = Calendar.current.dateComponents(fields, from: date)
+            let slotKey = settings.includesWeekends && repeating
+                ? "\(parts.hour ?? 0):\(parts.minute ?? 0)"
+                : "\(parts.weekday ?? 0):\(parts.hour ?? 0):\(parts.minute ?? 0)"
+            if repeating && !usedSlots.insert(slotKey).inserted { continue }
+            let content = UNMutableNotificationContent()
+            if entries.isEmpty {
+                content.title = "1-3-3 풀이 비었어요"
+                content.body = "학습 중인 카드에서 단어를 담아 보세요."
+            } else {
+                let entry = entries[index % entries.count]
+                content.title = "1-3-3 · \(entry.successCount)/3 확인"
+                content.body = entry.word.japanese
+            }
+            content.userInfo = ["vocaMicroReview": true]
+            let trigger = UNCalendarNotificationTrigger(dateMatching: parts, repeats: repeating)
+            let request = UNNotificationRequest(identifier: prefix + String(Int(date.timeIntervalSince1970)), content: content, trigger: trigger)
+            try await center.add(request)
+            if repeating && usedSlots.count == slotsPerDay * (settings.includesWeekends ? 1 : 5) { break }
+        }
     }
 }

@@ -1,5 +1,26 @@
 import XCTest
 @MainActor final class VocaUITests: XCTestCase {
+    func testMicroReviewCompletesThreeChecks() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
+        app.launch()
+        app.buttons["학습 시작"].tap()
+        XCTAssertTrue(app.buttons["1-3-3에 담기"].waitForExistence(timeout: 5))
+        app.buttons["1-3-3에 담기"].tap()
+        app.buttons["학습 닫기"].tap()
+        app.tabBars.buttons["계정"].tap()
+        app.buttons["microReviewSettings"].tap()
+        XCTAssertTrue(app.staticTexts["1-3-3 풀 · 1개"].waitForExistence(timeout: 5))
+        for count in 0..<3 {
+            app.buttons["지금 1-3-3 확인"].tap()
+            XCTAssertTrue(app.staticTexts["\(count)/3 완료"].waitForExistence(timeout: 5))
+            app.buttons["뜻 확인"].tap()
+            app.buttons["알았어요"].tap()
+            XCTAssertTrue(app.buttons["지금 1-3-3 확인"].waitForExistence(timeout: 8))
+        }
+        XCTAssertTrue(app.staticTexts["학습완료단어목록 · 1개"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["1-3-3 풀 · 0개"].exists)
+    }
     func testRemoveCardsAndStack() {
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting"]

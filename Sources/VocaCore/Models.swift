@@ -104,6 +104,8 @@ public struct Library: Identifiable, Codable, Equatable, Sendable {
 public struct Archive: Codable, Sendable {
     public var studyPoolSize: Int?
     public var wordReports: [WordReport]?
+    public var microReviewSettings: MicroReviewSettings?
+    public var microReviewEntries: [MicroReviewEntry]?
     public var stacks: [Stack]
     public var libraries: [Library]
     public var server: [Library]
@@ -120,6 +122,60 @@ public struct Archive: Codable, Sendable {
             Word(japanese: "おすすめ", korean: "추천", example: "おすすめの飲み物は何ですか。"),
             Word(japanese: "持ち帰り", korean: "포장, 테이크아웃", example: "持ち帰りでお願いします。")])
         return Archive(stacks: [daily], server: [Library(title: "작은 일본어 생활", subtitle: "매일 만나는 표현부터, 가볍게", stacks: [daily, travel])])
+    }
+}
+
+public struct MicroReviewSettings: Codable, Equatable, Sendable {
+    public var enabled = false
+    public var intervalMinutes = 60
+    public var startHour = 10
+    public var endHour = 20
+    public var includesWeekends = true
+    public init() {}
+
+    public func upcomingDates(after date: Date, limit: Int = 60, calendar: Calendar = .current) -> [Date] {
+        guard limit > 0, intervalMinutes > 0, startHour >= 0, endHour <= 24, startHour < endHour else { return [] }
+        var dates: [Date] = []
+        let startOfToday = calendar.startOfDay(for: date)
+        for dayOffset in 0..<30 where dates.count < limit {
+            guard let day = calendar.date(byAdding: .day, value: dayOffset, to: startOfToday) else { continue }
+            let weekday = calendar.component(.weekday, from: day)
+            if !includesWeekends && (weekday == 1 || weekday == 7) { continue }
+            for minutes in stride(from: startHour * 60, to: endHour * 60, by: intervalMinutes) where dates.count < limit {
+                guard let slot = calendar.date(byAdding: .minute, value: minutes, to: day), slot > date else { continue }
+                dates.append(slot)
+            }
+        }
+        return dates
+    }
+}
+
+public enum MicroReviewStatus: String, Codable, Sendable { case active, completed, stopped }
+
+public struct MicroReviewEntry: Identifiable, Codable, Equatable, Sendable {
+    public var id: UUID
+    public var word: Word
+    public var sourceTitle: String
+    public var successCount: Int
+    public var status: MicroReviewStatus
+    public var addedAt: Date
+    public var lastReviewedAt: Date?
+
+    public init(word: Word, sourceTitle: String, addedAt: Date = Date()) {
+        id = UUID(); self.word = word; self.sourceTitle = sourceTitle
+        successCount = 0; status = .active; self.addedAt = addedAt
+    }
+    public mutating func answer(known: Bool, at date: Date = Date()) {
+        guard status == .active else { return }
+        lastReviewedAt = date
+        if known {
+            successCount = min(3, successCount + 1)
+            if successCount == 3 { status = .completed }
+        }
+    }
+    public mutating func stop() { if status == .active { status = .stopped } }
+    public mutating func restart() {
+        successCount = 0; lastReviewedAt = nil; status = .active
     }
 }
 

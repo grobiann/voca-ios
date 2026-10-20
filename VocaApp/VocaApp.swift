@@ -1,7 +1,33 @@
 import SwiftUI
+import UserNotifications
+
+private extension Notification.Name {
+    static let openMicroReview = Notification.Name("voca.openMicroReview")
+}
+
+final class VocaNotificationDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+    static var pendingMicroReview = false
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        UNUserNotificationCenter.current().delegate = self
+        return true
+    }
+    nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
+        guard response.notification.request.content.userInfo["vocaMicroReview"] as? Bool == true else { return }
+        await MainActor.run {
+            Self.pendingMicroReview = true
+            NotificationCenter.default.post(name: .openMicroReview, object: nil)
+        }
+    }
+    nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
+        [.banner, .sound]
+    }
+}
 
 @main struct VocaApp: App {
+    @UIApplicationDelegateAdaptor(VocaNotificationDelegate.self) private var notificationDelegate
+    @Environment(\.scenePhase) private var scenePhase
     @State private var store = AppStore()
+    @State private var showMicroReview = false
     var body: some Scene {
         WindowGroup {
             TabView {
@@ -10,6 +36,21 @@ import SwiftUI
                 AccountView().tabItem { Label("계정", systemImage: "person.crop.circle") }
             }
             .tint(Palette.accent).environment(store)
+            .fullScreenCover(isPresented: $showMicroReview) { MicroReviewSessionView().environment(store) }
+            .onReceive(NotificationCenter.default.publisher(for: .openMicroReview)) { _ in
+                VocaNotificationDelegate.pendingMicroReview = false
+                showMicroReview = true
+            }
+            .onAppear {
+                store.scheduleMicroNotifications()
+                if VocaNotificationDelegate.pendingMicroReview {
+                    VocaNotificationDelegate.pendingMicroReview = false
+                    showMicroReview = true
+                }
+            }
+            .onChange(of: scenePhase) { _, phase in
+                if phase == .active { store.scheduleMicroNotifications() }
+            }
             .alert("확인이 필요해요", isPresented: Binding(get: { store.error != nil }, set: { if !$0 { store.error = nil } })) {
                 Button("확인") { store.error = nil }
             } message: { Text(store.error ?? "") }

@@ -82,6 +82,14 @@ struct StudyView: View {
                         responseButton("다시 볼게요", icon: "arrow.left", known: false, width: geometry.size.width)
                         responseButton("알았어요", icon: "arrow.right", known: true, width: geometry.size.width)
                     }.disabled(!revealed || exiting).opacity(revealed ? 1 : 0.35)
+                    Button {
+                        store.addMicroWord(word, sourceTitle: stack.title)
+                    } label: {
+                        Label(store.microEntry(for: word)?.status == .active ? "1-3-3 풀에 담김" : "1-3-3에 담기",
+                              systemImage: store.microEntry(for: word)?.status == .active ? "checkmark.circle.fill" : "bell.badge")
+                    }
+                    .buttonStyle(.bordered)
+                    .disabled(store.microEntry(for: word)?.status == .active || exiting)
                     Text(revealed ? "모르면 왼쪽, 알면 오른쪽으로 밀어 주세요" : "카드를 누르면 뜻을 확인할 수 있어요")
                         .font(.caption).foregroundStyle(.secondary)
                 } else {

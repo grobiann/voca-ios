@@ -33,6 +33,47 @@ final class VocaCoreTests: XCTestCase {
         XCTAssertFalse(stack.queue.contains { $0.wordID == reviewed })
         XCTAssertEqual(stack.allItems.count, 6)
     }
+    func testMicroReviewThreeSuccessesAndStop() throws {
+        let word = Archive.sample.stacks[0].words[0]
+        var entry = MicroReviewEntry(word: word, sourceTitle: "인사")
+        entry.answer(known: true)
+        entry.answer(known: false)
+        XCTAssertEqual(entry.successCount, 1)
+        entry.answer(known: true)
+        XCTAssertEqual(entry.status, .active)
+        entry.answer(known: true)
+        XCTAssertEqual(entry.successCount, 3)
+        XCTAssertEqual(entry.status, .completed)
+        entry.answer(known: true)
+        XCTAssertEqual(entry.successCount, 3)
+        entry.restart()
+        XCTAssertEqual(entry.successCount, 0)
+        entry.stop()
+        XCTAssertEqual(entry.status, .stopped)
+        let restored = try JSONDecoder().decode(MicroReviewEntry.self, from: JSONEncoder().encode(entry))
+        XCTAssertEqual(restored, entry)
+        let oldArchive = try JSONDecoder().decode(Archive.self, from: Data("{\"stacks\":[],\"libraries\":[],\"server\":[]}".utf8))
+        XCTAssertNil(oldArchive.microReviewSettings)
+        XCTAssertNil(oldArchive.microReviewEntries)
+    }
+    func testMicroReviewScheduleHonorsHoursAndWeekdaysWithoutDailyCap() {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
+        let monday = calendar.date(from: DateComponents(year: 2026, month: 10, day: 19, hour: 9))!
+        let settings = MicroReviewSettings()
+        let slots = settings.upcomingDates(after: monday, limit: 60, calendar: calendar)
+        XCTAssertEqual(slots.count, 60)
+        XCTAssertEqual(calendar.component(.hour, from: slots[0]), 10)
+        XCTAssertEqual(calendar.component(.hour, from: slots[9]), 19)
+        XCTAssertTrue(slots.allSatisfy { (10..<20).contains(calendar.component(.hour, from: $0)) })
+        XCTAssertTrue(slots.contains { [1, 7].contains(calendar.component(.weekday, from: $0)) })
+        var weekdays = settings; weekdays.includesWeekends = false
+        XCTAssertTrue(weekdays.upcomingDates(after: monday, calendar: calendar).allSatisfy { ![1, 7].contains(calendar.component(.weekday, from: $0)) })
+        var faster = settings; faster.intervalMinutes = 30
+        let fastSlots = faster.upcomingDates(after: monday, limit: 60, calendar: calendar)
+        XCTAssertEqual(calendar.component(.minute, from: fastSlots[1]), 30)
+        XCTAssertEqual(fastSlots.count, 60)
+    }
     func testCSVQuotesNewlinesAndGroups() throws {
         let csv = "\u{FEFF}stack,japanese,korean,example\r\n인사,こんにちは,안녕하세요,\"こんにちは、田中さん。\"\r\n카페,注文,주문,\"一つ、\"\"お願いします\"\"。\nありがとう。\"\r\n"
         let library = try LibraryImporter.read(Data(csv.utf8), filename: "생활.csv")

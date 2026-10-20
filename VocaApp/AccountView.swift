@@ -20,6 +20,17 @@ struct AccountView: View {
                     Toggle("카드 햅틱 피드백", isOn: $store.haptics).onChange(of: store.haptics) { _, value in UserDefaults.standard.set(value, forKey: "haptics") }
                     LabeledContent("완료 기준", value: "양방향 정답")
                 }
+                Section("1-3-3 알림") {
+                    NavigationLink {
+                        MicroReviewSettingsView()
+                    } label: {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("1-3-3 알림")
+                            Text("풀 \(store.activeMicroCount)개 · 완료 \(store.completedMicroCount)개")
+                                .font(.caption).foregroundStyle(.secondary)
+                        }
+                    }.accessibilityIdentifier("microReviewSettings")
+                }
                 Section {
                     LabeledContent("로그인", value: "연결 없이 사용 중")
                     LabeledContent("구독", value: "개인용 · 무료")
@@ -30,6 +41,191 @@ struct AccountView: View {
                     Text("매일 한 장, 조금 더 가까운 일본어.").foregroundStyle(.secondary)
                 }
             }.navigationTitle("계정")
+        }
+    }
+}
+
+struct MicroReviewSettingsView: View {
+    @Environment(AppStore.self) private var store
+    @State private var showQuickReview = false
+    private var settings: MicroReviewSettings { store.microSettings }
+    private var active: [MicroReviewEntry] { store.microEntries.filter { $0.status == .active } }
+    private var completed: [MicroReviewEntry] { store.microEntries.filter { $0.status == .completed } }
+    private var stopped: [MicroReviewEntry] { store.microEntries.filter { $0.status == .stopped } }
+    private func binding<Value>(_ keyPath: WritableKeyPath<MicroReviewSettings, Value>) -> Binding<Value> {
+        Binding(get: { store.microSettings[keyPath: keyPath] }, set: { value in
+            var updated = store.microSettings
+            updated[keyPath: keyPath] = value
+            store.microSettings = updated
+        })
+    }
+    var body: some View {
+        List {
+            Section {
+                HStack {
+                    Label("현재 풀", systemImage: "rectangle.stack")
+                    Spacer()
+                    Text("\(active.count)개").bold()
+                }
+                Button("지금 1-3-3 확인", systemImage: "play.fill") { showQuickReview = true }
+            } footer: { Text("기존 학습 화면에서 원하는 단어만 1-3-3 풀에 담을 수 있어요.") }
+            Section {
+                Toggle("1-3-3 알림 켜기", isOn: Binding(
+                    get: { settings.enabled },
+                    set: { enabled in Task { await store.setMicroEnabled(enabled) } }
+                ))
+                Picker("알림 간격", selection: binding(\.intervalMinutes)) {
+                    ForEach([30, 60, 90, 120, 180], id: \.self) { minutes in Text("\(minutes)분").tag(minutes) }
+                }
+                Picker("시작 시간", selection: binding(\.startHour)) {
+                    ForEach(0..<settings.endHour, id: \.self) { hour in Text(String(format: "%02d:00", hour)).tag(hour) }
+                }
+                Picker("종료 시간", selection: binding(\.endHour)) {
+                    ForEach((settings.startHour + 1)..<25, id: \.self) { hour in Text(String(format: "%02d:00", hour)).tag(hour) }
+                }
+                Toggle("주말에도 알림", isOn: binding(\.includesWeekends))
+            } header: { Text("알림 설정") } footer: { Text("기본은 매일 10:00~20:00, 60분 간격입니다. 하루 횟수 제한은 없습니다. 알림을 탭하면 짧은 확인 화면이 열립니다.") }
+            Section("1-3-3 풀 · \(active.count)개") {
+                if active.isEmpty { Text("아직 담은 단어가 없어요.").foregroundStyle(.secondary) }
+                ForEach(active) { entry in
+                    microRow(entry) {
+                        Button("더 이상 알리지 않기", systemImage: "bell.slash", role: .destructive) { store.stopMicro(entry.id) }
+                    }
+                }
+            }
+            Section("학습완료단어목록 · \(completed.count)개") {
+                if completed.isEmpty { Text("세 번 확인하면 이곳에 모여요.").foregroundStyle(.secondary) }
+                ForEach(completed) { entry in
+                    microRow(entry) {
+                        Button("다시 1-3-3에 담기", systemImage: "arrow.counterclockwise") { store.restartMicro(entry.id) }
+                    }
+                }
+            }
+            if !stopped.isEmpty {
+                Section("그만 보기 · \(stopped.count)개") {
+                    ForEach(stopped) { entry in
+                        microRow(entry) {
+                            Button("다시 알리기", systemImage: "bell") { store.restartMicro(entry.id) }
+                            Button("목록에서 삭제", systemImage: "trash", role: .destructive) { store.removeMicro(entry.id) }
+                        }
+                    }
+                }
+            }
+        }
+        .navigationTitle("1-3-3 알림")
+        .fullScreenCover(isPresented: $showQuickReview) { MicroReviewSessionView() }
+    }
+    private func microRow<Actions: View>(_ entry: MicroReviewEntry, @ViewBuilder actions: () -> Actions) -> some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 5) {
+                Text(entry.word.japanese).font(.headline).textSelection(.enabled)
+                Text("\(entry.word.korean) · \(entry.successCount)/3 완료")
+                    .font(.caption).foregroundStyle(.secondary)
+            }
+            Spacer()
+            Menu { actions() } label: { Image(systemName: "ellipsis.circle").frame(width: 44, height: 44) }
+                .accessibilityLabel("\(entry.word.japanese) 관리")
+        }
+    }
+}
+
+struct MicroReviewSessionView: View {
+    @Environment(AppStore.self) private var store
+    @Environment(\.dismiss) private var dismiss
+    @State private var currentID: UUID?
+    @State private var seenIDs = Set<UUID>()
+    @State private var revealed = false
+    @State private var handled = 0
+    @State private var continuing = false
+    @State private var closeTask: Task<Void, Never>?
+    private var current: MicroReviewEntry? { store.microEntries.first { $0.id == currentID && $0.status == .active } }
+    private var hasMoreWords: Bool { store.microEntries.contains { $0.status == .active && !seenIDs.contains($0.id) } }
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 22) {
+                HStack {
+                    Text("1-3-3 알림").font(.title2.bold())
+                    Spacer()
+                    Button("닫기", systemImage: "xmark") { dismiss() }.labelStyle(.iconOnly)
+                }
+                Text("현재 풀 \(store.activeMicroCount)개 · 이번 확인 \(handled)개")
+                    .font(.subheadline).foregroundStyle(.secondary)
+                Spacer(minLength: 10)
+                if let current {
+                    VStack(spacing: 18) {
+                        Text("\(current.successCount)/3 완료").font(.subheadline.bold()).foregroundStyle(Palette.accent)
+                        Text(current.word.japanese).font(.system(size: 38, weight: .semibold, design: .rounded))
+                            .multilineTextAlignment(.center).textSelection(.enabled)
+                        if revealed {
+                            Text(current.word.korean).font(.title2).multilineTextAlignment(.center)
+                            if !current.word.example.isEmpty { Text(current.word.example).font(.subheadline).foregroundStyle(.secondary).multilineTextAlignment(.center) }
+                        }
+                    }.frame(maxWidth: .infinity, minHeight: 260)
+                        .padding(28).background(.background, in: RoundedRectangle(cornerRadius: 26))
+                    if revealed {
+                        HStack(spacing: 12) {
+                            Button("다시 볼게요") { answer(false) }
+                            Button("알았어요") { answer(true) }
+                        }.buttonStyle(.borderedProminent)
+                    } else {
+                        Button("뜻 확인") { revealed = true }.buttonStyle(PrimaryButton())
+                    }
+                    Button("이 단어 그만 보기", role: .destructive) { stopCurrent() }
+                        .font(.subheadline)
+                } else if store.activeMicroCount == 0 {
+                    Image(systemName: "tray").font(.system(size: 56)).foregroundStyle(Palette.accent)
+                    Text("1-3-3 풀이 비었어요").font(.title2.bold())
+                    Text("학습 중인 카드에서 ‘1-3-3에 담기’를 누르면 다음 알림부터 만날 수 있어요.")
+                        .multilineTextAlignment(.center).foregroundStyle(.secondary)
+                    Button("학습 화면으로 돌아가기") { dismiss() }.buttonStyle(PrimaryButton())
+                } else {
+                    Image(systemName: "checkmark.seal.fill").font(.system(size: 56)).foregroundStyle(Palette.accent)
+                    Text("이번 확인을 마쳤어요").font(.title2.bold())
+                    Text("잠시 후 학습 화면으로 돌아갑니다.").foregroundStyle(.secondary)
+                    if hasMoreWords {
+                        Button("더 학습하기") { closeTask?.cancel(); continuing = true; advance() }
+                            .buttonStyle(PrimaryButton())
+                    }
+                    Button("지금 닫기") { dismiss() }
+                }
+                Spacer(minLength: 10)
+            }.padding(24).background(Palette.canvas)
+                .navigationBarHidden(true)
+        }.onAppear { advance() }
+            .onDisappear { closeTask?.cancel() }
+    }
+    private func answer(_ known: Bool) {
+        guard let currentID else { return }
+        store.answerMicro(currentID, known: known)
+        seenIDs.insert(currentID)
+        handled += 1
+        revealed = false
+        advance()
+    }
+    private func stopCurrent() {
+        guard let currentID else { return }
+        store.stopMicro(currentID)
+        seenIDs.insert(currentID)
+        revealed = false
+        advance()
+    }
+    private func advance() {
+        if handled >= 2 && !continuing {
+            currentID = nil
+            closeTask?.cancel()
+            closeTask = Task { @MainActor in
+                try? await Task.sleep(for: .seconds(3))
+                if !Task.isCancelled { dismiss() }
+            }
+            return
+        }
+        currentID = store.nextMicroEntry(excluding: seenIDs)?.id
+        if currentID == nil && handled > 0 {
+            closeTask?.cancel()
+            closeTask = Task { @MainActor in
+                try? await Task.sleep(for: .seconds(3))
+                if !Task.isCancelled { dismiss() }
+            }
         }
     }
 }
