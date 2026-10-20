@@ -123,7 +123,7 @@ import XCTest
         app.buttons["학습 시작"].tap()
         let sampleWords = ["おはようございます", "楽しみ", "散歩", "ゆっくり"]
         XCTAssertTrue(app.buttons["일본어 복사"].waitForExistence(timeout: 5))
-        guard let firstWord = sampleWords.first(where: { app.staticTexts[$0].exists }) else { XCTFail("첫 카드가 보이지 않아요"); return }
+        guard let firstWord = sampleWords.first(where: { app.staticTexts[$0].isHittable }) else { XCTFail("첫 카드가 보이지 않아요"); return }
         XCTAssertTrue(app.buttons["\(firstWord) 구글 검색"].exists)
         XCTAssertFalse(app.buttons["알았어요"].isEnabled)
         screenshot("02-Card-Front")

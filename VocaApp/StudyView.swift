@@ -120,10 +120,12 @@ struct StudyView: View {
         return ZStack {
             if revealed {
                 cardSurface(word, japaneseFirst: japaneseFirst, showingAnswer: true)
-                    .transition(.opacity)
+                    .zIndex(0)
+                    .transition(.asymmetric(insertion: .identity, removal: .opacity))
             } else {
                 cardSurface(word, japaneseFirst: japaneseFirst, showingAnswer: false)
-                    .transition(.opacity)
+                    .zIndex(1)
+                    .transition(.asymmetric(insertion: .identity, removal: .opacity))
             }
         }
             .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 30))
@@ -191,7 +193,7 @@ struct StudyView: View {
     private func reveal() {
         guard !revealed && !exiting else { return }
         store.feedback()
-        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.16)) { revealed = true }
+        withAnimation(reduceMotion ? nil : .easeOut(duration: 0.12)) { revealed = true }
     }
     private func swipeStamp(_ title: String, color: Color, angle: Double) -> some View {
         Text(title).font(.title2.bold()).foregroundStyle(color)
