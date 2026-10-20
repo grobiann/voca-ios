@@ -13,8 +13,14 @@ struct StudyView: View {
     @State private var exiting = false
     @State private var undo: Stack?
     @State private var advanceTask: Task<Void, Never>?
+    @State private var reporting = false
     private var item: ReviewItem? { stack.queue.first }
     private var word: Word? { stack.words.first { $0.id == item?.wordID } }
+    private var sourceLibrary: Library? {
+        (store.archive.libraries + store.archive.server).first { library in
+            library.stacks.contains { $0.id == (stack.sourceID ?? stack.id) }
+        }
+    }
     var body: some View {
         GeometryReader { geometry in
             VStack(spacing: 20) {
@@ -76,14 +82,18 @@ struct StudyView: View {
                         responseButton("다시 볼게요", icon: "arrow.left", known: false, width: geometry.size.width)
                         responseButton("알았어요", icon: "arrow.right", known: true, width: geometry.size.width)
                     }.disabled(!revealed || exiting).opacity(revealed ? 1 : 0.35)
-                    Button {
-                        store.addMicroWord(word, sourceTitle: stack.title)
-                    } label: {
-                        Label(store.microEntry(for: word)?.status == .active ? "1-3-3 풀에 담김" : "1-3-3에 담기",
-                              systemImage: store.microEntry(for: word)?.status == .active ? "checkmark.circle.fill" : "bell.badge")
+                    HStack(spacing: 12) {
+                        Button {
+                            store.addMicroWord(word, sourceTitle: stack.title)
+                        } label: {
+                            Label(store.microEntry(for: word)?.status == .active ? "1-3-3 풀에 담김" : "1-3-3에 담기",
+                                  systemImage: store.microEntry(for: word)?.status == .active ? "checkmark.circle.fill" : "bell.badge")
+                        }
+                        .disabled(store.microEntry(for: word)?.status == .active || exiting)
+                        Button("오류 제보", systemImage: "flag") { reporting = true }
+                            .disabled(exiting)
                     }
                     .buttonStyle(.bordered)
-                    .disabled(store.microEntry(for: word)?.status == .active || exiting)
                     Text(revealed ? "모르면 왼쪽, 알면 오른쪽으로 밀어 주세요" : "카드를 누르면 뜻을 확인할 수 있어요")
                         .font(.caption).foregroundStyle(.secondary)
                 } else {
@@ -98,6 +108,11 @@ struct StudyView: View {
         }.onAppear {
             if let saved = store.archive.stacks.first(where: { $0.id == stackID }) { stack = saved; stack.prepare(poolSize: store.poolSize); store.update(stack) }
         }.onDisappear { advanceTask?.cancel() }
+        .sheet(isPresented: $reporting) {
+            NavigationStack {
+                WordReportComposer(library: sourceLibrary, stacks: [stack], initialWordID: word?.id)
+            }
+        }
     }
     private func card(_ word: Word, item: ReviewItem) -> some View {
         let japaneseFirst = item.direction == .japaneseToKorean

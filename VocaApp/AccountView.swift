@@ -255,10 +255,18 @@ struct WordReportComposer: View {
     @Environment(\.dismiss) private var dismiss
     let library: Library?
     let stacks: [Stack]
+    let initialWordID: UUID?
     @State private var selectedStackID: UUID?
     @State private var selectedWordID: UUID?
     @State private var message = ""
     @State private var query = ""
+    init(library: Library?, stacks: [Stack], initialWordID: UUID? = nil) {
+        self.library = library
+        self.stacks = stacks
+        self.initialWordID = initialWordID
+        _selectedStackID = State(initialValue: stacks.first?.id)
+        _selectedWordID = State(initialValue: initialWordID)
+    }
     private var stack: Stack? { stacks.first { $0.id == selectedStackID } ?? stacks.first }
     private var word: Word? { stack?.words.first { $0.id == selectedWordID } }
     var body: some View {
@@ -269,16 +277,18 @@ struct WordReportComposer: View {
                     ForEach(stacks) { Text($0.title).tag(Optional($0.id)) }
                 }.onChange(of: selectedStackID) { _, _ in selectedWordID = nil; query = "" }
             }
-            Section("틀린 단어 선택") {
-                TextField("일본어 · 한국어 검색", text: $query)
-                ForEach((stack?.words ?? []).filter { query.isEmpty || $0.japanese.localizedCaseInsensitiveContains(query) || $0.korean.localizedCaseInsensitiveContains(query) }) { candidate in
-                    Button { selectedWordID = candidate.id } label: {
-                        HStack {
-                            VStack(alignment: .leading) { Text(candidate.japanese); Text(candidate.korean).font(.caption).foregroundStyle(.secondary) }
-                            Spacer()
-                            if selectedWordID == candidate.id { Image(systemName: "checkmark.circle.fill") }
-                        }
-                    }.foregroundStyle(.primary)
+            if initialWordID == nil {
+                Section("틀린 단어 선택") {
+                    TextField("일본어 · 한국어 검색", text: $query)
+                    ForEach((stack?.words ?? []).filter { query.isEmpty || $0.japanese.localizedCaseInsensitiveContains(query) || $0.korean.localizedCaseInsensitiveContains(query) }) { candidate in
+                        Button { selectedWordID = candidate.id } label: {
+                            HStack {
+                                VStack(alignment: .leading) { Text(candidate.japanese); Text(candidate.korean).font(.caption).foregroundStyle(.secondary) }
+                                Spacer()
+                                if selectedWordID == candidate.id { Image(systemName: "checkmark.circle.fill") }
+                            }
+                        }.foregroundStyle(.primary)
+                    }
                 }
             }
             if let word {
@@ -294,6 +304,12 @@ struct WordReportComposer: View {
                     if store.error == nil { dismiss() }
                 }.disabled(word == nil || message.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             } header: { Text("오류 내용") } footer: { Text("기기에 저장되며 자동 전송되지 않습니다. 계정 탭의 제보함에서 공유할 수 있어요.") }
-        }.navigationTitle("틀린 단어 제보").onAppear { if selectedStackID == nil { selectedStackID = stacks.first?.id } }
+        }
+        .navigationTitle("틀린 단어 제보")
+        .toolbar {
+            if initialWordID != nil {
+                ToolbarItem(placement: .cancellationAction) { Button("닫기") { dismiss() } }
+            }
+        }
     }
 }

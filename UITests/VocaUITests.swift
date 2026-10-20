@@ -1,5 +1,24 @@
 import XCTest
 @MainActor final class VocaUITests: XCTestCase {
+    func testReportCurrentStudyCard() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
+        app.launch()
+        app.buttons["학습 시작"].tap()
+        XCTAssertTrue(app.buttons["오류 제보"].waitForExistence(timeout: 5))
+        app.buttons["오류 제보"].tap()
+        XCTAssertTrue(app.staticTexts["선택한 카드"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.textFields["일본어 · 한국어 검색"].exists)
+        let message = app.descendants(matching: .any)["reportMessage"].firstMatch
+        message.tap()
+        message.typeText("학습 중 뜻 오류 확인")
+        app.buttons["제보 저장"].tap()
+        app.buttons["학습 닫기"].tap()
+        app.tabBars.buttons["계정"].tap()
+        app.swipeUp()
+        app.buttons["단어 오류 제보함"].tap()
+        XCTAssertTrue(app.staticTexts["학습 중 뜻 오류 확인"].waitForExistence(timeout: 5))
+    }
     func testMicroReviewCompletesThreeChecks() {
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting"]
