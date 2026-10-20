@@ -118,25 +118,14 @@ struct StudyView: View {
                     Button { store.speak(word.japanese) } label: { Image(systemName: "speaker.wave.2").font(.title3).frame(width: 44, height: 44) }.accessibilityLabel("일본어 발음 듣기")
                 }
             }
-            Spacer(minLength: 4)
-            ScrollView {
-                VStack(spacing: 24) {
-                    Text(japaneseFirst ? word.japanese : word.korean)
-                        .font(.system(size: revealed ? 24 : 38, weight: revealed ? .medium : .semibold, design: .rounded))
-                        .foregroundStyle(revealed ? .secondary : .primary)
-                    if (japaneseFirst || revealed), let reading = word.reading, !reading.isEmpty {
-                        Text(reading).font(.subheadline).foregroundStyle(.secondary)
-                    }
-                    if revealed {
-                        Rectangle().fill(Palette.accent.opacity(0.15)).frame(width: 36, height: 3)
-                        Text(japaneseFirst ? word.korean : word.japanese).font(.system(size: 34, weight: .semibold, design: .rounded))
-                    }
-                    if (japaneseFirst || revealed) && !word.example.isEmpty {
-                        Text(word.example).font(.body).foregroundStyle(.secondary).lineSpacing(6)
-                    }
-                }.frame(maxWidth: .infinity).multilineTextAlignment(.center).padding(.vertical, 12)
-            }.defaultScrollAnchor(.center)
-            Spacer(minLength: 4)
+            ViewThatFits(in: .vertical) {
+                cardFace(word, japaneseFirst: japaneseFirst, scale: 1)
+                cardFace(word, japaneseFirst: japaneseFirst, scale: 0.82)
+                cardFace(word, japaneseFirst: japaneseFirst, scale: 0.66)
+                cardFace(word, japaneseFirst: japaneseFirst, scale: 0.58, compact: true)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .clipped()
             Label(revealed ? "기억을 확인해 보세요" : "탭해서 뒤집기", systemImage: revealed ? "sparkle" : "hand.tap")
                 .font(.caption).foregroundStyle(.tertiary)
         }.padding(28).frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -147,6 +136,36 @@ struct StudyView: View {
             .accessibilityIdentifier("studyCard")
             .onTapGesture { reveal() }
             .accessibilityAction(named: "정답 보기") { reveal() }
+    }
+    private func cardFace(_ word: Word, japaneseFirst: Bool, scale: CGFloat, compact: Bool = false) -> some View {
+        VStack(spacing: compact ? 10 : 20 * scale) {
+            Text(japaneseFirst ? word.japanese : word.korean)
+                .font(.system(size: (revealed ? 24 : 38) * scale, weight: revealed ? .medium : .semibold, design: .rounded))
+                .foregroundStyle(revealed ? .secondary : .primary)
+                .lineLimit(compact ? 4 : nil)
+                .minimumScaleFactor(0.65)
+                .fixedSize(horizontal: false, vertical: true)
+            if (japaneseFirst || revealed), let reading = word.reading, !reading.isEmpty {
+                Text(reading).font(.system(size: 17 * scale)).foregroundStyle(.secondary)
+                    .lineLimit(compact ? 2 : nil).fixedSize(horizontal: false, vertical: true)
+            }
+            if revealed {
+                Rectangle().fill(Palette.accent.opacity(0.15)).frame(width: 36, height: 3)
+                Text(japaneseFirst ? word.korean : word.japanese)
+                    .font(.system(size: 34 * scale, weight: .semibold, design: .rounded))
+                    .lineLimit(compact ? 4 : nil).minimumScaleFactor(0.65)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            if (japaneseFirst || revealed) && !word.example.isEmpty {
+                Text(word.example).font(.system(size: 17 * scale)).foregroundStyle(.secondary)
+                    .lineSpacing(compact ? 2 : 5)
+                    .lineLimit(compact ? 5 : nil)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .multilineTextAlignment(.center)
+        .padding(.vertical, 8)
     }
     private func reveal() {
         guard !revealed && !exiting else { return }
