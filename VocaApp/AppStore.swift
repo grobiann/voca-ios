@@ -96,7 +96,7 @@ import UserNotifications
     }
     func searchJapanese(_ text: String) {
         var components = URLComponents(string: "https://www.google.com/search")!
-        components.queryItems = [URLQueryItem(name: "q", value: text)]
+        components.queryItems = [URLQueryItem(name: "q", value: text + " 한자 해석")]
         guard let webURL = components.url,
               var chrome = URLComponents(url: webURL, resolvingAgainstBaseURL: false) else { return }
         chrome.scheme = "googlechromes"
@@ -108,7 +108,7 @@ import UserNotifications
     func setMicroEnabled(_ enabled: Bool) async {
         if enabled {
             do {
-                let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge])
+                let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
                 guard granted else { error = "알림이 허용되지 않았습니다. iPhone 설정에서 voca-ios 알림을 허용해 주세요."; return }
             } catch { self.error = "알림 권한을 확인하지 못했습니다: \(error.localizedDescription)"; return }
         }
@@ -171,6 +171,21 @@ import UserNotifications
             catch { self.error = "1-3-3 알림을 예약하지 못했습니다: \(error.localizedDescription)" }
         }
     }
+    func sendMicroTestNotification() async -> Bool {
+        do {
+            let center = UNUserNotificationCenter.current()
+            let granted = try await center.requestAuthorization(options: [.alert, .badge, .sound])
+            guard granted else {
+                error = "알림이 허용되지 않았습니다. iPhone 설정에서 voca-ios 알림을 허용해 주세요."
+                return false
+            }
+            try await MicroNotificationScheduler.scheduleTest(entries: microEntries.filter { $0.status == .active })
+            return true
+        } catch {
+            self.error = "테스트 알림을 예약하지 못했습니다: \(error.localizedDescription)"
+            return false
+        }
+    }
     func feedback(_ style: UIImpactFeedbackGenerator.FeedbackStyle = .light) {
         if haptics { UIImpactFeedbackGenerator(style: style).impactOccurred() }
     }
@@ -178,6 +193,28 @@ import UserNotifications
 
 @MainActor private enum MicroNotificationScheduler {
     static let prefix = "voca.micro."
+    static func content(entries: [MicroReviewEntry], index: Int) -> UNMutableNotificationContent {
+        let content = UNMutableNotificationContent()
+        if entries.isEmpty {
+            content.title = "1-3-3 풀이 비었어요"
+            content.body = "학습 중인 카드에서 단어를 담아 보세요."
+        } else {
+            let entry = entries[index % entries.count]
+            content.title = "1-3-3 · \(entry.successCount)/3 확인"
+            content.body = entry.word.japanese
+        }
+        content.userInfo = ["vocaMicroReview": true]
+        content.sound = .default
+        content.badge = 1
+        content.interruptionLevel = .timeSensitive
+        content.relevanceScore = 1
+        return content
+    }
+    static func scheduleTest(entries: [MicroReviewEntry]) async throws {
+        let request = UNNotificationRequest(identifier: "voca.test.micro", content: content(entries: entries, index: 0),
+                                            trigger: UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false))
+        try await UNUserNotificationCenter.current().add(request)
+    }
     static func synchronize(settings: MicroReviewSettings, entries: [MicroReviewEntry]) async throws {
         let center = UNUserNotificationCenter.current()
         let existing = await center.pendingNotificationRequests()
@@ -200,16 +237,7 @@ import UserNotifications
                 ? "\(parts.hour ?? 0):\(parts.minute ?? 0)"
                 : "\(parts.weekday ?? 0):\(parts.hour ?? 0):\(parts.minute ?? 0)"
             if repeating && !usedSlots.insert(slotKey).inserted { continue }
-            let content = UNMutableNotificationContent()
-            if entries.isEmpty {
-                content.title = "1-3-3 풀이 비었어요"
-                content.body = "학습 중인 카드에서 단어를 담아 보세요."
-            } else {
-                let entry = entries[index % entries.count]
-                content.title = "1-3-3 · \(entry.successCount)/3 확인"
-                content.body = entry.word.japanese
-            }
-            content.userInfo = ["vocaMicroReview": true]
+            let content = content(entries: entries, index: index)
             let trigger = UNCalendarNotificationTrigger(dateMatching: parts, repeats: repeating)
             let request = UNNotificationRequest(identifier: prefix + String(Int(date.timeIntervalSince1970)), content: content, trigger: trigger)
             try await center.add(request)

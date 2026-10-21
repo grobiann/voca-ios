@@ -9,6 +9,9 @@ final class VocaNotificationDelegate: NSObject, UIApplicationDelegate, UNUserNot
     static var pendingMicroReview = false
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         UNUserNotificationCenter.current().delegate = self
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("--uitesting-notification-open") { Self.pendingMicroReview = true }
+        #endif
         return true
     }
     nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
@@ -28,6 +31,7 @@ final class VocaNotificationDelegate: NSObject, UIApplicationDelegate, UNUserNot
     @Environment(\.scenePhase) private var scenePhase
     @State private var store = AppStore()
     @State private var showMicroReview = false
+    @State private var rootReady = false
     var body: some Scene {
         WindowGroup {
             TabView {
@@ -38,22 +42,35 @@ final class VocaNotificationDelegate: NSObject, UIApplicationDelegate, UNUserNot
             .tint(Palette.accent).environment(store)
             .fullScreenCover(isPresented: $showMicroReview) { MicroReviewSessionView().environment(store) }
             .onReceive(NotificationCenter.default.publisher(for: .openMicroReview)) { _ in
-                VocaNotificationDelegate.pendingMicroReview = false
-                showMicroReview = true
+                presentPendingMicroReviewIfReady()
             }
             .onAppear {
+                rootReady = true
                 store.scheduleMicroNotifications()
-                if VocaNotificationDelegate.pendingMicroReview {
-                    VocaNotificationDelegate.pendingMicroReview = false
-                    showMicroReview = true
-                }
+                presentPendingMicroReviewIfReady()
             }
             .onChange(of: scenePhase) { _, phase in
-                if phase == .active { store.scheduleMicroNotifications() }
+                if phase == .active {
+                    store.scheduleMicroNotifications()
+                    Task { try? await UNUserNotificationCenter.current().setBadgeCount(0) }
+                    presentPendingMicroReviewIfReady()
+                }
             }
             .alert("확인이 필요해요", isPresented: Binding(get: { store.error != nil }, set: { if !$0 { store.error = nil } })) {
                 Button("확인") { store.error = nil }
             } message: { Text(store.error ?? "") }
+        }
+    }
+    private func presentPendingMicroReviewIfReady() {
+        guard rootReady, scenePhase == .active, VocaNotificationDelegate.pendingMicroReview, !showMicroReview else { return }
+        VocaNotificationDelegate.pendingMicroReview = false
+        Task { @MainActor in
+            await Task.yield()
+            if UIApplication.shared.applicationState == .active {
+                showMicroReview = true
+            } else {
+                VocaNotificationDelegate.pendingMicroReview = true
+            }
         }
     }
 }

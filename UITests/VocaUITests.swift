@@ -1,5 +1,13 @@
 import XCTest
 @MainActor final class VocaUITests: XCTestCase {
+    func testNotificationColdLaunchOpensQuickReview() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting", "--uitesting-notification-open"]
+        app.launch()
+        XCTAssertTrue(app.staticTexts["1-3-3 풀이 비었어요"].waitForExistence(timeout: 10))
+        app.buttons["학습 화면으로 돌아가기"].tap()
+        XCTAssertTrue(app.buttons["학습 시작"].waitForExistence(timeout: 5))
+    }
     func testReportCurrentStudyCard() {
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting"]

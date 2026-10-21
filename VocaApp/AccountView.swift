@@ -1,5 +1,6 @@
 import SwiftUI
 import VocaCore
+import UserNotifications
 struct AccountView: View {
     @Environment(AppStore.self) private var store
     var body: some View {
@@ -48,6 +49,9 @@ struct AccountView: View {
 struct MicroReviewSettingsView: View {
     @Environment(AppStore.self) private var store
     @State private var showQuickReview = false
+    @State private var testScheduled = false
+    @State private var soundAllowed = false
+    @State private var timeSensitiveAllowed = false
     private var settings: MicroReviewSettings { store.microSettings }
     private var active: [MicroReviewEntry] { store.microEntries.filter { $0.status == .active } }
     private var completed: [MicroReviewEntry] { store.microEntries.filter { $0.status == .completed } }
@@ -111,9 +115,29 @@ struct MicroReviewSettingsView: View {
                     }
                 }
             }
+            Section {
+                Button("5초 후 테스트 알림", systemImage: "bell.badge.fill") {
+                    Task {
+                        testScheduled = await store.sendMicroTestNotification()
+                        await refreshNotificationSettings()
+                    }
+                }
+                if testScheduled { Text("5초 뒤 알림이 옵니다. 알림을 탭해 짧은 확인 화면도 테스트해 보세요.").font(.caption).foregroundStyle(Palette.accent) }
+                LabeledContent("소리", value: soundAllowed ? "허용" : "꺼짐")
+                LabeledContent("시간 민감 알림", value: timeSensitiveAllowed ? "허용" : "꺼짐")
+                Button("iPhone 알림 설정 열기", systemImage: "gearshape") {
+                    if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
+                }
+            } header: { Text("알림 테스트") } footer: { Text("알림 소리와 시간 민감 알림은 iPhone 설정에서도 허용해야 합니다. 집중 모드 등 기기 설정에 따라 표시 방식이 달라질 수 있어요.") }
         }
         .navigationTitle("1-3-3 알림")
         .fullScreenCover(isPresented: $showQuickReview) { MicroReviewSessionView() }
+        .task { await refreshNotificationSettings() }
+    }
+    private func refreshNotificationSettings() async {
+        let settings = await UNUserNotificationCenter.current().notificationSettings()
+        soundAllowed = settings.soundSetting == .enabled
+        timeSensitiveAllowed = settings.timeSensitiveSetting == .enabled
     }
     private func microRow<Actions: View>(_ entry: MicroReviewEntry, @ViewBuilder actions: () -> Actions) -> some View {
         HStack {
