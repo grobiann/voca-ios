@@ -1,5 +1,25 @@
 import XCTest
 @MainActor final class VocaUITests: XCTestCase {
+    func testActualNotificationTapOpensQuickReview() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
+        app.launch()
+        app.tabBars.buttons["계정"].tap()
+        app.buttons["microReviewSettings"].tap()
+        let testButton = app.buttons["5초 후 테스트 알림"]
+        for _ in 0..<5 where !testButton.isHittable { app.swipeUp() }
+        XCTAssertTrue(testButton.isHittable)
+        testButton.tap()
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let allow = springboard.buttons.matching(NSPredicate(format: "label == 'Allow' OR label == '허용'")).firstMatch
+        if allow.waitForExistence(timeout: 2) { allow.tap() }
+        XCUIDevice.shared.press(.home)
+        let banner = springboard.staticTexts["1-3-3 풀이 비었어요"].firstMatch
+        XCTAssertTrue(banner.waitForExistence(timeout: 10))
+        banner.tap()
+        XCTAssertTrue(app.staticTexts["1-3-3 풀이 비었어요"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["학습 화면으로 돌아가기"].exists)
+    }
     func testNotificationColdLaunchOpensQuickReview() {
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting", "--uitesting-notification-open"]

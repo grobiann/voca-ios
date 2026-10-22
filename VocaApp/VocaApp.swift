@@ -15,16 +15,25 @@ final class VocaNotificationDelegate: NSObject, UIApplicationDelegate, UNUserNot
         #endif
         return true
     }
-    nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
-        guard response.notification.request.content.userInfo["vocaMicroReview"] as? Bool == true else { return }
-        await MainActor.run {
+    // Explicit callbacks keep UIKit's completion on the main actor. The async
+    // delegate bridge may resume its completion on a background executor.
+    nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse,
+                                           withCompletionHandler completionHandler: @escaping @Sendable () -> Void) {
+        let opensReview = response.notification.request.content.userInfo["vocaMicroReview"] as? Bool == true
+        Task { @MainActor in
+            defer { completionHandler() }
+            guard opensReview else { return }
             Self.pendingMicroReview = true
             NotificationCenter.default.post(name: .openMicroReview, object: nil)
         }
     }
-    nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
-        [.banner, .sound]
+    nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification,
+                                           withCompletionHandler completionHandler: @escaping @Sendable (UNNotificationPresentationOptions) -> Void) {
+        Task { @MainActor in
+            completionHandler([.banner, .sound])
+        }
     }
+
 }
 
 @main struct VocaApp: App {
