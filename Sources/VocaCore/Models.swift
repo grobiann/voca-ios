@@ -145,6 +145,7 @@ public struct Archive: Codable, Sendable {
 }
 
 public struct MicroReviewSettings: Codable, Equatable, Sendable {
+    public var usesSystemAlarm: Bool?
     public var enabled = false
     public var intervalMinutes = 60
     public var startHour = 10

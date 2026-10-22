@@ -1,6 +1,21 @@
 import XCTest
 @testable import VocaCore
 final class VocaCoreTests: XCTestCase {
+    func testLegacyMicroSettingsAndHalfHourlySchedule() throws {
+        let legacy = Data(#"{"enabled":true,"intervalMinutes":60,"startHour":10,"endHour":20,"includesWeekends":true}"#.utf8)
+        var settings = try JSONDecoder().decode(MicroReviewSettings.self, from: legacy)
+        XCTAssertNil(settings.usesSystemAlarm)
+        settings.intervalMinutes = 30
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        let start = calendar.date(from: DateComponents(year: 2026, month: 10, day: 23, hour: 9))!
+        let dates = settings.upcomingDates(after: start, limit: 20, calendar: calendar)
+        XCTAssertEqual(dates.count, 20)
+        XCTAssertEqual(calendar.component(.hour, from: dates.first!), 10)
+        XCTAssertEqual(calendar.component(.hour, from: dates.last!), 19)
+        XCTAssertEqual(calendar.component(.minute, from: dates.last!), 30)
+        for pair in zip(dates, dates.dropFirst()) { XCTAssertEqual(pair.1.timeIntervalSince(pair.0), 1800) }
+    }
     func testBothDirectionsAndRetry() {
         var stack = Archive.sample.stacks[0]; stack.prepare()
         XCTAssertEqual(stack.queue.count, stack.words.count)

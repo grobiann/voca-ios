@@ -2,6 +2,7 @@ import SwiftUI
 import VocaCore
 import AVFoundation
 import UserNotifications
+import AlarmKit
 
 @MainActor @Observable final class AppStore {
     var archive: Archive
@@ -108,7 +109,12 @@ import UserNotifications
     func setMicroEnabled(_ enabled: Bool) async {
         if enabled {
             do {
-                let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
+                let granted: Bool
+                if #available(iOS 26.0, *), microSettings.usesSystemAlarm == true {
+                    granted = try await AlarmManager.shared.requestAuthorization() == .authorized
+                } else {
+                    granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
+                }
                 guard granted else { error = "알림이 허용되지 않았습니다. iPhone 설정에서 voca-ios 알림을 허용해 주세요."; return }
             } catch { self.error = "알림 권한을 확인하지 못했습니다: \(error.localizedDescription)"; return }
         }
@@ -166,10 +172,44 @@ import UserNotifications
         let entries = microEntries.filter { $0.status == .active }
         reminderTask = Task {
             _ = await previous?.result
-            do { try await MicroNotificationScheduler.synchronize(settings: settings, entries: entries) }
+            do {
+                if #available(iOS 26.0, *) {
+                    try await MicroAlarmScheduler.synchronize(settings: settings)
+                }
+                var notificationSettings = settings
+                if settings.usesSystemAlarm == true { notificationSettings.enabled = false }
+                try await MicroNotificationScheduler.synchronize(settings: notificationSettings, entries: entries)
+            }
             catch is CancellationError { }
             catch { self.error = "1-3-3 알림을 예약하지 못했습니다: \(error.localizedDescription)" }
         }
+    }
+    func setSystemAlarm(_ enabled: Bool) async {
+        guard #available(iOS 26.0, *) else { return }
+        do {
+            if enabled {
+                guard try await AlarmManager.shared.requestAuthorization() == .authorized else {
+                    error = "iPhone 설정에서 voca-ios의 알람을 허용해 주세요."; return
+                }
+            } else if microSettings.enabled {
+                guard try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) else {
+                    error = "일반 알림 권한을 허용해 주세요."; return
+                }
+            }
+            var updated = microSettings
+            updated.usesSystemAlarm = enabled
+            microSettings = updated
+        } catch { self.error = "알람 권한을 확인하지 못했습니다: \(error.localizedDescription)" }
+    }
+    func sendMicroTestAlarm() async -> Bool {
+        guard #available(iOS 26.0, *) else { return false }
+        do {
+            guard try await AlarmManager.shared.requestAuthorization() == .authorized else {
+                error = "iPhone 설정에서 voca-ios의 알람을 허용해 주세요."; return false
+            }
+            try await MicroAlarmScheduler.test()
+            return true
+        } catch { self.error = "테스트 알람을 예약하지 못했습니다: \(error.localizedDescription)"; return false }
     }
     func sendMicroTestNotification() async -> Bool {
         do {
@@ -242,6 +282,57 @@ import UserNotifications
             let request = UNNotificationRequest(identifier: prefix + String(Int(date.timeIntervalSince1970)), content: content, trigger: trigger)
             try await center.add(request)
             if repeating && usedSlots.count == slotsPerDay * (settings.includesWeekends ? 1 : 5) { break }
+        }
+    }
+}
+
+@available(iOS 26.0, *)
+private struct MicroAlarmMetadata: AlarmMetadata {}
+
+@available(iOS 26.0, *)
+@MainActor private enum MicroAlarmScheduler {
+    private static let prefix = "13300000-0000-4000-8000-"
+    private static let testID = UUID(uuidString: "13300000-0000-4000-9000-000000000000")!
+    private static func configuration(_ schedule: Alarm.Schedule, id: UUID) -> sending AlarmManager.AlarmConfiguration<MicroAlarmMetadata> {
+        let open = AlarmButton(text: "1-3-3 시작", textColor: .white, systemImageName: "play.fill")
+        let alert: AlarmPresentation.Alert
+        if #available(iOS 26.1, *) {
+            alert = .init(title: "잠깐, 일본어 두 단어", secondaryButton: open, secondaryButtonBehavior: .custom)
+        } else {
+            alert = .init(title: "잠깐, 일본어 두 단어",
+                          stopButton: .init(text: "그만", textColor: .white, systemImageName: "stop.fill"),
+                          secondaryButton: open, secondaryButtonBehavior: .custom)
+        }
+        let attributes = AlarmAttributes(presentation: AlarmPresentation(alert: alert),
+                                         metadata: MicroAlarmMetadata(), tintColor: Palette.accent)
+        return .alarm(schedule: schedule, attributes: attributes, secondaryIntent: OpenMicroReviewIntent(alarmID: id.uuidString))
+    }
+    static func test() async throws {
+        _ = try await AlarmManager.shared.schedule(id: testID, configuration: configuration(.fixed(Date().addingTimeInterval(5)), id: testID))
+    }
+    static func synchronize(settings: MicroReviewSettings) async throws {
+        let manager = AlarmManager.shared
+        // Never request permission during a background refresh.
+        guard manager.authorizationState == .authorized else { return }
+        let existing = try manager.alarms.filter { $0.id.uuidString.lowercased().hasPrefix(prefix) }
+        var wanted: [UUID: Alarm.Schedule] = [:]
+        if settings.enabled && settings.usesSystemAlarm == true {
+            let weekdays: [Locale.Weekday] = settings.includesWeekends
+                ? [.sunday, .monday, .tuesday, .wednesday, .thursday, .friday, .saturday]
+                : [.monday, .tuesday, .wednesday, .thursday, .friday]
+            for minute in stride(from: settings.startHour * 60, to: settings.endHour * 60, by: max(30, settings.intervalMinutes)) {
+                let id = UUID(uuidString: prefix + String(format: "%012d", minute))!
+                wanted[id] = .relative(.init(time: .init(hour: minute / 60, minute: minute % 60), repeats: .weekly(weekdays)))
+            }
+        }
+        for (id, schedule) in wanted {
+            try Task.checkCancellation()
+            if existing.contains(where: { $0.id == id && $0.schedule == schedule }) { continue }
+            _ = try await manager.schedule(id: id, configuration: configuration(schedule, id: id))
+        }
+        for alarm in existing where wanted[alarm.id] == nil {
+            try Task.checkCancellation()
+            try manager.cancel(id: alarm.id)
         }
     }
 }

@@ -1,5 +1,27 @@
 import XCTest
 @MainActor final class VocaUITests: XCTestCase {
+    func testSystemAlarmOpensQuickReview() { verifySystemAlarm(terminateBeforeAlarm: false) }
+    func testSystemAlarmColdLaunchOpensQuickReview() { verifySystemAlarm(terminateBeforeAlarm: true) }
+    private func verifySystemAlarm(terminateBeforeAlarm: Bool) {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
+        app.launch()
+        app.tabBars.buttons["계정"].tap()
+        app.buttons["microReviewSettings"].tap()
+        let testButton = app.buttons["5초 후 시스템 알람 테스트"]
+        for _ in 0..<6 where !testButton.isHittable { app.swipeUp() }
+        XCTAssertTrue(testButton.isHittable)
+        testButton.tap()
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let allow = springboard.buttons.matching(NSPredicate(format: "label == 'Allow' OR label == '허용'")).firstMatch
+        if allow.waitForExistence(timeout: 3) { allow.tap() }
+        XCUIDevice.shared.press(.home)
+        if terminateBeforeAlarm { app.terminate() }
+        let start = springboard.buttons["1-3-3 시작"].firstMatch
+        XCTAssertTrue(start.waitForExistence(timeout: 15))
+        start.tap()
+        XCTAssertTrue(app.staticTexts["1-3-3 풀이 비었어요"].waitForExistence(timeout: 10))
+    }
     func testActualNotificationTapOpensQuickReview() {
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting"]

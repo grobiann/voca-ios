@@ -25,6 +25,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.grobiann.voca-ios
         CODE_SIGN_ENTITLEMENTS: VocaApp/VocaApp.entitlements
+        INFOPLIST_FILE: VocaApp/Info.plist
         INFOPLIST_KEY_CFBundleDisplayName: voca-ios
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
