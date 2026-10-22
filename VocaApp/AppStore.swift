@@ -12,6 +12,7 @@ import AlarmKit
     private var storageReadable = true
     private let speaker = AVSpeechSynthesizer()
     private var reminderTask: Task<Void, Never>?
+    private var needsNotificationPermissionAfterMigration = false
     var microSettings: MicroReviewSettings {
         get { archive.microReviewSettings ?? MicroReviewSettings() }
         set {
@@ -49,6 +50,11 @@ import AlarmKit
             self.error = "저장된 데이터를 읽지 못했습니다. 원본 파일은 유지됩니다. 앱을 다시 실행해 주세요. \(error.localizedDescription)"
         }
         haptics = UserDefaults.standard.object(forKey: "haptics") as? Bool ?? true
+        if archive.microReviewSettings?.usesSystemAlarm == true {
+            archive.microReviewSettings?.usesSystemAlarm = false
+            needsNotificationPermissionAfterMigration = archive.microReviewSettings?.enabled == true
+            save()
+        }
     }
     func save() {
         guard storageReadable else { error = "원본 데이터 보호를 위해 저장을 중단했습니다. 앱을 다시 실행해 주세요."; return }
@@ -109,18 +115,18 @@ import AlarmKit
     func setMicroEnabled(_ enabled: Bool) async {
         if enabled {
             do {
-                let granted: Bool
-                if #available(iOS 26.0, *), microSettings.usesSystemAlarm == true {
-                    granted = try await AlarmManager.shared.requestAuthorization() == .authorized
-                } else {
-                    granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
-                }
+                let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge])
                 guard granted else { error = "알림이 허용되지 않았습니다. iPhone 설정에서 voca-ios 알림을 허용해 주세요."; return }
             } catch { self.error = "알림 권한을 확인하지 못했습니다: \(error.localizedDescription)"; return }
         }
         var settings = microSettings
         settings.enabled = enabled
         microSettings = settings
+    }
+    func requestMigratedNotificationPermissionIfNeeded() async {
+        guard needsNotificationPermissionAfterMigration else { return }
+        needsNotificationPermissionAfterMigration = false
+        await setMicroEnabled(true)
     }
     func addMicroWord(_ word: Word, sourceTitle: String) {
         var entries = microEntries
@@ -172,58 +178,13 @@ import AlarmKit
         let entries = microEntries.filter { $0.status == .active }
         reminderTask = Task {
             _ = await previous?.result
-            do {
-                if #available(iOS 26.0, *) {
-                    try await MicroAlarmScheduler.synchronize(settings: settings)
-                }
-                var notificationSettings = settings
-                if settings.usesSystemAlarm == true { notificationSettings.enabled = false }
-                try await MicroNotificationScheduler.synchronize(settings: notificationSettings, entries: entries)
+            if #available(iOS 26.0, *) {
+                do { try MicroAlarmCleanup.cancelOldAlarms() }
+                catch { self.error = "이전 시스템 알람을 취소하지 못했습니다: \(error.localizedDescription)" }
             }
+            do { try await MicroNotificationScheduler.synchronize(settings: settings, entries: entries) }
             catch is CancellationError { }
             catch { self.error = "1-3-3 알림을 예약하지 못했습니다: \(error.localizedDescription)" }
-        }
-    }
-    func setSystemAlarm(_ enabled: Bool) async {
-        guard #available(iOS 26.0, *) else { return }
-        do {
-            if enabled {
-                guard try await AlarmManager.shared.requestAuthorization() == .authorized else {
-                    error = "iPhone 설정에서 voca-ios의 알람을 허용해 주세요."; return
-                }
-            } else if microSettings.enabled {
-                guard try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) else {
-                    error = "일반 알림 권한을 허용해 주세요."; return
-                }
-            }
-            var updated = microSettings
-            updated.usesSystemAlarm = enabled
-            microSettings = updated
-        } catch { self.error = "알람 권한을 확인하지 못했습니다: \(error.localizedDescription)" }
-    }
-    func sendMicroTestAlarm() async -> Bool {
-        guard #available(iOS 26.0, *) else { return false }
-        do {
-            guard try await AlarmManager.shared.requestAuthorization() == .authorized else {
-                error = "iPhone 설정에서 voca-ios의 알람을 허용해 주세요."; return false
-            }
-            try await MicroAlarmScheduler.test()
-            return true
-        } catch { self.error = "테스트 알람을 예약하지 못했습니다: \(error.localizedDescription)"; return false }
-    }
-    func sendMicroTestNotification() async -> Bool {
-        do {
-            let center = UNUserNotificationCenter.current()
-            let granted = try await center.requestAuthorization(options: [.alert, .badge, .sound])
-            guard granted else {
-                error = "알림이 허용되지 않았습니다. iPhone 설정에서 voca-ios 알림을 허용해 주세요."
-                return false
-            }
-            try await MicroNotificationScheduler.scheduleTest(entries: microEntries.filter { $0.status == .active })
-            return true
-        } catch {
-            self.error = "테스트 알림을 예약하지 못했습니다: \(error.localizedDescription)"
-            return false
         }
     }
     func feedback(_ style: UIImpactFeedbackGenerator.FeedbackStyle = .light) {
@@ -244,16 +205,10 @@ import AlarmKit
             content.body = entry.word.japanese
         }
         content.userInfo = ["vocaMicroReview": true]
-        content.sound = .default
         content.badge = 1
         content.interruptionLevel = .timeSensitive
         content.relevanceScore = 1
         return content
-    }
-    static func scheduleTest(entries: [MicroReviewEntry]) async throws {
-        let request = UNNotificationRequest(identifier: "voca.test.micro", content: content(entries: entries, index: 0),
-                                            trigger: UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false))
-        try await UNUserNotificationCenter.current().add(request)
     }
     static func synchronize(settings: MicroReviewSettings, entries: [MicroReviewEntry]) async throws {
         let center = UNUserNotificationCenter.current()
@@ -287,51 +242,13 @@ import AlarmKit
 }
 
 @available(iOS 26.0, *)
-private struct MicroAlarmMetadata: AlarmMetadata {}
-
-@available(iOS 26.0, *)
-@MainActor private enum MicroAlarmScheduler {
+@MainActor private enum MicroAlarmCleanup {
     private static let prefix = "13300000-0000-4000-8000-"
     private static let testID = UUID(uuidString: "13300000-0000-4000-9000-000000000000")!
-    private static func configuration(_ schedule: Alarm.Schedule, id: UUID) -> sending AlarmManager.AlarmConfiguration<MicroAlarmMetadata> {
-        let open = AlarmButton(text: "1-3-3 시작", textColor: .white, systemImageName: "play.fill")
-        let alert: AlarmPresentation.Alert
-        if #available(iOS 26.1, *) {
-            alert = .init(title: "잠깐, 일본어 두 단어", secondaryButton: open, secondaryButtonBehavior: .custom)
-        } else {
-            alert = .init(title: "잠깐, 일본어 두 단어",
-                          stopButton: .init(text: "그만", textColor: .white, systemImageName: "stop.fill"),
-                          secondaryButton: open, secondaryButtonBehavior: .custom)
-        }
-        let attributes = AlarmAttributes(presentation: AlarmPresentation(alert: alert),
-                                         metadata: MicroAlarmMetadata(), tintColor: Palette.accent)
-        return .alarm(schedule: schedule, attributes: attributes, secondaryIntent: OpenMicroReviewIntent(alarmID: id.uuidString))
-    }
-    static func test() async throws {
-        _ = try await AlarmManager.shared.schedule(id: testID, configuration: configuration(.fixed(Date().addingTimeInterval(5)), id: testID))
-    }
-    static func synchronize(settings: MicroReviewSettings) async throws {
+    static func cancelOldAlarms() throws {
         let manager = AlarmManager.shared
-        // Never request permission during a background refresh.
         guard manager.authorizationState == .authorized else { return }
-        let existing = try manager.alarms.filter { $0.id.uuidString.lowercased().hasPrefix(prefix) }
-        var wanted: [UUID: Alarm.Schedule] = [:]
-        if settings.enabled && settings.usesSystemAlarm == true {
-            let weekdays: [Locale.Weekday] = settings.includesWeekends
-                ? [.sunday, .monday, .tuesday, .wednesday, .thursday, .friday, .saturday]
-                : [.monday, .tuesday, .wednesday, .thursday, .friday]
-            for minute in stride(from: settings.startHour * 60, to: settings.endHour * 60, by: max(30, settings.intervalMinutes)) {
-                let id = UUID(uuidString: prefix + String(format: "%012d", minute))!
-                wanted[id] = .relative(.init(time: .init(hour: minute / 60, minute: minute % 60), repeats: .weekly(weekdays)))
-            }
-        }
-        for (id, schedule) in wanted {
-            try Task.checkCancellation()
-            if existing.contains(where: { $0.id == id && $0.schedule == schedule }) { continue }
-            _ = try await manager.schedule(id: id, configuration: configuration(schedule, id: id))
-        }
-        for alarm in existing where wanted[alarm.id] == nil {
-            try Task.checkCancellation()
+        for alarm in try manager.alarms where alarm.id == testID || alarm.id.uuidString.lowercased().hasPrefix(prefix) {
             try manager.cancel(id: alarm.id)
         }
     }

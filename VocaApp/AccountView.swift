@@ -49,14 +49,7 @@ struct AccountView: View {
 struct MicroReviewSettingsView: View {
     @Environment(AppStore.self) private var store
     @State private var showQuickReview = false
-    @State private var testScheduled = false
-    @State private var alarmTestScheduled = false
-    @State private var soundAllowed = false
-    @State private var timeSensitiveAllowed = false
     private var settings: MicroReviewSettings { store.microSettings }
-    private var active: [MicroReviewEntry] { store.microEntries.filter { $0.status == .active } }
-    private var completed: [MicroReviewEntry] { store.microEntries.filter { $0.status == .completed } }
-    private var stopped: [MicroReviewEntry] { store.microEntries.filter { $0.status == .stopped } }
     private func binding<Value>(_ keyPath: WritableKeyPath<MicroReviewSettings, Value>) -> Binding<Value> {
         Binding(get: { store.microSettings[keyPath: keyPath] }, set: { value in
             var updated = store.microSettings
@@ -67,13 +60,18 @@ struct MicroReviewSettingsView: View {
     var body: some View {
         List {
             Section {
-                HStack {
-                    Label("현재 풀", systemImage: "rectangle.stack")
-                    Spacer()
-                    Text("\(active.count)개").bold()
+                NavigationLink {
+                    MicroReviewPoolView()
+                } label: {
+                    HStack {
+                        Label("현재 풀", systemImage: "folder")
+                        Spacer()
+                        Text("\(store.activeMicroCount)개").bold().foregroundStyle(.secondary)
+                    }
                 }
+                .accessibilityIdentifier("microReviewPool")
                 Button("지금 1-3-3 확인", systemImage: "play.fill") { showQuickReview = true }
-            } footer: { Text("기존 학습 화면에서 원하는 단어만 1-3-3 풀에 담을 수 있어요.") }
+            } footer: { Text("학습 중인 카드에서 원하는 단어만 1-3-3 풀에 담을 수 있어요.") }
             Section {
                 Toggle("1-3-3 알림 켜기", isOn: Binding(
                     get: { settings.enabled },
@@ -89,7 +87,22 @@ struct MicroReviewSettingsView: View {
                     ForEach((settings.startHour + 1)..<25, id: \.self) { hour in Text(String(format: "%02d:00", hour)).tag(hour) }
                 }
                 Toggle("주말에도 알림", isOn: binding(\.includesWeekends))
-            } header: { Text("알림 설정") } footer: { Text("기본은 매일 10:00~20:00, 60분 간격입니다. 하루 횟수 제한은 없습니다. 알림을 탭하면 짧은 확인 화면이 열립니다.") }
+            } header: { Text("알림 설정") } footer: {
+                Text("알림은 소리 없이 표시됩니다. 알림을 탭하면 1-3-3 학습이 열려요. 진동과 표시 방식은 iPhone 알림 설정 및 집중 모드에 따릅니다.")
+            }
+        }
+        .navigationTitle("1-3-3 알림")
+        .fullScreenCover(isPresented: $showQuickReview) { MicroReviewSessionView() }
+    }
+}
+
+struct MicroReviewPoolView: View {
+    @Environment(AppStore.self) private var store
+    private var active: [MicroReviewEntry] { store.microEntries.filter { $0.status == .active } }
+    private var completed: [MicroReviewEntry] { store.microEntries.filter { $0.status == .completed } }
+    private var stopped: [MicroReviewEntry] { store.microEntries.filter { $0.status == .stopped } }
+    var body: some View {
+        List {
             Section("1-3-3 풀 · \(active.count)개") {
                 if active.isEmpty { Text("아직 담은 단어가 없어요.").foregroundStyle(.secondary) }
                 ForEach(active) { entry in
@@ -116,52 +129,8 @@ struct MicroReviewSettingsView: View {
                     }
                 }
             }
-            Section {
-                if #available(iOS 26.0, *) {
-                    Toggle("시스템 알람 사용", isOn: Binding(
-                        get: { settings.usesSystemAlarm == true },
-                        set: { enabled in Task { await store.setSystemAlarm(enabled) } }
-                    ))
-                    Text("알림을 켜면 위의 활동시간·간격대로 시스템 알람이 울립니다. 알람에서 ‘1-3-3 시작’을 누르면 바로 학습합니다. 일반 알림과 중복으로 울리지 않습니다.")
-                        .font(.caption).foregroundStyle(.secondary)
-                    Button("10~20시 · 30분 간격 적용") {
-                        var updated = store.microSettings
-                        updated.startHour = 10; updated.endHour = 20; updated.intervalMinutes = 30
-                        store.microSettings = updated
-                    }
-                    Text("종료 시각 전까지 울립니다. 10~20시 · 30분이면 10:00부터 19:30까지 하루 20회입니다.")
-                        .font(.caption).foregroundStyle(.secondary)
-                    Button("5초 후 시스템 알람 테스트") {
-                        Task { alarmTestScheduled = await store.sendMicroTestAlarm() }
-                    }
-                    if alarmTestScheduled { Text("5초 뒤 알람의 ‘1-3-3 시작’을 눌러 보세요.").font(.caption) }
-                }
-                Text("단축어 앱에서도 voca-ios의 ‘1-3-3 학습 시작’ 동작을 사용할 수 있어요.")
-                    .font(.caption).foregroundStyle(.secondary)
-            } header: { Text("바로 학습하기") }
-            Section {
-                Button("5초 후 테스트 알림", systemImage: "bell.badge.fill") {
-                    Task {
-                        testScheduled = await store.sendMicroTestNotification()
-                        await refreshNotificationSettings()
-                    }
-                }
-                if testScheduled { Text("5초 뒤 알림이 옵니다. 알림을 탭해 짧은 확인 화면도 테스트해 보세요.").font(.caption).foregroundStyle(Palette.accent) }
-                LabeledContent("소리", value: soundAllowed ? "허용" : "꺼짐")
-                LabeledContent("시간 민감 알림", value: timeSensitiveAllowed ? "허용" : "꺼짐")
-                Button("iPhone 알림 설정 열기", systemImage: "gearshape") {
-                    if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
-                }
-            } header: { Text("알림 테스트") } footer: { Text("알림 소리와 시간 민감 알림은 iPhone 설정에서도 허용해야 합니다. 집중 모드 등 기기 설정에 따라 표시 방식이 달라질 수 있어요.") }
         }
-        .navigationTitle("1-3-3 알림")
-        .fullScreenCover(isPresented: $showQuickReview) { MicroReviewSessionView() }
-        .task { await refreshNotificationSettings() }
-    }
-    private func refreshNotificationSettings() async {
-        let settings = await UNUserNotificationCenter.current().notificationSettings()
-        soundAllowed = settings.soundSetting == .enabled
-        timeSensitiveAllowed = settings.timeSensitiveSetting == .enabled
+        .navigationTitle("현재 풀")
     }
     private func microRow<Actions: View>(_ entry: MicroReviewEntry, @ViewBuilder actions: () -> Actions) -> some View {
         HStack {

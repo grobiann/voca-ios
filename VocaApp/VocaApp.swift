@@ -33,7 +33,7 @@ final class VocaNotificationDelegate: NSObject, UIApplicationDelegate, UNUserNot
     nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification,
                                            withCompletionHandler completionHandler: @escaping @Sendable (UNNotificationPresentationOptions) -> Void) {
         Task { @MainActor in
-            completionHandler([.banner, .sound])
+            completionHandler([.banner])
         }
     }
 
@@ -65,6 +65,7 @@ final class VocaNotificationDelegate: NSObject, UIApplicationDelegate, UNUserNot
             .onAppear {
                 rootReady = true
                 store.scheduleMicroNotifications()
+                Task { await store.requestMigratedNotificationPermissionIfNeeded() }
                 presentPendingMicroReviewIfReady()
             }
             .onChange(of: scenePhase) { _, phase in
