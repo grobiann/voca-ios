@@ -123,6 +123,20 @@ import AlarmKit
         settings.enabled = enabled
         microSettings = settings
     }
+    func sendMicroTestNotification() async -> Bool {
+        do {
+            let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge])
+            guard granted else {
+                error = "알림이 허용되지 않았습니다. iPhone 설정에서 voca-ios 알림을 허용해 주세요."
+                return false
+            }
+            try await MicroNotificationScheduler.scheduleTest(entries: microEntries.filter { $0.status == .active })
+            return true
+        } catch {
+            self.error = "테스트 알림을 예약하지 못했습니다: \(error.localizedDescription)"
+            return false
+        }
+    }
     func requestMigratedNotificationPermissionIfNeeded() async {
         guard needsNotificationPermissionAfterMigration else { return }
         needsNotificationPermissionAfterMigration = false
@@ -194,6 +208,7 @@ import AlarmKit
 
 @MainActor private enum MicroNotificationScheduler {
     static let prefix = "voca.micro."
+    static let testIdentifier = "voca.test.micro"
     static func content(entries: [MicroReviewEntry], index: Int) -> UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
         if entries.isEmpty {
@@ -209,6 +224,16 @@ import AlarmKit
         content.interruptionLevel = .timeSensitive
         content.relevanceScore = 1
         return content
+    }
+    static func scheduleTest(entries: [MicroReviewEntry]) async throws {
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [testIdentifier])
+        let request = UNNotificationRequest(
+            identifier: testIdentifier,
+            content: content(entries: entries, index: 0),
+            trigger: UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        )
+        try await center.add(request)
     }
     static func synchronize(settings: MicroReviewSettings, entries: [MicroReviewEntry]) async throws {
         let center = UNUserNotificationCenter.current()

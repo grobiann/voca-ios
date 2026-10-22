@@ -1,5 +1,20 @@
 import XCTest
 @MainActor final class VocaUITests: XCTestCase {
+    func testFiveSecondNotificationCanBeScheduled() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
+        app.launch()
+        app.tabBars.buttons["계정"].tap()
+        app.buttons["microReviewSettings"].tap()
+        for _ in 0..<5 where !app.buttons["5초 후 테스트 알림"].isHittable { app.swipeUp() }
+        let testButton = app.buttons["5초 후 테스트 알림"]
+        XCTAssertTrue(testButton.isHittable)
+        testButton.tap()
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let allow = springboard.buttons.matching(NSPredicate(format: "label == 'Allow' OR label == '허용'")).firstMatch
+        if allow.waitForExistence(timeout: 2) { allow.tap() }
+        XCTAssertTrue(app.staticTexts["5초 뒤 소리 없는 알림이 표시됩니다."].waitForExistence(timeout: 5))
+    }
     func testNotificationColdLaunchOpensQuickReview() {
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting", "--uitesting-notification-open"]

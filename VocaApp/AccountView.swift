@@ -49,6 +49,7 @@ struct AccountView: View {
 struct MicroReviewSettingsView: View {
     @Environment(AppStore.self) private var store
     @State private var showQuickReview = false
+    @State private var testScheduled = false
     private var settings: MicroReviewSettings { store.microSettings }
     private func binding<Value>(_ keyPath: WritableKeyPath<MicroReviewSettings, Value>) -> Binding<Value> {
         Binding(get: { store.microSettings[keyPath: keyPath] }, set: { value in
@@ -89,6 +90,19 @@ struct MicroReviewSettingsView: View {
                 Toggle("주말에도 알림", isOn: binding(\.includesWeekends))
             } header: { Text("알림 설정") } footer: {
                 Text("알림은 소리 없이 표시됩니다. 알림을 탭하면 1-3-3 학습이 열려요. 진동과 표시 방식은 iPhone 알림 설정 및 집중 모드에 따릅니다.")
+            }
+            Section("알림 테스트") {
+                Button("5초 후 테스트 알림", systemImage: "bell") {
+                    Task { testScheduled = await store.sendMicroTestNotification() }
+                }
+                if testScheduled {
+                    Text("5초 뒤 소리 없는 알림이 표시됩니다.")
+                        .font(.footnote).foregroundStyle(.secondary)
+                }
+            }
+            Section("iOS 27 단축어 연결") {
+                Text("단축어 앱에서 자동화 → 알림 수신 → 앱 voca-ios → 제목에 ‘1-3-3’ 포함 → ‘1-3-3 학습 시작’ 동작을 선택하세요.")
+                    .font(.footnote).foregroundStyle(.secondary)
             }
         }
         .navigationTitle("1-3-3 알림")
