@@ -32,6 +32,13 @@ import AlarmKit
             save()
         }
     }
+    var showReadingOnFront: Bool {
+        get { archive.showReadingOnFront ?? true }
+        set {
+            archive.showReadingOnFront = newValue
+            save()
+        }
+    }
     init() {
         #if DEBUG
         let testing = ProcessInfo.processInfo.arguments.contains("--uitesting") || ProcessInfo.processInfo.arguments.contains("--uitesting-resume")

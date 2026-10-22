@@ -175,9 +175,12 @@ final class VocaCoreTests: XCTestCase {
         while !stack.queue.isEmpty && answers < 120 { stack.answer(known: true, poolSize: 1); answers += 1 }
         XCTAssertTrue(stack.isComplete)
         let old = try JSONDecoder().decode(Archive.self, from: Data("{\"stacks\":[],\"libraries\":[],\"server\":[]}".utf8))
-        XCTAssertNil(old.studyPoolSize); XCTAssertNil(old.wordReports)
+        XCTAssertNil(old.studyPoolSize); XCTAssertNil(old.wordReports); XCTAssertNil(old.showReadingOnFront)
         var archive = Archive.sample
         archive.studyPoolSize = 30
+        archive.showReadingOnFront = false
+        let restoredReadingSetting = try JSONDecoder().decode(Archive.self, from: JSONEncoder().encode(archive))
+        XCTAssertEqual(restoredReadingSetting.showReadingOnFront, false)
         let report = WordReport(library: archive.server.first, stack: archive.stacks[0], word: archive.stacks[0].words[0], message: "뜻 확인")
         archive.wordReports = [report]
         let restored = try JSONDecoder().decode(Archive.self, from: JSONEncoder().encode(archive))

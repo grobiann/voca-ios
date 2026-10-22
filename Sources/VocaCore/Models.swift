@@ -103,6 +103,7 @@ public struct Library: Identifiable, Codable, Equatable, Sendable {
 }
 public struct Archive: Codable, Sendable {
     public var studyPoolSize: Int?
+    public var showReadingOnFront: Bool?
     public var wordReports: [WordReport]?
     public var microReviewSettings: MicroReviewSettings?
     public var microReviewEntries: [MicroReviewEntry]?

@@ -165,7 +165,7 @@ struct StudyView: View {
                 .lineLimit(compact ? 4 : nil)
                 .minimumScaleFactor(0.65)
                 .fixedSize(horizontal: false, vertical: true)
-            if (japaneseFirst || showingAnswer), let reading = word.reading, !reading.isEmpty {
+            if (showingAnswer || (japaneseFirst && store.showReadingOnFront)), let reading = word.reading, !reading.isEmpty {
                 Text(reading).font(.system(size: 17 * scale)).foregroundStyle(.secondary)
                     .lineLimit(compact ? 2 : nil).fixedSize(horizontal: false, vertical: true)
             }

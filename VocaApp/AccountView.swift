@@ -16,6 +16,9 @@ struct AccountView: View {
                 Section("학습 설정") {
                     Stepper("학습 풀 크기: \(store.poolSize)개", value: $store.poolSize, in: 1...100)
                     Text("기본 20개 · 1~100개 중 선택할 수 있어요. 모르는 카드는 풀 안에서 반복하고, 같은 단어의 반대 방향은 간격을 두고 보여 줍니다.").font(.caption).foregroundStyle(.secondary)
+                    Toggle("앞면에 히라가나 표시", isOn: $store.showReadingOnFront)
+                    Text("끄면 일반 학습과 1-3-3 카드 앞면에서 읽는 법을 숨깁니다. 뒷면에는 항상 표시합니다.")
+                        .font(.caption).foregroundStyle(.secondary)
                     LabeledContent("학습 언어", value: "일본어")
                     LabeledContent("모국어", value: "한국어")
                     Toggle("카드 햅틱 피드백", isOn: $store.haptics).onChange(of: store.haptics) { _, value in UserDefaults.standard.set(value, forKey: "haptics") }
@@ -314,11 +317,11 @@ struct MicroReviewSessionView: View {
                 .font(.system(size: (revealed ? 24 : 38) * scale, weight: revealed ? .medium : .semibold, design: .rounded))
                 .foregroundStyle(revealed ? .secondary : .primary)
                 .fixedSize(horizontal: false, vertical: true)
+            if (revealed || store.showReadingOnFront), let reading = word.reading, !reading.isEmpty {
+                Text(reading).font(.system(size: 17 * scale)).foregroundStyle(.secondary)
+                    .accessibilityIdentifier("microReading")
+            }
             if revealed {
-                if let reading = word.reading, !reading.isEmpty {
-                    Text(reading).font(.system(size: 17 * scale)).foregroundStyle(.secondary)
-                        .accessibilityIdentifier("microReading")
-                }
                 Rectangle().fill(Palette.accent.opacity(0.15)).frame(width: 36, height: 3)
                 Text(word.korean).font(.system(size: 34 * scale, weight: .semibold, design: .rounded))
                     .fixedSize(horizontal: false, vertical: true)
