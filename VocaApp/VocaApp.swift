@@ -1,7 +1,8 @@
 import SwiftUI
 import UserNotifications
 
-private extension Notification.Name {
+extension Notification.Name {
+    static let finishMicroReview = Notification.Name("voca.finishMicroReview")
     static let openMicroReview = Notification.Name("voca.openMicroReview")
 }
 
@@ -32,17 +33,21 @@ final class VocaNotificationDelegate: NSObject, UIApplicationDelegate, UNUserNot
     @State private var store = AppStore()
     @State private var showMicroReview = false
     @State private var rootReady = false
+    @State private var selectedTab = 0
     var body: some Scene {
         WindowGroup {
-            TabView {
-                LearnView().tabItem { Label("학습", systemImage: "rectangle.on.rectangle.angled") }
-                LibraryView().tabItem { Label("라이브러리", systemImage: "books.vertical") }
-                AccountView().tabItem { Label("계정", systemImage: "person.crop.circle") }
+            TabView(selection: $selectedTab) {
+                LearnView().tabItem { Label("학습", systemImage: "rectangle.on.rectangle.angled") }.tag(0)
+                LibraryView().tabItem { Label("라이브러리", systemImage: "books.vertical") }.tag(1)
+                AccountView().tabItem { Label("계정", systemImage: "person.crop.circle") }.tag(2)
             }
             .tint(Palette.accent).environment(store)
             .fullScreenCover(isPresented: $showMicroReview) { MicroReviewSessionView().environment(store) }
             .onReceive(NotificationCenter.default.publisher(for: .openMicroReview)) { _ in
                 presentPendingMicroReviewIfReady()
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .finishMicroReview)) { _ in
+                selectedTab = 0
             }
             .onAppear {
                 rootReady = true

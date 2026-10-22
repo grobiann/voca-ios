@@ -51,13 +51,20 @@ import XCTest
             XCTAssertFalse(app.staticTexts["先生、おはようございます。"].exists)
             if count == 0 {
                 card.swipeLeft()
-                XCTAssertTrue(app.buttons["지금 1-3-3 확인"].waitForExistence(timeout: 8))
+                XCTAssertTrue(app.buttons["microFinishReview"].waitForExistence(timeout: 5))
+                XCTAssertTrue(app.staticTexts["26초 후 마침"].waitForExistence(timeout: 6))
+                XCTAssertTrue(app.buttons["학습 시작"].waitForExistence(timeout: 30))
+                app.tabBars.buttons["계정"].tap()
                 app.buttons["지금 1-3-3 확인"].tap()
                 XCTAssertTrue(app.staticTexts["이 단어 학습 완료 0/3회"].waitForExistence(timeout: 5))
                 card.tap()
             }
             if count == 1 { card.swipeRight() } else { app.buttons["알았어요"].tap() }
-            XCTAssertTrue(app.buttons["지금 1-3-3 확인"].waitForExistence(timeout: 8))
+            XCTAssertTrue(app.buttons["microFinishReview"].waitForExistence(timeout: 5))
+            XCTAssertGreaterThan(app.buttons["microFinishReview"].frame.height, 300)
+            app.buttons["microFinishReview"].tap()
+            XCTAssertTrue(app.buttons["학습 시작"].waitForExistence(timeout: 8))
+            app.tabBars.buttons["계정"].tap()
         }
         XCTAssertTrue(app.staticTexts["학습완료단어목록 · 1개"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["1-3-3 풀 · 0개"].exists)

@@ -169,6 +169,7 @@ struct MicroReviewSessionView: View {
     @State private var exiting = false
     @State private var advanceTask: Task<Void, Never>?
     @State private var closeTask: Task<Void, Never>?
+    @State private var completionDeadline: Date?
     private var current: MicroReviewEntry? { store.microEntries.first { $0.id == currentID && $0.status == .active } }
     private var hasMoreWords: Bool { store.microEntries.contains { $0.status == .active && !seenIDs.contains($0.id) } }
     var body: some View {
@@ -221,28 +222,50 @@ struct MicroReviewSessionView: View {
                     Text(revealed ? "모르면 왼쪽, 알면 오른쪽으로 밀어 주세요" : "카드를 누르면 뜻을 확인할 수 있어요")
                         .font(.caption).foregroundStyle(.secondary)
                 } else {
-                    Spacer()
                     if handled > 0 {
-                        Image(systemName: "checkmark.seal.fill").font(.system(size: 56)).foregroundStyle(Palette.accent)
-                        Text("이번 확인을 마쳤어요").font(.title2.bold())
-                        Text("잠시 후 학습 화면으로 돌아갑니다.").foregroundStyle(.secondary)
+                        Button { finishReview() } label: {
+                            VStack(spacing: 18) {
+                                Spacer()
+                                Image(systemName: "checkmark.seal.fill")
+                                    .font(.system(size: 48)).foregroundStyle(Palette.accent)
+                                Text("이번 확인을 마쳤어요").font(.subheadline).foregroundStyle(.secondary)
+                                Text("터치하여 학습 화면으로").font(.title2.bold()).foregroundStyle(.primary)
+                                Spacer()
+                            }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityIdentifier("microFinishReview")
                         if hasMoreWords {
-                            Button("더 학습하기") {
+                            Button("조금 더 학습하기") {
                                 closeTask?.cancel()
+                                completionDeadline = nil
                                 continuing = true
                                 sessionTotal = handled + store.microEntries.filter { $0.status == .active && !seenIDs.contains($0.id) }.count
                                 advance()
-                            }.buttonStyle(PrimaryButton())
+                            }
+                            .font(.subheadline).foregroundStyle(.secondary)
+                            .padding(.vertical, 12)
                         }
-                        Button("지금 닫기") { dismiss() }
+                        HStack {
+                            Spacer()
+                            if let completionDeadline {
+                                TimelineView(.periodic(from: .now, by: 1)) { context in
+                                    Text("\(max(0, Int(ceil(completionDeadline.timeIntervalSince(context.date)))))초 후 마침")
+                                        .font(.caption2).monospacedDigit().foregroundStyle(.tertiary)
+                                }
+                            }
+                        }
                     } else {
+                        Spacer()
                         Image(systemName: "tray").font(.system(size: 56)).foregroundStyle(Palette.accent)
                         Text("1-3-3 풀이 비었어요").font(.title2.bold())
                         Text("학습 중인 카드에서 ‘1-3-3에 담기’를 누르면 다음 알림부터 만날 수 있어요.")
                             .multilineTextAlignment(.center).foregroundStyle(.secondary)
                         Button("학습 화면으로 돌아가기") { dismiss() }.buttonStyle(PrimaryButton())
+                        Spacer()
                     }
-                    Spacer()
                 }
             }.padding(24).frame(maxWidth: 650).frame(maxWidth: .infinity).background(Palette.canvas)
         }.onAppear {
@@ -369,13 +392,20 @@ struct MicroReviewSessionView: View {
             advance()
         }
     }
+    private func finishReview() {
+        closeTask?.cancel()
+        completionDeadline = nil
+        dismiss()
+        NotificationCenter.default.post(name: .finishMicroReview, object: nil)
+    }
     private func advance() {
         currentID = handled >= sessionTotal && !continuing ? nil : store.nextMicroEntry(excluding: seenIDs)?.id
         if currentID == nil && handled > 0 {
             closeTask?.cancel()
+            completionDeadline = Date().addingTimeInterval(30)
             closeTask = Task { @MainActor in
-                do { try await Task.sleep(for: .seconds(3)) } catch { return }
-                if !Task.isCancelled { dismiss() }
+                do { try await Task.sleep(for: .seconds(30)) } catch { return }
+                if !Task.isCancelled { finishReview() }
             }
         }
     }
