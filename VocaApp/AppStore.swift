@@ -122,7 +122,7 @@ import AlarmKit
     func setMicroEnabled(_ enabled: Bool) async {
         if enabled {
             do {
-                let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge])
+                let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert])
                 guard granted else { error = "알림이 허용되지 않았습니다. iPhone 설정에서 voca-ios 알림을 허용해 주세요."; return }
             } catch { self.error = "알림 권한을 확인하지 못했습니다: \(error.localizedDescription)"; return }
         }
@@ -132,7 +132,7 @@ import AlarmKit
     }
     func sendMicroTestNotification() async -> Bool {
         do {
-            let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge])
+            let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert])
             guard granted else {
                 error = "알림이 허용되지 않았습니다. iPhone 설정에서 voca-ios 알림을 허용해 주세요."
                 return false
@@ -227,7 +227,6 @@ import AlarmKit
             content.body = entry.word.japanese
         }
         content.userInfo = ["vocaMicroReview": true]
-        content.badge = 1
         content.interruptionLevel = .timeSensitive
         content.relevanceScore = 1
         return content

@@ -64,6 +64,7 @@ final class VocaNotificationDelegate: NSObject, UIApplicationDelegate, UNUserNot
             }
             .onAppear {
                 rootReady = true
+                Task { try? await UNUserNotificationCenter.current().setBadgeCount(0) }
                 store.scheduleMicroNotifications()
                 Task { await store.requestMigratedNotificationPermissionIfNeeded() }
                 presentPendingMicroReviewIfReady()
