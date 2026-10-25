@@ -90,11 +90,12 @@ final class VocaCoreTests: XCTestCase {
         XCTAssertEqual(fastSlots.count, 60)
     }
     func testCSVQuotesNewlinesAndGroups() throws {
-        let csv = "\u{FEFF}stack,japanese,korean,example\r\n인사,こんにちは,안녕하세요,\"こんにちは、田中さん。\"\r\n카페,注文,주문,\"一つ、\"\"お願いします\"\"。\nありがとう。\"\r\n"
+        let csv = "\u{FEFF}stack,japanese,korean,example\r\n인사,こんにちは,안녕하세요,\"こんにちは、田中さん。\"\r\n카페,注文,\"주문, \"\"부탁해요\"\"\n감사합니다\",\"一つ、お願いします。\"\r\n"
         let library = try LibraryImporter.read(Data(csv.utf8), filename: "생활.csv")
         XCTAssertEqual(library.stacks.count, 2); XCTAssertEqual(library.wordCount, 2)
-        XCTAssertTrue(library.stacks[1].words[0].example.contains("\"お願いします\""))
-        XCTAssertTrue(library.stacks[1].words[0].example.contains("\n"))
+        XCTAssertTrue(library.stacks[1].words[0].korean.contains("\"부탁해요\""))
+        XCTAssertTrue(library.stacks[1].words[0].korean.contains("\n"))
+        XCTAssertTrue(library.stacks.flatMap(\.words).allSatisfy { $0.example.isEmpty })
     }
     func testInvalidImports() {
         for csv in ["japanese,korean,example\na,b", "japanese,korean,example\n\"a,b,c", "bad,header\na,b"] {
@@ -108,6 +109,26 @@ final class VocaCoreTests: XCTestCase {
         """
         let library = try LibraryImporter.read(Data(json.utf8), filename: "test.json")
         XCTAssertEqual(library.wordCount, 1); XCTAssertEqual(library.title, "여행")
+        XCTAssertEqual(library.stacks[0].words[0].example, "")
+        let minimal = #"{"title":"기본","stacks":[{"title":"요일","cards":[{"japanese":"月曜日","korean":"월요일","reading":"げつようび"}]}]}"#
+        XCTAssertEqual(try LibraryImporter.read(Data(minimal.utf8), filename: "minimal.json").stacks[0].words[0].reading, "げつようび")
+    }
+    func testGroupedExpressionsAndExampleMigration() {
+        let library = GroupedExpressions.library
+        XCTAssertEqual(library.stacks.count, 11)
+        XCTAssertEqual(library.wordCount, 122)
+        XCTAssertTrue(library.stacks.allSatisfy { !$0.words.isEmpty && $0.words.count <= 20 })
+        XCTAssertTrue(library.stacks.flatMap(\.words).allSatisfy { $0.example.isEmpty && !($0.reading ?? "").isEmpty })
+        XCTAssertEqual(library.stacks[2].words[0].reading, "ついたち")
+        XCTAssertEqual(library.stacks[4].words[0].reading, "ひとり")
+        var archive = Archive.sample
+        archive.stacks[0].words[0].example = "옛 예문"
+        archive.libraries = [library]
+        archive.libraries[0].stacks[0].words[0].example = "옛 예문"
+        XCTAssertTrue(archive.removeLegacyExamples())
+        XCTAssertTrue(archive.stacks[0].words[0].example.isEmpty)
+        XCTAssertTrue(archive.libraries[0].stacks[0].words[0].example.isEmpty)
+        XCTAssertFalse(archive.removeLegacyExamples())
     }
     func testPoolLimitAndWrongAnswersDoNotAdmitWords() {
         var stack = Stack(title: "100 words", words: (0..<100).map { Word(japanese: "語\($0)", korean: "말\($0)", example: "例") })
@@ -247,7 +268,7 @@ extension VocaCoreTests {
             XCTAssertEqual(library.wordCount, count)
             XCTAssertEqual(library.stacks.count, stacks)
             XCTAssertTrue(library.stacks.allSatisfy { $0.words.count <= 20 })
-            XCTAssertTrue(library.stacks.flatMap(\.words).allSatisfy { !$0.example.isEmpty && !($0.reading ?? "").isEmpty && $0.source != nil })
+            XCTAssertTrue(library.stacks.flatMap(\.words).allSatisfy { $0.example.isEmpty && !($0.reading ?? "").isEmpty && $0.source != nil })
         }
     }
 }

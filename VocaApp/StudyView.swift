@@ -53,9 +53,6 @@ struct StudyView: View {
                             VStack(spacing: 24) {
                                 Text(stack.queue[1].direction == .japaneseToKorean ? nextWord.japanese : nextWord.korean)
                                     .font(.system(size: 38, weight: .semibold, design: .rounded))
-                                if stack.queue[1].direction == .japaneseToKorean {
-                                    Text(nextWord.example).font(.body).foregroundStyle(.secondary)
-                                }
                             }.multilineTextAlignment(.center).padding(28)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 30))
@@ -174,12 +171,6 @@ struct StudyView: View {
                 Text(japaneseFirst ? word.korean : word.japanese)
                     .font(.system(size: 34 * scale, weight: .semibold, design: .rounded))
                     .lineLimit(compact ? 4 : nil).minimumScaleFactor(0.65)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            if (japaneseFirst || showingAnswer) && !word.example.isEmpty {
-                Text(word.example).font(.system(size: 17 * scale)).foregroundStyle(.secondary)
-                    .lineSpacing(compact ? 2 : 5)
-                    .lineLimit(compact ? 5 : nil)
                     .fixedSize(horizontal: false, vertical: true)
             }
         }

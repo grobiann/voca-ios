@@ -1,675 +1,675 @@
-stack_id,stack,card_id,japanese,reading,korean,example,english,example_source,translation_status,example_status,source,license
-N5-001,N5 단어 001,ada066edfd,会う,あう,만나다,もうスミスさんに会われましたね。,to meet,https://tatoeba.org/sentences/show/194412,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-001,N5 단어 001,ebec658463,青,あお,파란색,信号が青に変わったわよ。,blue,https://tatoeba.org/sentences/show/145720,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-001,N5 단어 001,51a671ec17,青い,あおい,파랗다; 푸르다,お前はまだ「青い」な。,blue,https://tatoeba.org/sentences/show/226939,자동번역 후 AI 교정 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-001,N5 단어 001,2dacb910b2,赤,あか,빨간색,赤インクで書いてはいけない。,red,https://tatoeba.org/sentences/show/142280,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-001,N5 단어 001,44ba38cf8b,赤い,あかい,빨갛다,彼女は赤いスカートをはいていた。,red,https://tatoeba.org/sentences/show/88306,자동번역 후 AI 교정 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-001,N5 단어 001,91987ae840,明るい,あかるい,밝다,外はだんだん明るくなっていく。,bright,https://tatoeba.org/sentences/show/184877,자동번역 후 AI 교정 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-001,N5 단어 001,8dc7006bda,秋,あき,가을,秋はもうすぐそこまで来ている。,autumn,https://tatoeba.org/sentences/show/148194,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-001,N5 단어 001,fc3bc1e6f1,開く,あく,열리다,ぐいと押すとドアは開いた。,to open; to become open,https://tatoeba.org/sentences/show/225720,자동번역 후 AI 교정 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-001,N5 단어 001,321963ed35,開ける,あける,열다,ドアはジムによって開けられます。,to open,https://tatoeba.org/sentences/show/201846,자동번역 후 AI 교정 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-001,N5 단어 001,9661cbac61,上げる,あげる,올리다; 주다,左手を上げなさい。,to give,https://tatoeba.org/sentences/show/170915,자동번역 후 AI 교정 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-001,N5 단어 001,d46ae79a26,朝,あさ,아침,朝のラッシュは今がピークだ。,morning,https://tatoeba.org/sentences/show/126237,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-001,N5 단어 001,98bc6f72ae,朝ごはん,あさごはん,아침밥,朝ごはんにはなにがよろしいですか。,breakfast,https://tatoeba.org/sentences/show/126248,자동번역 후 AI 교정 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-001,N5 단어 001,b3b4041c52,あさって,あさって,모레,あさって彼にここへ来てもらうつもりです。,day after tomorrow,https://tatoeba.org/sentences/show/234491,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-001,N5 단어 001,27df3d5802,足,あし,발; 다리,また足がしびれた。,foot; leg,https://tatoeba.org/sentences/show/195414,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-001,N5 단어 001,115ec83476,明日,あした,내일,あしたは一日中ひまです。,tomorrow,https://tatoeba.org/sentences/show/234469,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-001,N5 단어 001,bee501faf0,あそこ,あそこ,저쪽,先生、アソコがかゆいんです。,over there,https://tatoeba.org/sentences/show/2733322,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-001,N5 단어 001,2d55571300,遊ぶ,あそぶ,놀다; 방문하다,ビルはよく一人でおもちゃで遊ぶ。,to play; to make a visit,https://tatoeba.org/sentences/show/197343,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-001,N5 단어 001,f665c2128a,暖かい,あたたかい,따뜻한,だんだん暖かくなります。,warm,https://tatoeba.org/sentences/show/203062,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-001,N5 단어 001,b62cb9ce4c,頭,あたま,머리,アリスは頭に花をさしています。,head,https://tatoeba.org/sentences/show/229971,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-001,N5 단어 001,8ae27e3b51,新しい,あたらしい,새로운,先生は新しい車が気に入っている。,new,https://tatoeba.org/sentences/show/141560,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-002,N5 단어 002,34e6f7d220,あちら,あちら,거기,こっちの本はあっちの本よりやさしい。,there,https://tatoeba.org/sentences/show/217779,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-002,N5 단어 002,9949d87445,厚い,あつい,친절한; 깊은; 두꺼운,それは４ｃｍの厚さです。,kind; deep; thick,https://tatoeba.org/sentences/show/205578,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-002,N5 단어 002,7b4aecdf7b,暑い,あつい,더운,どうして、こんなに暑いのですか。,hot,https://tatoeba.org/sentences/show/201579,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-002,N5 단어 002,a379d413fd,熱い,あつい,만지면 뜨겁다,熱いコーヒーを入れてあげましょう。,hot to the touch,https://tatoeba.org/sentences/show/147486,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-002,N5 단어 002,60dd63379e,あっち,あっち,저쪽,こっちの本はあっちの本よりやさしい。,over there,https://tatoeba.org/sentences/show/217779,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-002,N5 단어 002,4f134c9b38,後,あと,나중에,雨天の後には晴天が来る。,afterwards,https://tatoeba.org/sentences/show/189518,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-002,N5 단어 002,afdf384f68,あなた,あなた,너,ねえあなたたち行かないで。,you,https://tatoeba.org/sentences/show/198640,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-002,N5 단어 002,4aab699864,兄,あに,(겸손한) 형,これは兄です。かっこいいですね。,(humble) older brother,https://tatoeba.org/sentences/show/74148,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-002,N5 단어 002,8bfeb208b4,姉,あね,(겸손한) 언니,先月、姉は６ポンドの男の子を生んだ。,(humble) older sister,https://tatoeba.org/sentences/show/141894,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-002,N5 단어 002,ac4706068b,あの,あの,저기 있는 것,あのおいしいワインをなぜ飲まないんだい。,that over there,https://tatoeba.org/sentences/show/231361,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-002,N5 단어 002,0cf05b3a0d,アパート,アパート,아파트,兄はアパートをさがしています。,apartment,https://tatoeba.org/sentences/show/176617,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-002,N5 단어 002,a5aceb6426,あびる,あびる,목욕하다; 샤워하다,その時はシャワーを浴びていた。,to bathe; to shower,https://tatoeba.org/sentences/show/209749,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-002,N5 단어 002,0509cb3b27,危ない,あぶない,위험한,間一髪！危ないところでした。,dangerous,https://tatoeba.org/sentences/show/183713,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-002,N5 단어 002,4afffe5811,甘い,あまい,달콤한,メアリーにはつい甘くなってしまう。,sweet,https://tatoeba.org/sentences/show/194851,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-002,N5 단어 002,eac90e8e98,あまり,あまり,별로,この手の本はあまり読まない。,not very,https://tatoeba.org/sentences/show/221356,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-002,N5 단어 002,5d72771a3c,飴,あめ,사탕,いい子にしていたら、あめをあげよう。,candy,https://tatoeba.org/sentences/show/229358,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-002,N5 단어 002,277a58c9df,雨,あめ,비,木のおかげで雨にぬれずにすんだ。,rain,https://tatoeba.org/sentences/show/80133,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-002,N5 단어 002,f8fa96946f,洗う,あらう,씻다,いつこの車は洗われましたか。,to wash,https://tatoeba.org/sentences/show/228970,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-002,N5 단어 002,93461820fe,ありがとう,ありがとう,감사합니다,はるばる来てくれてありがとう。,Thank you,https://tatoeba.org/sentences/show/197814,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-002,N5 단어 002,ac08788418,ある,ある,있다; 가지다 (무생물에 사용됨),話があったら電話をかけて下さい。,to be; to have (used for inanimate objects),https://tatoeba.org/sentences/show/77204,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-003,N5 단어 003,55f3080ce4,歩く,あるく,걷다,歩いて行きますか？それともバスで行きますか？,to walk,https://tatoeba.org/sentences/show/231584,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-003,N5 단어 003,d727a76b22,あれ,あれ,저것,あれは私のかばんです。,that,Codex 작성 · 미검수,자동번역 · 미검수,AI 작성 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-003,N5 단어 003,e37a087c0f,いい,いい,좋은,もう２、３ページ読みさえすればいい。,good,https://tatoeba.org/sentences/show/194533,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-003,N5 단어 003,6d4596ae46,いいえ,いいえ,아니요,いいえ、今日は休みではありません。,no,Codex 작성 · 미검수,자동번역 · 미검수,AI 작성 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-003,N5 단어 003,ae0cc00f94,言う,いう,말하다,「みんなひと休みしようぜ」とジョンは言った。,to say,https://tatoeba.org/sentences/show/236431,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-003,N5 단어 003,9f074820b1,家,いえ,집,木立の間に家が見える。,house,https://tatoeba.org/sentences/show/80048,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-003,N5 단어 003,a3f296ad9a,いかが,いかが,어떻게,コンタクトを入れるというのはいかがでしょう？,how,https://tatoeba.org/sentences/show/74894,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-003,N5 단어 003,66e4692df7,行く,いく,가다,お母さん、泳ぎに行ってもいい？,to go,https://tatoeba.org/sentences/show/226648,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-003,N5 단어 003,026ae57b50,いくつ,いくつ,몇 명입니까? 나이는 몇 살입니까?,あなたのお父さんはおいくつですか。,how many?; how old?,https://tatoeba.org/sentences/show/233594,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-003,N5 단어 003,4fc98c6938,いくら,いくら,얼마나 많이?,このハンカチはいくらですか。,how much?,https://tatoeba.org/sentences/show/223306,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-003,N5 단어 003,43c874a6c8,池,いけ,연못,その池にはほとんど水がない。,pond,https://tatoeba.org/sentences/show/207858,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-003,N5 단어 003,ca76162587,医者,いしゃ,의사,医者になるつもりだったのですが。,medical doctor,https://tatoeba.org/sentences/show/190904,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-003,N5 단어 003,d305fa14a8,いす,いす,의자,ちょっと椅子をずらしてくれない？,chair,https://tatoeba.org/sentences/show/202860,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-003,N5 단어 003,cd1bcc2b1b,忙しい,いそがしい,바쁜; 짜증난,忙しくてそれどころじゃないよ。,busy; irritated,https://tatoeba.org/sentences/show/82529,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-003,N5 단어 003,4dae367794,痛い,いたい,아픈,ほかに痛いところはありますか。,painful,https://tatoeba.org/sentences/show/196436,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-003,N5 단어 003,eac7a22620,いただきます,いただきます,식사 전 감사의 표현,８ドル５０セントいただきます。,expression of gratitude before meals,https://tatoeba.org/sentences/show/234953,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-003,N5 단어 003,9d8f862791,一,いち,하나,これは東京一のインドレストランです。,one,https://tatoeba.org/sentences/show/218179,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-003,N5 단어 003,1cfccd0cdd,一日,いちにち,하루; 월초,一日で５００ドルつかってしまった。,one day; first of month,https://tatoeba.org/sentences/show/190280,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-003,N5 단어 003,cb96f363df,いちばん,いちばん,최고; 첫 번째,このリンゴがいちばんおいしい。,best; first,https://tatoeba.org/sentences/show/223023,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-003,N5 단어 003,fac6fc0838,いつ,いつ,언제,いつ旅行においでになりますか。,when,https://tatoeba.org/sentences/show/228596,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-004,N5 단어 004,2a7c4baf86,五日,いつか,5일; 다섯째 날,１月５日から１月１５日までおねがいします。,five days; fifth day,https://tatoeba.org/sentences/show/235804,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-004,N5 단어 004,2dc7289c82,一緒,いっしょ,함께,「ご一緒してもいいですか」「もちろんです」,together,https://tatoeba.org/sentences/show/217215,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-004,N5 단어 004,9ac35c3990,五つ,いつつ,다섯,この箱にはリンゴが五つ入っている。,five,https://tatoeba.org/sentences/show/220200,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-004,N5 단어 004,dea2a1df8b,いつも,いつも,언제나,あの子はいつもニコニコしている。,always,https://tatoeba.org/sentences/show/230970,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-004,N5 단어 004,0df89f5010,犬,いぬ,개,その犬はかみついたりしませんよ。,dog,https://tatoeba.org/sentences/show/211003,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-004,N5 단어 004,ce75c75644,今,いま,지금,今のアナウンスは何だったのですか。,now,https://tatoeba.org/sentences/show/172752,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-004,N5 단어 004,cb29ccdd2a,意味,いみ,의미,その語にはいくつかの意味がある。,meaning,https://tatoeba.org/sentences/show/210824,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-004,N5 단어 004,12047d019b,妹,いもうと,(겸손한) 여동생,男の子は妹を見下ろしがちである。,(humble) younger sister,https://tatoeba.org/sentences/show/127233,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-004,N5 단어 004,eda751e069,嫌,いや,불쾌한,毎日うっとうしくていやですね。,unpleasant,https://tatoeba.org/sentences/show/81316,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-004,N5 단어 004,1ff0529d03,入口,いりぐち,입구,１台の車が入り口に止まった。,entrance,https://tatoeba.org/sentences/show/235719,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-004,N5 단어 004,9438889173,いる,いる,있다; 가지다 (사람과 동물에 사용됨),すっかり食べ終わってはいない。,to be; to have (used for people and animals),https://tatoeba.org/sentences/show/214668,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-004,N5 단어 004,7a84208708,要る,いる,필요하다,今のところお金はいらない。,to need,https://tatoeba.org/sentences/show/172740,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-004,N5 단어 004,6d824d5110,入れる,いれる,넣다,それは引き出しに入れておきました。,to put in,https://tatoeba.org/sentences/show/205330,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-004,N5 단어 004,523266ea6f,色,いろ,색상,カメレオンはどんな色にでもなれる。,colour,https://tatoeba.org/sentences/show/226206,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-004,N5 단어 004,f74dd1ee9a,いろいろ,いろいろ,다양한,先生といってもいろいろある。,various,https://tatoeba.org/sentences/show/141760,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-004,N5 단어 004,08a3ed212d,上,うえ,위에,テーブルの上にリンゴがあります。,on top of,https://tatoeba.org/sentences/show/202398,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-004,N5 단어 004,93bdc81dd9,後ろ,うしろ,뒤에,校長が先生の後ろから入ってきた。,behind,https://tatoeba.org/sentences/show/173570,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-004,N5 단어 004,d2b2316e45,薄い,うすい,얇은; 약한,コーヒーは薄いのが好きです。,thin; weak,https://tatoeba.org/sentences/show/224899,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-004,N5 단어 004,036f4180a2,歌,うた,노래,歌がうまければいいのになあ。,song,https://tatoeba.org/sentences/show/186791,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-004,N5 단어 004,3464318c23,歌う,うたう,노래하다,ジョンはステージで何を歌いましたか。,to sing,https://tatoeba.org/sentences/show/215403,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-005,N5 단어 005,63bc7722fa,生まれる,うまれる,태어나다,どんぐりからオークが生まれる。,to be born,https://tatoeba.org/sentences/show/199613,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-005,N5 단어 005,06ac21dc7d,海,うみ,바다,何としても海をひと目みたいものだ。,sea,https://tatoeba.org/sentences/show/187770,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-005,N5 단어 005,f7e1da43df,売る,うる,팔다,トムはメアリーにバイクを売った。,to sell,https://tatoeba.org/sentences/show/2312116,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-005,N5 단어 005,7ecfe0d248,煩い,うるさい,시끄러운; 짜증나는,あの子はなんてうるさい子だろう。,noisy; annoying,https://tatoeba.org/sentences/show/230966,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-005,N5 단어 005,1ef8a05bf3,上着,うわぎ,재킷,ドアのそばのかぎに上着をかけなさい。,jacket,https://tatoeba.org/sentences/show/201867,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-005,N5 단어 005,5bb390da0b,絵,え,그림,絵がテーブルの上にかかっている。,picture,https://tatoeba.org/sentences/show/184950,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-005,N5 단어 005,92b1621231,映画,えいが,영화,その映画をもう一度見たいな。,movie,https://tatoeba.org/sentences/show/212237,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-005,N5 단어 005,8a88cfbcb8,映画館,えいがかん,영화,その映画館は人々でいっぱいだった。,cinema,https://tatoeba.org/sentences/show/212218,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-005,N5 단어 005,16adc7bd03,英語,えいご,영어,アメリカでは英語を話します。,English language,https://tatoeba.org/sentences/show/230259,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-005,N5 단어 005,8ac60a4060,ええ,ええ,예,「テニスをしましょうか」「ええ」,yes,https://tatoeba.org/sentences/show/202181,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-005,N5 단어 005,d5f359c20b,駅,えき,역,グランド・セントラル駅までやってください。,station,https://tatoeba.org/sentences/show/225536,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-005,N5 단어 005,eb1695baf6,エレベーター,エレベーター,엘리베이터,エレベーターはどこですか。,elevator,https://tatoeba.org/sentences/show/227886,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-005,N5 단어 005,381da4d060,鉛筆,えんぴつ,연필,えんぴつであなたの名前を書きなさい。,pencil,https://tatoeba.org/sentences/show/227853,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-005,N5 단어 005,7f02ae8fa1,おいしい,おいしい,맛있는,おいしい食事をありがとう。,delicious,https://tatoeba.org/sentences/show/227834,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-005,N5 단어 005,60813fffd1,多い,おおい,많은,この学校は男子よりも女子が多い。,many,https://tatoeba.org/sentences/show/222596,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-005,N5 단어 005,8fa5a63fc7,大きい,おおきい,큰,もっと大きいサイズはありますか。,big,https://tatoeba.org/sentences/show/193236,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-005,N5 단어 005,3a2de0afca,大きな,おおきな,큰,それらはとても大きなりんごです。,big,https://tatoeba.org/sentences/show/204722,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-005,N5 단어 005,57ed89b240,大勢,おおぜい,많은 사람들,大ぜいの人たちがいた。,great number of people,https://tatoeba.org/sentences/show/137691,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-005,N5 단어 005,2007947770,お母さん,おかあさん,(존경하는) 어머니,お母さんに口答えしてはいけませんよ。,(honorable) mother,https://tatoeba.org/sentences/show/226625,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-005,N5 단어 005,669019c625,お菓子,おかし,과자; 사탕,もうすこしお菓子を食べませんか。,sweets; candy,https://tatoeba.org/sentences/show/194419,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-006,N5 단어 006,3e015d0a8b,お金,おかね,돈,どうやってそのお金を手に入れたんですか。,money,https://tatoeba.org/sentences/show/232498,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-006,N5 단어 006,248a353e09,起きる,おきる,일어나다,お子さんはまだ起きているのですか。,to get up,https://tatoeba.org/sentences/show/227112,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-006,N5 단어 006,96845304fd,置く,おく,놓다,それをテーブルの上に置きなさい。,to put,https://tatoeba.org/sentences/show/204648,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-006,N5 단어 006,6c4661d672,奥さん,おくさん,(존경하는) 아내,奥さんがどこかに出かけているらしいから。,(honorable) wife,https://tatoeba.org/sentences/show/188559,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-006,N5 단어 006,f843b00173,お酒,おさけ,술; 쌀 와인,マイクはお酒をやめたの？,alcohol; rice wine,https://tatoeba.org/sentences/show/195774,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-006,N5 단어 006,101d46a061,お皿,おさら,접시; 그릇,スープを入れるくぼんだお皿がありますか。,plate; dish,https://tatoeba.org/sentences/show/215024,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-006,N5 단어 006,1b89f0f993,お祖父さん,おじいさん,할아버지; 남성 노인,おじいさんはとてもゆっくりと話す。,grandfather; male senior citizen,https://tatoeba.org/sentences/show/227740,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-006,N5 단어 006,f2fa049fdd,教える,おしえる,가르치다; 말하다,生年月日を教えてくださいますか？,to teach; to tell,https://tatoeba.org/sentences/show/142700,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-006,N5 단어 006,ce8facdf69,押す,おす,밀다; 무언가를 찍다,シャッターを押してくれますか。,to push; to stamp something,https://tatoeba.org/sentences/show/215785,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-006,N5 단어 006,a082687f7a,遅い,おそい,늦은; 느린,遅くなっても何もないよりはまし。,late; slow,https://tatoeba.org/sentences/show/126737,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-006,N5 단어 006,edca336b1f,お茶,おちゃ,녹차,３時はお茶にしよう。,green tea,https://tatoeba.org/sentences/show/235316,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-006,N5 단어 006,75a36b034c,お手洗い,おてあらい,화장실,お手洗いはどこですか。,bathroom,https://tatoeba.org/sentences/show/227063,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-006,N5 단어 006,89807c7c22,お父さん,おとうさん,(존경하는) 아버지,お父さんからことづけがあります。,(honorable) father,https://tatoeba.org/sentences/show/226757,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-006,N5 단어 006,db32745bbc,弟,おとうと,남동생,弟のことなんかほっときなさい。,younger brother,https://tatoeba.org/sentences/show/125460,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-006,N5 단어 006,2fd7d45c8d,男,おとこ,남성,その男とつきあってはいけないよ。,man,https://tatoeba.org/sentences/show/208173,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-006,N5 단어 006,6f664d3ded,男の子,おとこのこ,소년,あのハンサムな男の子を見て。,boy,https://tatoeba.org/sentences/show/231277,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-006,N5 단어 006,f0f3826045,一昨日,おととい,그저께,一昨日、彼は学校を休んだかもしれない。,day before yesterday,https://tatoeba.org/sentences/show/190607,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-006,N5 단어 006,b75778f0ce,一昨年,おととし,재작년,彼女は、一昨年よりもはるかに暮らし向きがよい。,year before last,https://tatoeba.org/sentences/show/93768,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-006,N5 단어 006,6f5049e2d4,大人,おとな,성인,大人だけこの映画が見える。,adult,https://tatoeba.org/sentences/show/137483,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-006,N5 단어 006,3707072a6b,おなか,おなか,위,何かおなかに入れてから出かけなさい。,stomach,https://tatoeba.org/sentences/show/188135,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-007,N5 단어 007,7c134ec812,同じ,おなじ,같은,この木はあの木とほぼ同じ高さだ。,same,https://tatoeba.org/sentences/show/219452,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-007,N5 단어 007,c6f43a8cc3,お兄さん,おにいさん,(존경하는) 형,私はあなたのお兄さんより年上です。,(honorable) older brother,https://tatoeba.org/sentences/show/161718,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-007,N5 단어 007,af378a4c86,お姉さん,おねえさん,(존경하는) 언니,あなたのお姉さんは今何をしているの？,(honorable) older sister,https://tatoeba.org/sentences/show/233258,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-007,N5 단어 007,4df6eda2a2,お願いします,おねがいします,제발,ファーストクラスでお願いします。,please,https://tatoeba.org/sentences/show/197242,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-007,N5 단어 007,12d9487797,おばあさん,おばあさん,할머니; 여성 노인,トムのおばあさんは元気そうですよ。,grandmother; female senior-citizen,https://tatoeba.org/sentences/show/200160,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-007,N5 단어 007,03d7b15720,伯母さん,おばさん,이모,叔母さんを訪ねた時はすごいごちそうだったね。,aunt,https://tatoeba.org/sentences/show/227572,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-007,N5 단어 007,36bff8d879,おはよう,おはよう,(약어) 좋은 아침입니다,おはよう。ご飯をよそっても良いかしら？,(abbreviation) Good morning,https://tatoeba.org/sentences/show/76824,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-007,N5 단어 007,f347485004,お風呂,おふろ,욕조,私はほとんど毎日お風呂に入ります。,bath,https://tatoeba.org/sentences/show/158918,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-007,N5 단어 007,7a073616e5,お弁当,おべんとう,도시락,彼は今日、お弁当を持って来た。,boxed lunch,https://tatoeba.org/sentences/show/107100,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-007,N5 단어 007,dad2d16220,覚える,おぼえる,기억하기 위해,日本語は外人にとって覚えにくい。,to remember,https://tatoeba.org/sentences/show/122337,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-007,N5 단어 007,ae5d1778d1,おまわりさん,おまわりさん,경찰관을 부르는 친근한 표현,すみません、おまわりさん。ここはどこですか。,friendly term for policeman,https://tatoeba.org/sentences/show/214211,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-007,N5 단어 007,cdfb776826,重い,おもい,무거운,トムはジャックよりも１０ポンド重い。,heavy,https://tatoeba.org/sentences/show/200082,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-007,N5 단어 007,2568873ebd,おもしろい,おもしろい,흥미로운,スケートはとてもおもしろかった。,interesting,https://tatoeba.org/sentences/show/214743,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-007,N5 단어 007,3c5bb8f223,泳ぐ,およぐ,수영하다,トムはすぐに泳げるようになるよ。,to swim,https://tatoeba.org/sentences/show/200074,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-007,N5 단어 007,ae00442122,降りる,おりる,내리다; 내려가다,ここで降りましょう。,to get off; to descend,https://tatoeba.org/sentences/show/224559,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-007,N5 단어 007,d7960dc78d,終る,おわる,끝내기 위해,そのコンサートは十時に終わった。,to finish,https://tatoeba.org/sentences/show/213081,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-007,N5 단어 007,cdea017272,音楽,おんがく,음악,この音楽を聞いてくつろぎなさい。,music,https://tatoeba.org/sentences/show/222881,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-007,N5 단어 007,980a922ad3,女,おんな,여성,人は男か女のどちらかである。,woman,https://tatoeba.org/sentences/show/144456,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-007,N5 단어 007,e6afab391a,女の子,おんなのこ,소녀,女の子はほとんどみんなやさしい。,girl,https://tatoeba.org/sentences/show/147335,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-007,N5 단어 007,31a803c7f5,外国,がいこく,외국,あなたは外国の本を持っていますか。,foreign country,https://tatoeba.org/sentences/show/232163,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-008,N5 단어 008,70f1678111,外国人,がいこくじん,외국인,その外国人はかなりうまく日本語を話す。,foreigner,https://tatoeba.org/sentences/show/211699,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-008,N5 단어 008,2120ff505c,会社,かいしゃ,회사,ビルは三年前にこの会社に入った。,company,https://tatoeba.org/sentences/show/197326,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-008,N5 단어 008,7cb27c411e,階段,かいだん,계단,その階段を上ってはいけません。,stairs,https://tatoeba.org/sentences/show/211701,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-008,N5 단어 008,a771d4f949,買い物,かいもの,쇼핑,１日おきに買い物に行く。,shopping,https://tatoeba.org/sentences/show/235706,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-008,N5 단어 008,bdb125e5c6,買う,かう,구매하다,買うかどうかはあなたしだいです。,to buy,https://tatoeba.org/sentences/show/121489,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-008,N5 단어 008,8ea4b03d7f,返す,かえす,무언가를 반환하다,車はいつ返したらいいでしょうか。,to return something,https://tatoeba.org/sentences/show/149018,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-008,N5 단어 008,1d22f1d023,帰る,かえる,돌아가다,「帰ろ」「マックよってかない？」,to go back,https://tatoeba.org/sentences/show/75070,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-008,N5 단어 008,687082e55c,かかる,かかる,시간이나 돈을 들이다,どうしたらエンジンがかかりますか。,to take time or money,https://tatoeba.org/sentences/show/201593,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-008,N5 단어 008,e2d6576c76,かぎ,かぎ,열쇠,車のカギをなくしちゃった。,key,https://tatoeba.org/sentences/show/149069,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-008,N5 단어 008,f7c7f35d9e,書く,かく,쓰다,すぐに書かなければなりませんか。,to write,https://tatoeba.org/sentences/show/214855,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-008,N5 단어 008,452102ad0a,学生,がくせい,학생,学生の半数が休んでいた。,student,https://tatoeba.org/sentences/show/184267,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-008,N5 단어 008,0ce2b98d3b,かける,かける,전화로 전화하다,１０円で電話がかけられますか。,to call by phone,https://tatoeba.org/sentences/show/236074,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-008,N5 단어 008,6f54881e59,傘,かさ,우산,タクシーに傘を忘れてしまった。,umbrella,https://tatoeba.org/sentences/show/203724,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-008,N5 단어 008,1122cac409,貸す,かす,빌려주다,ホッチキスを貸してくれませんか。,to lend,https://tatoeba.org/sentences/show/196239,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-008,N5 단어 008,c1a28465a2,風,かぜ,바람,カーテンが風になびいた。,wind,https://tatoeba.org/sentences/show/226491,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-008,N5 단어 008,c9b5da4d10,風邪,かぜ,감기,ただの風邪でしょう。,a cold,https://tatoeba.org/sentences/show/203635,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-008,N5 단어 008,1c9db63bdc,家族,かぞく,가족,あなたの家族はきっと親切でしょう。,family,https://tatoeba.org/sentences/show/233420,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-008,N5 단어 008,e34295f3e1,方,かた,사람; 하는 방식,こちらはあなたがお話しになるお方です。,person; way of doing,https://tatoeba.org/sentences/show/224157,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-008,N5 단어 008,dd8ac16bd2,学校,がっこう,학교,この学校はたくさんの生徒がいます。,school,https://tatoeba.org/sentences/show/222600,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-008,N5 단어 008,613c41bd1d,カップ,カップ,컵,テーブルの上にカップがある。,cup,https://tatoeba.org/sentences/show/202407,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-009,N5 단어 009,66eeeb818b,家庭,かてい,가정,食事は家庭で食べますか、外食ですか。,household,https://tatoeba.org/sentences/show/145834,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-009,N5 단어 009,4092bfd9bb,角,かど,모퉁이,角のテーブルがいいのですが。,a corner,https://tatoeba.org/sentences/show/184544,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-009,N5 단어 009,6e6a06687d,かばん,かばん,가방; 바구니,これはジェーンさんのかばんです。,bag; basket,https://tatoeba.org/sentences/show/218609,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-009,N5 단어 009,749f78c9d1,花瓶,かびん,꽃병,花びんに水を入れなさい。,a vase,https://tatoeba.org/sentences/show/186606,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-009,N5 단어 009,cd08f9cdc2,紙,かみ,종이,紙は木から作られる。,paper,https://tatoeba.org/sentences/show/151205,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-009,N5 단어 009,9d648d38ad,カメラ,カメラ,카메라,おじさんがぼくにカメラをくれました。,camera,https://tatoeba.org/sentences/show/227734,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-009,N5 단어 009,0dbf9ef8ca,火曜日,かようび,화요일,火曜日に国会が開かれる。,Tuesday,https://tatoeba.org/sentences/show/186646,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-009,N5 단어 009,d2546ac97b,辛い,からい,매운,このカレーは辛すぎて食べられない。,spicy,https://tatoeba.org/sentences/show/223874,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-009,N5 단어 009,a556e5edce,体,からだ,몸,とりわけ体に気をつけなさい。,body,https://tatoeba.org/sentences/show/199696,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-009,N5 단어 009,8cd440a181,借りる,かりる,빌리다,この本をお借りしてもよろしいですか。,to borrow,https://tatoeba.org/sentences/show/219525,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-009,N5 단어 009,a8b9eb425d,軽い,かるい,빛,軽く食べましょう。,light,https://tatoeba.org/sentences/show/176051,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-009,N5 단어 009,9decc44f4e,カレー,カレー,카레,このレストランのカレーはうまいよ。,curry,https://tatoeba.org/sentences/show/223009,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-009,N5 단어 009,6382448bd3,カレンダー,カレンダー,달력,このカレンダーはどこにかけましょうか。,calendar,https://tatoeba.org/sentences/show/223871,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-009,N5 단어 009,bcf12e002d,川,かわ,강,その川はあまりきれいではなかった。,river,https://tatoeba.org/sentences/show/208510,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-009,N5 단어 009,bad3423a93,かわいい,かわいい,귀여운,ルーシーはかわいい女の子だ。,cute,https://tatoeba.org/sentences/show/192411,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-009,N5 단어 009,fdc787af58,漢字,かんじ,한자,この漢字はどういう意味ですか。,Chinese character,https://tatoeba.org/sentences/show/222576,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-009,N5 단어 009,22836046e2,木,き,나무; 목재,その木には実がたわわになっていた。,tree; wood,https://tatoeba.org/sentences/show/206562,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-009,N5 단어 009,5d679a1af2,黄色,きいろ,노란색,木の葉は秋には黄色になる。,yellow,https://tatoeba.org/sentences/show/80105,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-009,N5 단어 009,0b36c8d6c6,黄色い,きいろい,노란색,その黄色いのをいただきましょう。,yellow,https://tatoeba.org/sentences/show/212174,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-009,N5 단어 009,6030b50276,消える,きえる,사라지다,火が消えないようにしてください。,to disappear,https://tatoeba.org/sentences/show/186758,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-010,N5 단어 010,dc19a213cd,聞く,きく,듣다; 경청하다; 묻다,ニューススタンドで聞いて下さい。,to hear; to listen to; to ask,https://tatoeba.org/sentences/show/76494,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-010,N5 단어 010,fa320a51ea,北,きた,북쪽,その町はロンドンのすぐ北にある。,north,https://tatoeba.org/sentences/show/207801,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-010,N5 단어 010,4fb1c0d758,ギター,ギター,기타,どちらがあなたのギターですか。,guitar,https://tatoeba.org/sentences/show/200823,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-010,N5 단어 010,7d1cf1538b,汚い,きたない,더러운,ジャックは私に汚いいたずらをした。,dirty,https://tatoeba.org/sentences/show/215815,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-010,N5 단어 010,5620a00afc,喫茶店,きっさてん,커피 라운지,私たちは喫茶店で昼食をとった。,coffee lounge,https://tatoeba.org/sentences/show/165940,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-010,N5 단어 010,e101e41f54,切手,きって,우표,切手の上からサインをしてください。,postage stamp,https://tatoeba.org/sentences/show/142111,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-010,N5 단어 010,4fee5be397,切符,きっぷ,표,この切符で二人入れるよ。,ticket,https://tatoeba.org/sentences/show/220860,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-010,N5 단어 010,a94a4be08f,昨日,きのう,어제,きのう先生は今日テストをすると言った。,yesterday,https://tatoeba.org/sentences/show/225950,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-010,N5 단어 010,8f81565ad7,九,きゅう,아홉,彼は「九時だ」と言った。,nine,https://tatoeba.org/sentences/show/108121,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-010,N5 단어 010,b4faf372f3,牛肉,ぎゅうにく,소고기,日本人はイギリス人より牛肉を食べる。,beef,https://tatoeba.org/sentences/show/122271,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-010,N5 단어 010,797ae8d562,牛乳,ぎゅうにゅう,우유,牛乳はバターやチーズになります。,milk,https://tatoeba.org/sentences/show/182280,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-010,N5 단어 010,0400a204bd,今日,きょう,오늘,今日は何をしたいですか。,today,https://tatoeba.org/sentences/show/232046,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-010,N5 단어 010,85eb994887,教室,きょうしつ,교실,ＬＬ教室を使ってもよいですか。,classroom,https://tatoeba.org/sentences/show/234825,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-010,N5 단어 010,976c4f7174,兄弟,きょうだい,(겸손한) 형제자매들,あなたは何人兄弟がいますか。,(humble) siblings,https://tatoeba.org/sentences/show/232196,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-010,N5 단어 010,ec4e1dfc87,去年,きょねん,작년,ビルは去年の秋に私に会いに来た。,last year,https://tatoeba.org/sentences/show/197333,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-010,N5 단어 010,d106dac023,嫌い,きらい,싫어하다,ジムくんは行き過ぎの嫌いがある。,hate,https://tatoeba.org/sentences/show/76676,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-010,N5 단어 010,cf23f5fba1,切る,きる,자르다,トランプをよく切ってください。,to cut,https://tatoeba.org/sentences/show/199708,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-010,N5 단어 010,45fbcb8670,着る,きる,어깨부터 아래로 입다,このセーターを着てごらんなさい。,to put on from the shoulders down,https://tatoeba.org/sentences/show/223601,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-010,N5 단어 010,43cd9825f0,きれい,きれい,예쁜; 깨끗한,それからすっきりきれいにしてくれ。,pretty; clean,https://tatoeba.org/sentences/show/205929,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-010,N5 단어 010,36016e0c51,キロ,キロ,킬로미터; 킬로그램,ヘレンはせいぜい４０キロだ。,kilometre; kilogram,https://tatoeba.org/sentences/show/196669,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-011,N5 단어 011,a59efa3057,銀行,ぎんこう,은행,銀行にどれだけお金がありますか。,bank,https://tatoeba.org/sentences/show/179588,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-011,N5 단어 011,b00c4af0a2,金曜日,きんようび,금요일,あなたは金曜日に何をするつもりですか。,Friday,https://tatoeba.org/sentences/show/232112,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-011,N5 단어 011,95ccaa32f5,薬,くすり,약,４時間おきにこの薬をのみなさい。,medicine,https://tatoeba.org/sentences/show/235200,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-011,N5 단어 011,a36841ba49,ください,ください,제발,ニューススタンドで聞いて下さい。,please,https://tatoeba.org/sentences/show/76494,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-011,N5 단어 011,6b454b895e,果物,くだもの,과일,父はそんなに果物を食べないんです。,fruit,https://tatoeba.org/sentences/show/84708,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-011,N5 단어 011,a123a147d7,口,くち,입; 열림,口にものをほおばってしゃべるな。,mouth; opening,https://tatoeba.org/sentences/show/173943,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-011,N5 단어 011,9dd0572f05,靴,くつ,신발,靴のほこりをはけではらいなさい。,shoes,https://tatoeba.org/sentences/show/179254,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-011,N5 단어 011,20a1278928,靴下,くつした,양말,この靴下はちぐはぐだ。,socks,https://tatoeba.org/sentences/show/237401,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-011,N5 단어 011,b55dd305d1,国,くに,국가,あなたの国では何語を話しますか。,country,https://tatoeba.org/sentences/show/233291,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-011,N5 단어 011,eec0f93991,曇り,くもり,흐린 날씨,曇りの日です。,cloudy weather,https://tatoeba.org/sentences/show/123255,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-011,N5 단어 011,c34fdb6092,曇る,くもる,흐려지다; 어두워지다,今日は曇っている。,to become cloudy; to become dim,https://tatoeba.org/sentences/show/171528,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-011,N5 단어 011,01a0587b49,暗い,くらい,음울한,あたりがもう暗くなっていることに気がついた。,gloomy,https://tatoeba.org/sentences/show/234367,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-011,N5 단어 011,72c04ce067,クラス,クラス,수업,あいつはクラスでいちばんのまぬけだ。,class,https://tatoeba.org/sentences/show/234637,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-011,N5 단어 011,5538df2bce,グラム,グラム,그램,プログラムをいただけますか。,gram,https://tatoeba.org/sentences/show/196880,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-011,N5 단어 011,2e2abd26ca,来る,くる,오다,１０時までに来ます。,to come,https://tatoeba.org/sentences/show/236043,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-011,N5 단어 011,d6b85573f3,車,くるま,자동차; 차량,車のわきの男の子をごらんなさい。,car; vehicle,https://tatoeba.org/sentences/show/149061,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-011,N5 단어 011,3c32cfb08a,黒,くろ,검은색,黒に黒をたしても白にはならぬ。,black,https://tatoeba.org/sentences/show/172985,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-011,N5 단어 011,5e5300cf62,黒い,くろい,검은색,ナンシーはヘレンよりもほんのすこし色が黒い。,black,https://tatoeba.org/sentences/show/198990,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-011,N5 단어 011,e1634cb3e9,警官,けいかん,경관,二人の警官もへとへとになった。,policeman,https://tatoeba.org/sentences/show/123109,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-011,N5 단어 011,9c1d724a61,今朝,けさ,오늘 아침,今朝はとても寒かった。,this morning,https://tatoeba.org/sentences/show/172291,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-012,N5 단어 012,19f270c68f,消す,けす,지우다; 전원을 끄다,寝る前に電気を消してください。,to erase; to turn off power,https://tatoeba.org/sentences/show/145648,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-012,N5 단어 012,dd34250740,結構,けっこう,훌륭한; 충분한,いや結構です。たくさんいただきました。,splendid; enough,https://tatoeba.org/sentences/show/228472,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-012,N5 단어 012,2eb252da72,結婚,けっこん,결혼,ジョンはジェーンと結婚していた。,marriage,https://tatoeba.org/sentences/show/215406,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-012,N5 단어 012,04e80a2ba1,月曜日,げつようび,월요일,月曜日までにここに来ています。,Monday,https://tatoeba.org/sentences/show/175591,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-012,N5 단어 012,2e1642b248,玄関,げんかん,현관 홀,玄関のカギはどうなっていますか。,entry hall,https://tatoeba.org/sentences/show/174948,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-012,N5 단어 012,442c4aa1ca,元気,げんき,건강; 활력,こんにちは、ロジャー。とっても元気よ。,health; vitality,https://tatoeba.org/sentences/show/217292,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-012,N5 단어 012,47c1fdbe2f,五,ご,다섯,どこかは今五時だろう。,five,https://tatoeba.org/sentences/show/201024,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-012,N5 단어 012,05cf590971,公園,こうえん,공원,この公園はすべての人に公開されている。,park,https://tatoeba.org/sentences/show/222003,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-012,N5 단어 012,8699b8bec2,交差点,こうさてん,교차로,あの交差点で何が起こったのか。,intersection,https://tatoeba.org/sentences/show/231036,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-012,N5 단어 012,1288e600be,紅茶,こうちゃ,홍차,紅茶かコーヒーはいかがですか。,black tea,https://tatoeba.org/sentences/show/173507,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-012,N5 단어 012,402eb0d21f,交番,こうばん,경찰 박스,向こうの交番で聞いてください。,police box,https://tatoeba.org/sentences/show/173841,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-012,N5 단어 012,d890e45616,声,こえ,목소리,あなたの声が聞けてうれしいわ。,voice,https://tatoeba.org/sentences/show/1142225,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-012,N5 단어 012,c552e79d34,コート,コート,코트; 테니스 코트,このコートいいですね。試着してもいいですか。,coat; tennis court,https://tatoeba.org/sentences/show/1171687,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-012,N5 단어 012,67126059f1,コーヒー,コーヒー,커피,そのコーヒーはいいにおいがする。,coffee,https://tatoeba.org/sentences/show/213210,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-012,N5 단어 012,05123676c2,ここ,ここ,여기,ここに名前を書いてください。,here,Codex 작성 · 미검수,자동번역 · 미검수,AI 작성 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-012,N5 단어 012,9a7c962266,午後,ごご,오후,午後何時ごろうかがいましょうか。,afternoon,https://tatoeba.org/sentences/show/174382,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-012,N5 단어 012,f114f6f499,九日,ここのか,9일; 9번째 날,スピーチコンテストは１１月９日に行われた。,nine days; ninth day,https://tatoeba.org/sentences/show/214544,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-012,N5 단어 012,cff3c57405,九つ,ここのつ,아홉,私たちの学校にはクラスが９つある。,nine,https://tatoeba.org/sentences/show/167043,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-012,N5 단어 012,c92dbe626a,午前,ごぜん,아침,その電車は午前９時にここを出発します。,morning,https://tatoeba.org/sentences/show/207576,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-012,N5 단어 012,d5d8c608aa,答える,こたえる,답변하기,「はい、ありません」とジョーダンさんは答えた。,to answer,https://tatoeba.org/sentences/show/236468,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-013,N5 단어 013,a9191729e3,ごちそうさま,ごちそうさま,잔치,コーヒー、ごちそうさまでした。,feast,https://tatoeba.org/sentences/show/10156656,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-013,N5 단어 013,e9e492c68a,こちら,こちら,이 사람 또는 이 방식,今のところこちらだけになります。,this person or way,https://tatoeba.org/sentences/show/172739,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-013,N5 단어 013,be9b8bcb5e,こっち,こっち,이 사람 또는 이 방식,こっちへ来い、ぐずぐずしないで。,this person or way,https://tatoeba.org/sentences/show/224125,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-013,N5 단어 013,2da7034c1e,コップ,コップ,유리잔,コップに水を入れました。,a glass,Codex 작성 · 미검수,자동번역 · 미검수,AI 작성 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-013,N5 단어 013,0020b9ee4e,今年,ことし,올해,今年もよい年でありますように。,this year,https://tatoeba.org/sentences/show/171289,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-013,N5 단어 013,491cfa69be,言葉,ことば,단어; 언어,言葉が出てこなかった。,word; language,https://tatoeba.org/sentences/show/174713,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-013,N5 단어 013,1f4bb6e503,子供,こども,어린이,あなたには何人子供がいますか。,child,https://tatoeba.org/sentences/show/233758,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-013,N5 단어 013,bd3a2ad2ad,この,この,이것,このコップをミルクで満たした。,this,https://tatoeba.org/sentences/show/223794,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-013,N5 단어 013,a2694d259e,御飯,ごはん,밥; 식사,ご飯とパンどちらがいいですか。,cooked rice; meal,https://tatoeba.org/sentences/show/217034,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-013,N5 단어 013,f586d7d023,コピーする,コピーする,복사하다,コピーするページに付箋をつけておいてください。,to copy,https://tatoeba.org/sentences/show/219109,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-013,N5 단어 013,61994485cb,困る,こまる,걱정하다,時間がなくてたいへん困っている。,to be worried,https://tatoeba.org/sentences/show/150625,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-013,N5 단어 013,4a11eb5fb4,ごめんなさい,ごめんなさい,"죄송합니다, 실례합니다",お話し中、ごめんなさい。,I beg your pardon; excuse me,https://tatoeba.org/sentences/show/226510,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-013,N5 단어 013,6313cc9cb5,これ,これ,이것,これは兄です。かっこいいですね。,this,https://tatoeba.org/sentences/show/74148,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-013,N5 단어 013,3793173687,今月,こんげつ,이번 달,今月の売り上げはよくない。,this month,https://tatoeba.org/sentences/show/172460,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-013,N5 단어 013,7a27eadef1,今週,こんしゅう,이번 주,今週はどちらにいらしゃいましたか。,this week,https://tatoeba.org/sentences/show/172375,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-013,N5 단어 013,e1978f90df,こんな,こんな,그런,こんな本を読んで何になるのか。,such,https://tatoeba.org/sentences/show/217309,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-013,N5 단어 013,0a65b39cf7,こんにちは,こんにちは,"안녕하세요; 좋은 하루 되세요 (낮 시간 인사말, 아이디)",こんにちはジョージ、どう？,"hello; good day (daytime greeting, id)",https://tatoeba.org/sentences/show/217287,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-013,N5 단어 013,eb1c9a5df9,今晩,こんばん,오늘 저녁,今晩はパーティーがあるのかなあ。,this evening,https://tatoeba.org/sentences/show/171245,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-013,N5 단어 013,6c0551dd8a,こんばんは,こんばんは,좋은 저녁이에요,シカゴのみなさん、こんばんは。,good evening,https://tatoeba.org/sentences/show/347753,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-013,N5 단어 013,7ba7ba2434,さあ,さあ,잘…,さあ、パーティーをおしまいにしよう。,well…,https://tatoeba.org/sentences/show/216960,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-014,N5 단어 014,a96e3a2b33,財布,さいふ,지갑,サイフがないのにふと気がついた。,wallet,https://tatoeba.org/sentences/show/216852,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-014,N5 단어 014,dbd7cd319c,魚,さかな,물고기,日本人は魚をたくさん食べますか。,fish,https://tatoeba.org/sentences/show/122254,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-014,N5 단어 014,20fcc4f54f,先,さき,미래; 이전,それから先の話を聞きたい。,the future; previous,https://tatoeba.org/sentences/show/205916,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-014,N5 단어 014,4c39babf5f,咲く,さく,꽃을 피우다,チューリップがみごとに咲いた。,to bloom,https://tatoeba.org/sentences/show/202946,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-014,N5 단어 014,c10cb3070d,作文,さくぶん,작문; 글쓰기,作文は書いてしまいましたか。,composition; writing,https://tatoeba.org/sentences/show/170165,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-014,N5 단어 014,4e2aefb855,差す,さす,손을 뻗다; 우산을 펼치다,彼は雨の中を傘もささずに歩きつづけた。,to stretch out hands; to raise an umbrella,https://tatoeba.org/sentences/show/109822,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-014,N5 단어 014,a371cc6a54,雑誌,ざっし,잡지,その雑誌はどこで買えますか。,magazine,https://tatoeba.org/sentences/show/210481,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-014,N5 단어 014,8af5030b7a,砂糖,さとう,설탕,ポットにはあまり砂糖がなかった。,sugar,https://tatoeba.org/sentences/show/196232,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-014,N5 단어 014,688bc67044,寒い,さむい,추운,寒いからコートを着るべきだ。,cold,https://tatoeba.org/sentences/show/184049,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-014,N5 단어 014,0a1f511640,さようなら,さようなら,안녕히 가세요,では今晩またね、さようなら。,good-bye,https://tatoeba.org/sentences/show/202137,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-014,N5 단어 014,45c705d5b2,再来年,さらいねん,내년 이후,祖父は、再来年引退する予定です。,year after next,https://tatoeba.org/sentences/show/140720,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-014,N5 단어 014,5cb07674a3,三,さん,삼,二、三デメリットがありますね。,three,https://tatoeba.org/sentences/show/123182,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-014,N5 단어 014,e2695084c9,散歩,さんぽ,산책하다,散歩に出かけてもよろしいですか。,to stroll,https://tatoeba.org/sentences/show/169336,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-014,N5 단어 014,da4b805e0b,四,し,넷,列車でならここからたった四分だ。,four,https://tatoeba.org/sentences/show/77561,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-014,N5 단어 014,b366a3d677,塩,しお,소금,このスープは塩が少し足りない。,salt,https://tatoeba.org/sentences/show/223651,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-014,N5 단어 014,2c41aedcba,しかし,しかし,하지만,しかしこの本をしまっておきなさい。,however,https://tatoeba.org/sentences/show/216279,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-014,N5 단어 014,d5c916ca85,時間,じかん,시간,いつだって読書の時間は見つけられる。,time,https://tatoeba.org/sentences/show/228889,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-014,N5 단어 014,573bc15b1d,仕事,しごと,직업,仕事をサボったからクビになった。,job,https://tatoeba.org/sentences/show/76109,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-014,N5 단어 014,8ec35978bd,辞書,じしょ,사전,それはどの辞書にもでています。,dictionary,https://tatoeba.org/sentences/show/205423,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-014,N5 단어 014,178469ba7a,静か,しずか,조용한,キャプテンは静かにするように命じた。,quiet,https://tatoeba.org/sentences/show/225839,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-015,N5 단어 015,dd36cae3a9,下,した,아래에,クッキーはテーブルの下にいる。,below,https://tatoeba.org/sentences/show/225669,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-015,N5 단어 015,988db98632,七,しち,일곱,どういっても七時までにいかないと。,seven,https://tatoeba.org/sentences/show/201696,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-015,N5 단어 015,2c5c99977c,質問,しつもん,질문,あの先生に質問してもいいですよ。,question,https://tatoeba.org/sentences/show/230657,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-015,N5 단어 015,ebf194a316,自転車,じてんしゃ,자전거,ぼくの自転車はパンクしている。,bicycle,https://tatoeba.org/sentences/show/196377,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-015,N5 단어 015,78fd1a0e8a,自動車,じどうしゃ,자동차,自動車にひかれたのではないですか。,automobile,https://tatoeba.org/sentences/show/150044,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-015,N5 단어 015,ec6fd2f845,死ぬ,しぬ,죽다,その少年は死んだものとしてあきらめられた。,to die,https://tatoeba.org/sentences/show/209091,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-015,N5 단어 015,6156bfb418,字引,じびき,사전,ジョンソンさんはまるで生き字引です。,dictionary,https://tatoeba.org/sentences/show/215504,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-015,N5 단어 015,995a632b12,自分,じぶん,자신,自分でそれをしなければならない。,oneself,https://tatoeba.org/sentences/show/149971,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-015,N5 단어 015,01420cdf0f,閉まる,しまる,닫히다; 닫혀 있다,あいにく店は閉まっていた。,to close; to be closed,https://tatoeba.org/sentences/show/234558,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-015,N5 단어 015,8e6c15bef9,締める,しめる,묶다,いつもシートベルトを締めなさい。,to tie,https://tatoeba.org/sentences/show/228764,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-015,N5 단어 015,95827b08e3,閉める,しめる,무언가를 닫다,どうかドアを閉めてくれませんか。,to close something,https://tatoeba.org/sentences/show/201657,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-015,N5 단어 015,091c8c0e07,じゃ,じゃ,그럼…,じゃあ、キーをもらえますか。,well then…,https://tatoeba.org/sentences/show/215913,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-015,N5 단어 015,5101640e7e,写真,しゃしん,사진,なんてキレイな写真なんでしょう。,photograph,https://tatoeba.org/sentences/show/198939,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-015,N5 단어 015,f71424e3ff,シャツ,シャツ,셔츠,シャツにアイロンをかけてください。,shirt,https://tatoeba.org/sentences/show/215784,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-015,N5 단어 015,d9c88143a2,シャワー,シャワー,샤워,シャワーの水が出ません。,shower,https://tatoeba.org/sentences/show/215745,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-015,N5 단어 015,db9f5d4422,十,じゅう,열,その会は十時に終わった。,ten,https://tatoeba.org/sentences/show/211902,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-015,N5 단어 015,5bae559507,授業,じゅぎょう,수업; 수업 활동,それは授業の終わりだった。,lesson; class work,https://tatoeba.org/sentences/show/205089,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-015,N5 단어 015,4daa103d7d,宿題,しゅくだい,숙제,宿題はもうやってしまいましたか。,homework,https://tatoeba.org/sentences/show/147882,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-015,N5 단어 015,1763fc412a,上手,じょうず,잘 만들어진,あなたは上手にバスケットボールができますか。,skillful,https://tatoeba.org/sentences/show/231837,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-015,N5 단어 015,50525927ee,丈夫,じょうぶ,튼튼한; 내구성이 좋은,このロープはとてもじょうぶだ。,strong; durable,https://tatoeba.org/sentences/show/222994,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-016,N5 단어 016,9476d7966d,しょうゆ,しょうゆ,간장,同社は醤油その他の食品を生産する。,soy sauce,https://tatoeba.org/sentences/show/123656,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-016,N5 단어 016,dcc87a37fb,食堂,しょくどう,식당,食堂はセルフサービスでした。,dining hall,https://tatoeba.org/sentences/show/145792,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-016,N5 단어 016,1fcb2fece8,知る,しる,알다,ぼくは知らないし、気にもしない。,to know,https://tatoeba.org/sentences/show/196304,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-016,N5 단어 016,98eace7008,白,しろ,하얀색,黒に黒をたしても白にはならぬ。,white,https://tatoeba.org/sentences/show/172985,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-016,N5 단어 016,8997f64f52,白い,しろい,하얀색,白いベルトがついてるのがいいな。,white,https://tatoeba.org/sentences/show/121433,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-016,N5 단어 016,b8317395af,新聞,しんぶん,신문,ジョンのことが新聞に出ていた。,newspaper,https://tatoeba.org/sentences/show/215457,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-016,N5 단어 016,44d9d70862,水曜日,すいようび,수요일,今度の水曜日ならいいですよ。,Wednesday,https://tatoeba.org/sentences/show/172151,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-016,N5 단어 016,e82727193e,吸う,すう,담배를 피우다; 빨다,この紙はインクを吸わない。,to smoke; to suck,https://tatoeba.org/sentences/show/221731,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-016,N5 단어 016,f0f5f6b29b,スカート,スカート,치마,スカートを見せていただけませんか。,skirt,https://tatoeba.org/sentences/show/215022,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-016,N5 단어 016,20cbecd474,好き,すき,바람직한,あなたのそんなところが好きです。,likeable,https://tatoeba.org/sentences/show/161709,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-016,N5 단어 016,ce75057c4c,すぐ,すぐ,즉시; 곧; 쉽게; 바로 (가까운); 정직한; 올바른,すぐわかるところにあるよ。,immediately; soon; easily; right (near); honest; upright,https://tatoeba.org/sentences/show/214924,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-016,N5 단어 016,0d38b01113,少ない,すくない,몇 개,読書の時間がますます少なくなっている。,a few,https://tatoeba.org/sentences/show/123386,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-016,N5 단어 016,a8722990f1,すぐに,すぐに,곧,すぐに書かなければなりませんか。,instantly,https://tatoeba.org/sentences/show/214855,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-016,N5 단어 016,c373555102,少し,すこし,약간의,少しテレビを見てもいいですか。,few,https://tatoeba.org/sentences/show/146856,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-016,N5 단어 016,67f5908e10,涼しい,すずしい,상쾌함,日増しに涼しくなっていく。,refreshing,https://tatoeba.org/sentences/show/122850,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-016,N5 단어 016,8149d77689,ストーブ,ストーブ,히터,私は古いストーブに１０ドルの値をつけた。,heater,https://tatoeba.org/sentences/show/157236,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-016,N5 단어 016,938a169f6c,スプーン,スプーン,숟가락,スプーンをいただけますか。,spoon,https://tatoeba.org/sentences/show/214525,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-016,N5 단어 016,0a33903ccf,スポーツ,スポーツ,스포츠,ビリーはスポーツがうまいです。,sport,https://tatoeba.org/sentences/show/197412,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-016,N5 단어 016,10fe0704ca,ズボン,ズボン,바지,ちょっとこのズボンにつめて。,trousers,https://tatoeba.org/sentences/show/202838,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-016,N5 단어 016,feae64eac4,すみません,すみません,죄송합니다. 실례합니다.,すみません、この席あいていますか。,sorry; excuse me,https://tatoeba.org/sentences/show/214207,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-017,N5 단어 017,d671097071,住む,すむ,살다,どうしてアメリカに住んでいたの？,to live in,https://tatoeba.org/sentences/show/201568,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-017,N5 단어 017,508131fe89,スリッパ,スリッパ,슬리퍼,スリッパをはいてください。,slippers,https://tatoeba.org/sentences/show/214119,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-017,N5 단어 017,c4cdc162d7,する,する,하다,ログアウトするんじゃなかったよ。,to do,https://tatoeba.org/sentences/show/4858,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-017,N5 단어 017,c9a15e8777,座る,すわる,앉다,父と母は木の下に座っていました。,to sit,https://tatoeba.org/sentences/show/84829,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-017,N5 단어 017,898b067287,背,せ,키; 신장,トムはジャックと背が同じくらいだ。,height; stature,https://tatoeba.org/sentences/show/200083,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-017,N5 단어 017,af7459ef1e,生徒,せいと,학생,この学校はたくさんの生徒がいます。,pupil,https://tatoeba.org/sentences/show/222600,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-017,N5 단어 017,4b0b49a42d,セーター,セーター,스웨터; 점퍼,このセーターは気に入らない。,sweater; jumper,https://tatoeba.org/sentences/show/223610,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-017,N5 단어 017,b48d0c99d4,せっけん,せっけん,경제,せっけんだらけの手で私にさわらないで。,economy,https://tatoeba.org/sentences/show/214032,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-017,N5 단어 017,9d432ac114,背広,せびろ,비즈니스 정장,私は新しい背広を買った。,business suit,https://tatoeba.org/sentences/show/155725,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-017,N5 단어 017,d12ee2e932,狭い,せまい,좁은,オランダは狭い国です。,narrow,https://tatoeba.org/sentences/show/227474,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-017,N5 단어 017,434707d737,ゼロ,ゼロ,영,私たちは商売をゼロから始めなければならなかった。,zero,https://tatoeba.org/sentences/show/165629,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-017,N5 단어 017,1729d60f09,千,せん,천,このホールには人が二千人入れる。,thousand,https://tatoeba.org/sentences/show/223188,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-017,N5 단어 017,0eaa93c144,先月,せんげつ,전달,先月は、ほとんど雨が降らなかった。,last month,https://tatoeba.org/sentences/show/141880,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-017,N5 단어 017,b8c4cd80db,先週,せんしゅう,지난주,あの人は先週ここにいた人です。,last week,https://tatoeba.org/sentences/show/230710,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-017,N5 단어 017,814bdc2cec,先生,せんせい,선생님; 의사,校長が先生の後ろから入ってきた。,teacher; doctor,https://tatoeba.org/sentences/show/173570,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-017,N5 단어 017,4d0ca7b320,洗濯,せんたく,세탁,洗濯はいつやってもいいですか。,washing,https://tatoeba.org/sentences/show/141216,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-017,N5 단어 017,acba6e07ba,全部,ぜんぶ,모두,トッピングは全部のせて下さい。,all,https://tatoeba.org/sentences/show/200680,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-017,N5 단어 017,501df34d31,掃除,そうじ,청소하다; 쓸다,父はガレージを掃除している。,to clean; to sweep,https://tatoeba.org/sentences/show/84738,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-017,N5 단어 017,e75777d218,そうして,そうして,그리고,そうしてくださればとてもうれしい。,and,https://tatoeba.org/sentences/show/213883,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-017,N5 단어 017,5ef867ff81,そこ,そこ,그곳,バスでそこまで２時間かかります。,that place,https://tatoeba.org/sentences/show/198206,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-018,N5 단어 018,105df79571,そちら,そちら,저쪽,これとそちらとの違いは何だい。,over there,https://tatoeba.org/sentences/show/218744,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-018,N5 단어 018,80981fa136,そっち,そっち,저쪽,そっちの天気は？,over there,https://tatoeba.org/sentences/show/213467,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-018,N5 단어 018,68ad5f4363,外,そと,밖의,外に出してやってくれませんか。,outside,https://tatoeba.org/sentences/show/184892,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-018,N5 단어 018,cb1c02a574,その,その,저것,その本を貸してください。,that,Codex 작성 · 미검수,자동번역 · 미검수,AI 작성 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-018,N5 단어 018,38c854e97f,そば,そば,가까이; 옆에,ガレージは家のそばにあります。,near; beside,https://tatoeba.org/sentences/show/226153,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-018,N5 단어 018,6ff51bace3,空,そら,하늘,空はすっかりもやがかかっていた。,sky,https://tatoeba.org/sentences/show/179433,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-018,N5 단어 018,79d922e359,それ,それ,저것,わたしはそれを見てぎょっとした。,that,https://tatoeba.org/sentences/show/191835,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-018,N5 단어 018,799b7cabe0,それから,それから,이후,それからすっきりきれいにしてくれ。,after that,https://tatoeba.org/sentences/show/205929,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-018,N5 단어 018,46c1721526,それでは,それでは,그러한 상황에서,それでは、あなたは来ないということですか。,in that situation,https://tatoeba.org/sentences/show/205771,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-018,N5 단어 018,5b303264b9,大学,だいがく,대학교,大学で何をするつもりですか。,university,https://tatoeba.org/sentences/show/137646,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-018,N5 단어 018,992fc07339,大使館,たいしかん,대사관,日本大使館はどこにありますか。,embassy,https://tatoeba.org/sentences/show/122209,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-018,N5 단어 018,2f62b9db5e,大丈夫,だいじょうぶ,괜찮은,いや、大丈夫だ。,all right,https://tatoeba.org/sentences/show/228498,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-018,N5 단어 018,9ee7cd3382,大好き,だいすき,매우 호감이 가는,ロジャーはパーティーが大好きだ。,to be very likeable,https://tatoeba.org/sentences/show/192202,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-018,N5 단어 018,b3a8593e53,大切,たいせつ,중요한,本を読むことは大切です。,important,https://tatoeba.org/sentences/show/81616,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-018,N5 단어 018,1c0b0f77b6,台所,だいどころ,주방,ルーシーは今台所にいるでしょう。,kitchen,https://tatoeba.org/sentences/show/192405,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-018,N5 단어 018,e04372c490,たいへん,たいへん,매우,それはたいへんなショックでした。,very,https://tatoeba.org/sentences/show/237333,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-018,N5 단어 018,c74892f565,高い,たかい,키가 큰; 비싼,二つのうちでどちらが高いですか。,tall; expensive,https://tatoeba.org/sentences/show/123179,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-018,N5 단어 018,a7c72d9bb1,たくさん,たくさん,많은,なすべきことがまだたくさんある。,many,https://tatoeba.org/sentences/show/199298,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-018,N5 단어 018,2d5a93eb11,タクシー,タクシー,택시,そのタクシーはいきなり左に曲がった。,taxi,https://tatoeba.org/sentences/show/212991,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-018,N5 단어 018,6298cfc5d6,出す,だす,내놓다,ここではおいしい食べ物が出されます。,to put out,https://tatoeba.org/sentences/show/224634,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-019,N5 단어 019,932afda20b,立つ,たつ,서다,立っているのは、みんな男だった。,to stand,https://tatoeba.org/sentences/show/78277,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-019,N5 단어 019,e7ca1b2fd5,たて,たて,길이; 높이,テーブルを縦一列に並べなさい。,length; height,https://tatoeba.org/sentences/show/202374,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-019,N5 단어 019,372b08211e,建物,たてもの,건물,建物がとっても小さく見えるよ。,building,https://tatoeba.org/sentences/show/175391,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-019,N5 단어 019,9b2d455dfe,楽しい,たのしい,재미있는,あなたと一緒にいて楽しかった。,enjoyable,https://tatoeba.org/sentences/show/233856,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-019,N5 단어 019,7e9d38afeb,頼む,たのむ,묻다,あなたに頼んでもよろしいですか。,to ask,https://tatoeba.org/sentences/show/233649,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-019,N5 단어 019,80beed00bf,たばこ,たばこ,담배; 담배,男はライターでたばこに火をつけた。,tobacco; cigarettes,https://tatoeba.org/sentences/show/127211,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-019,N5 단어 019,d9eba03b7b,たぶん,たぶん,아마,君にはたぶんみんなわかっていることでしょう。,probably,https://tatoeba.org/sentences/show/178680,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-019,N5 단어 019,5c89b3094a,食べ物,たべもの,음식,食べ物はすべてなくなってしまった。,food,https://tatoeba.org/sentences/show/145899,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-019,N5 단어 019,86f67e2dc3,食べる,たべる,먹다,ちょうど食べたかったものでした。,to eat,https://tatoeba.org/sentences/show/202896,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-019,N5 단어 019,4d66739694,卵,たまご,계란,卵を一ダースづつつめなさい。,egg,https://tatoeba.org/sentences/show/78480,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-019,N5 단어 019,3d2ca62c5f,誰,だれ,WHO,誰がこれをしたのかはわからない。,who,https://tatoeba.org/sentences/show/137017,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-019,N5 단어 019,2e610178ae,誕生日,たんじょうび,생일,誕生日とは人が生まれた日のことだ。,birthday,https://tatoeba.org/sentences/show/127349,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-019,N5 단어 019,55dbb815ba,だんだん,だんだん,서서히,日がだんだん長くなってきています。,gradually,https://tatoeba.org/sentences/show/122958,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-019,N5 단어 019,d4779ac36c,小さい,ちいさい,작은,もっと小さいサイズがありますか。,little,https://tatoeba.org/sentences/show/193270,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-019,N5 단어 019,38a8411ec3,小さな,ちいさな,작은,小さなことでくよくよするな。,little,https://tatoeba.org/sentences/show/147022,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-019,N5 단어 019,a21ba677f2,近い,ちかい,가까운,クリスマスが近くなってきた。,near,https://tatoeba.org/sentences/show/225480,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-019,N5 단어 019,35e9881c22,違う,ちがう,다르다,ライオンとヒョウの違いは何ですか。,to differ,https://tatoeba.org/sentences/show/192689,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-019,N5 단어 019,6d7293f7cf,近く,ちかく,가까운,７時近くだ。学校へ行かなくては。,near,https://tatoeba.org/sentences/show/234967,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-019,N5 단어 019,3134199c25,地下鉄,ちかてつ,지하철,地下鉄で行きたいのです。,underground train,https://tatoeba.org/sentences/show/127016,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-019,N5 단어 019,ffa3dda331,地図,ちず,지도,この大きなアメリカの地図を見て。,map,https://tatoeba.org/sentences/show/220672,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-020,N5 단어 020,f9b377e253,茶色,ちゃいろ,갈색,その犬は茶色で小さくて、やせています。,brown,https://tatoeba.org/sentences/show/210959,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-020,N5 단어 020,3d12036023,ちゃわん,ちゃわん,밥그릇,この茶わんはなんとすばらしいのでしょう。,rice bowl,https://tatoeba.org/sentences/show/220567,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-020,N5 단어 020,9b08365493,ちょうど,ちょうど,정확히,ちょうど食べたかったものでした。,exactly,https://tatoeba.org/sentences/show/202896,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-020,N5 단어 020,602fdffbf2,ちょっと,ちょっと,약간,ちょっと、そこのきみ！,somewhat,https://tatoeba.org/sentences/show/74695,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-020,N5 단어 020,c88e0ba104,使う,つかう,사용하기 위해,フラッシュを使ってもいいですか。,to use,https://tatoeba.org/sentences/show/197026,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-020,N5 단어 020,156f17113e,疲れる,つかれる,피곤해지다,とても疲れているように見えます。,to get tired,https://tatoeba.org/sentences/show/177623,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-020,N5 단어 020,d00ef0a9d5,次,つぎ,다음,次はいつ来ればいいのでしょうか。,next,https://tatoeba.org/sentences/show/150216,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-020,N5 단어 020,9d4a68ce12,着く,つく,도착하기 위해,シカゴに着いたらすぐ電話します。,to arrive at,https://tatoeba.org/sentences/show/216366,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-020,N5 단어 020,672321bac9,机,つくえ,책상,机の上にペンが一本もありません。,desk,https://tatoeba.org/sentences/show/183446,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-020,N5 단어 020,6e922a750e,作る,つくる,만들다,たまごを割らずにオムレツは作れない。,to make,https://tatoeba.org/sentences/show/203324,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-020,N5 단어 020,edc22b8d98,つける,つける,켜다,テレビをつけて。,to turn on,https://tatoeba.org/sentences/show/201970,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-020,N5 단어 020,ba6c46f68c,勤める,つとめる,누군가를 위해 일하다,父は銀行に勤めています。,to work for someone,https://tatoeba.org/sentences/show/84602,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-020,N5 단어 020,3a94b5e981,つまらない,つまらない,지루한,このビデオはつまらないよ。,boring,https://tatoeba.org/sentences/show/223276,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-020,N5 단어 020,a23d308800,冷たい,つめたい,만져보면 차갑다,もう手が冷たくって。,cold to the touch,https://tatoeba.org/sentences/show/194174,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-020,N5 단어 020,d99745fbb6,強い,つよい,강한,トラとライオンとどちらが強いか。,powerful,https://tatoeba.org/sentences/show/199736,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-020,N5 단어 020,5b9670420a,手,て,손,ここに手のないナベがある。,hand,https://tatoeba.org/sentences/show/224417,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-020,N5 단어 020,0cf2b43e9c,テープ,テープ,줄자,君はそのコンサートをテープにとったか。,tape,https://tatoeba.org/sentences/show/177769,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-020,N5 단어 020,ff161262dd,テーブル,テーブル,테이블,このテーブルを頼んだのではない。,table,https://tatoeba.org/sentences/show/223523,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-020,N5 단어 020,dc0ae29019,テープレコーダー,テープレコーダー,테이프 레코더,このテープレコーダーは新しくない。,tape recorder,https://tatoeba.org/sentences/show/223518,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-020,N5 단어 020,375cfbefdd,出かける,でかける,나가다,出かけるよりもじっとしていたい。,to go out,https://tatoeba.org/sentences/show/147811,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-021,N5 단어 021,218ea67735,手紙,てがみ,편지,書かねばならない手紙があります。,letter,https://tatoeba.org/sentences/show/147430,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-021,N5 단어 021,69d0d632fa,できる,できる,할 수 있도록,あの二人はどうもできているらしい。,to be able to,https://tatoeba.org/sentences/show/230516,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-021,N5 단어 021,151fd72164,出口,でぐち,출구,B2出口から地上に出てください。,exit,https://tatoeba.org/sentences/show/234867,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-021,N5 단어 021,90e9410bff,テスト,テスト,시험,そのテストはむずかしかった。,test,https://tatoeba.org/sentences/show/212948,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-021,N5 단어 021,d33540fe8e,では,では,그렇게 해서...,では今晩またね、さようなら。,with that...,https://tatoeba.org/sentences/show/202137,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-021,N5 단어 021,0144505953,デパート,デパート,백화점,あのデパートで新しいコートを買いたい。,department store,https://tatoeba.org/sentences/show/155750,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-021,N5 단어 021,3f71089c32,でも,でも,하지만,どんな人でもいないよりはましだ。,but,https://tatoeba.org/sentences/show/199395,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-021,N5 단어 021,5ef4f7dde9,出る,でる,나타나다; 떠나다,電話には出なかったからメールしておきました。,to appear; to leave,https://tatoeba.org/sentences/show/449040,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-021,N5 단어 021,c7e14d8454,テレビ,テレビ,텔레비전,あなたはどこでテレビを見ますか。,television,https://tatoeba.org/sentences/show/232489,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-021,N5 단어 021,679e34031e,天気,てんき,날씨,今日が天気ならいいのに。,weather,https://tatoeba.org/sentences/show/171537,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-021,N5 단어 021,a7c36fdb70,電気,でんき,전기; 전등,電気シェーバーから火が出ました。,electricity; electric light,https://tatoeba.org/sentences/show/124855,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-021,N5 단어 021,62b5c13164,電車,でんしゃ,전기 열차,電車の中ですりにやられちゃったんだ。,electric train,https://tatoeba.org/sentences/show/124800,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-021,N5 단어 021,3c039918ba,電話,でんわ,전화,ブラウンさんから電話のようです。,telephone,https://tatoeba.org/sentences/show/197096,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-021,N5 단어 021,6f4691297f,戸,と,일본식 문,誰かが戸をやかましくノックしている。,Japanese style door,https://tatoeba.org/sentences/show/137092,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-021,N5 단어 021,677d3c5fac,ドア,ドア,서양식 문,入る前にドアをノックして下さい。,Western style door,https://tatoeba.org/sentences/show/122091,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-021,N5 단어 021,e1e7c2d290,トイレ,トイレ,화장실,トイレの水が止まりません。,toilet,https://tatoeba.org/sentences/show/201731,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-021,N5 단어 021,d0fb41651f,どう,どう,어떻게; 어떤 방식으로,駅までどう行けばいいですか。,how; in what way,Codex 작성 · 미검수,자동번역 · 미검수,AI 작성 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-021,N5 단어 021,a891b73f8b,どうして,どうして,어떤 이유로,どうしてあなたは一人になったの？,for what reason,https://tatoeba.org/sentences/show/201572,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-021,N5 단어 021,a71cbc3ce4,どうぞ,どうぞ,제발,写真をどうぞ見せて下さい。,please,https://tatoeba.org/sentences/show/149251,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-021,N5 단어 021,93b9cec3d4,どうぞよろしく,どうぞよろしく,만나서 반갑습니다,どうぞよろしく。,pleased to meet you,https://tatoeba.org/sentences/show/201303,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-022,N5 단어 022,03d03cf25d,動物,どうぶつ,동물,私はその動物の名前を知っている。,animal,https://tatoeba.org/sentences/show/159921,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-022,N5 단어 022,d2cb14f88a,どうも,どうも,감사해요,あの二人はどうもできているらしい。,thanks,https://tatoeba.org/sentences/show/230516,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-022,N5 단어 022,f840779b9e,遠い,とおい,멀리,それはホテルから遠くありません。,far,https://tatoeba.org/sentences/show/205405,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-022,N5 단어 022,e8579084ba,十日,とおか,열흘; 열 번째 날,ジャックは８月１０日に生まれた。,ten days; the tenth day,https://tatoeba.org/sentences/show/215846,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-022,N5 단어 022,978a2cefa5,時々,ときどき,때때로,ジェーンはときどき学校まで走っていく。,sometimes,https://tatoeba.org/sentences/show/216490,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-022,N5 단어 022,e3ad76810f,時計,とけい,시계; 시계,あなたの時計では何時ですか。,watch; clock,https://tatoeba.org/sentences/show/233246,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-022,N5 단어 022,ad884a3b70,どこ,どこ,어디,あなたはどこでテレビを見ますか。,where,https://tatoeba.org/sentences/show/232489,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-022,N5 단어 022,ca332ac7b4,所,ところ,장소,どんな所でアルバイトできるの。,place,https://tatoeba.org/sentences/show/199406,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-022,N5 단어 022,358fc382cb,年,とし,년도,お年をお聞きしてよろしいでしょうか。,year,https://tatoeba.org/sentences/show/226785,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-022,N5 단어 022,de5a452667,図書館,としょかん,도서관,図書館の中で話をしてはいけない。,library,https://tatoeba.org/sentences/show/143872,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-022,N5 단어 022,5480c153dc,どちら,どちら,둘 중 어느 것,二つのうちでどちらが高いですか。,which of two,https://tatoeba.org/sentences/show/123179,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-022,N5 단어 022,e8a4843059,どっち,どっち,어느,この本とあの本とどっちがやさしい？,which,https://tatoeba.org/sentences/show/219777,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-022,N5 단어 022,a3679ee665,とても,とても,매우,この雨の中を外出することはとてもできないことです。,very,https://tatoeba.org/sentences/show/222938,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-022,N5 단어 022,10fb2e55c0,どなた,どなた,WHO,「どなたですか」「お母さんよ」,who,https://tatoeba.org/sentences/show/4914,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-022,N5 단어 022,c597c353cb,隣,となり,바로 옆집,あのビルのとなりです。,next door to,https://tatoeba.org/sentences/show/231268,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-022,N5 단어 022,cd4b8c6381,どの,どの,어느,これはほかのどの木よりも高い。,which,https://tatoeba.org/sentences/show/218528,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-022,N5 단어 022,397b682fa7,飛ぶ,とぶ,날다; 뛰다,ヒューズが飛んだ。,to fly; to hop,https://tatoeba.org/sentences/show/197450,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-022,N5 단어 022,9d1aa046d6,止まる,とまる,멈추다,ちょうどその時バスが止まった。,to come to a halt,https://tatoeba.org/sentences/show/202936,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-022,N5 단어 022,72c525f37a,友達,ともだち,친구,よい友達がたくさんいてうれしい。,friend,https://tatoeba.org/sentences/show/192885,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-022,N5 단어 022,86e7fb81c6,土曜日,どようび,토요일,私は土曜日からここにいます。,Saturday,https://tatoeba.org/sentences/show/154894,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-023,N5 단어 023,7e4fccba7f,鳥,とり,새,なんてきれいな鳥なんだろう。,bird,https://tatoeba.org/sentences/show/198937,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-023,N5 단어 023,3669c65744,鶏肉,とりにく,닭고기,鶏肉を３ポンド分ください。,chicken meat,https://tatoeba.org/sentences/show/125767,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-023,N5 단어 023,4cc27797ba,撮る,とる,사진을 찍거나 영상을 녹화하다,外からなら撮ってもかまいません。,to take a photo or record a film,https://tatoeba.org/sentences/show/184902,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-023,N5 단어 023,1313ed47fb,取る,とる,무언가를 가져가다,そのお金はいざというときのために取っておくよ。,to take something,https://tatoeba.org/sentences/show/213310,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-023,N5 단어 023,b21477c7db,どれ,どれ,(세 개 이상 중에서) 어느 것,この三つの中で、どれが好きですか。,which (of three or more),Codex 작성 · 미검수,자동번역 · 미검수,AI 작성 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-023,N5 단어 023,3ae88c29c4,ナイフ,ナイフ,칼,それはあなたのナイフではない。,knife,https://tatoeba.org/sentences/show/205569,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-023,N5 단어 023,5d32281da9,中,なか,가운데,テントの中ではなくて外で食べよう。,middle,https://tatoeba.org/sentences/show/201917,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-023,N5 단어 023,fcea29f192,長い,ながい,긴,だんだん日が長くなっています。,long,https://tatoeba.org/sentences/show/203060,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-023,N5 단어 023,07a4101167,鳴く,なく,(동물이) 소리를 내다; 울다; 지저귀다; (새가) 노래하다,カエルが鳴いたら帰ろう。,to make a sound (of an animal); to cry; to chirp; to sing (of birds),https://tatoeba.org/sentences/show/226439,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-023,N5 단어 023,04015c3825,無くす,なくす,무언가를 잃다,私は前日無くした本を見つけた。,to lose something,https://tatoeba.org/sentences/show/155413,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-023,N5 단어 023,ef9536b1ee,なぜ,なぜ,왜,あなたはなぜ働いているの。,why,https://tatoeba.org/sentences/show/232436,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-023,N5 단어 023,641ddbf693,夏,なつ,여름,アリは夏じゅうせっせとはたらく。,summer,https://tatoeba.org/sentences/show/229963,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-023,N5 단어 023,e09167a3d4,夏休み,なつやすみ,여름휴가,この夏休みはどこかへ行くのですか。,summer holiday,https://tatoeba.org/sentences/show/222855,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-023,N5 단어 023,cf58476318,など,など,등등,ぬくもりなどどこにも見つからない。,et cetera,https://tatoeba.org/sentences/show/198659,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-023,N5 단어 023,e65bf7ad23,七つ,ななつ,일곱,７つの海って何ですか。,seven,https://tatoeba.org/sentences/show/235014,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-023,N5 단어 023,75ed3c3b2b,七日,なのか,칠일; 일곱째 날,一週間は七日です。,seven days; the seventh day,https://tatoeba.org/sentences/show/190567,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-023,N5 단어 023,a812b1ac7f,名前,なまえ,이름,あなたの名前はリストからはずされた。,name,https://tatoeba.org/sentences/show/232988,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-023,N5 단어 023,a95b0a87ad,習う,ならう,배우다,車の運転を習っています。,to learn,https://tatoeba.org/sentences/show/149053,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-023,N5 단어 023,1227b20370,並ぶ,ならぶ,줄을 서다; 줄을 맞춰 서다,あんた、なぜに並んでいるのだい。,to line up; to stand in a line,https://tatoeba.org/sentences/show/229608,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-023,N5 단어 023,1635de1a94,並べる,ならべる,줄을 서다; 준비하다,メイドはテーブルにナイフとフォークを並べた。,to line up; to set up,https://tatoeba.org/sentences/show/194690,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-024,N5 단어 024,e05de4981d,なる,なる,되다,ちまたではインターネットなるものがはやっています。,to become,https://tatoeba.org/sentences/show/202981,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-024,N5 단어 024,558866ef86,何,なん,무엇,学校の前に何本か木が見えます。,what,https://tatoeba.org/sentences/show/184431,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-024,N5 단어 024,34108268e1,二,に,둘,このホールには人が二千人入れる。,two,https://tatoeba.org/sentences/show/223188,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-024,N5 단어 024,c17f97fafc,賑やか,にぎやか,분주한; 바쁜,この通りは賑やかだ。,bustling; busy,https://tatoeba.org/sentences/show/220474,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-024,N5 단어 024,efac1fc502,肉,にく,고기,肉にはウジがわいていた。,meat,https://tatoeba.org/sentences/show/122996,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-024,N5 단어 024,436f1c3c65,西,にし,서쪽,列車は西へ走っていた。,west,https://tatoeba.org/sentences/show/77480,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-024,N5 단어 024,d8c3a3f0d0,日曜日,にちようび,일요일,ちょうど日曜日にぶつかりますね。,Sunday,https://tatoeba.org/sentences/show/202889,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-024,N5 단어 024,2e6c7d2d9d,荷物,にもつ,수화물,これ荷物を上にあげてもよろしい。,luggage,https://tatoeba.org/sentences/show/217565,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-024,N5 단어 024,b824bec2c5,ニュース,ニュース,소식,そのニュースはラジオで聞いたよ。,news,https://tatoeba.org/sentences/show/212803,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-024,N5 단어 024,9ef6c9d703,庭,にわ,정원,その庭にはバラがまったくなかった。,garden,https://tatoeba.org/sentences/show/207712,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-024,N5 단어 024,3af80b5b2a,脱ぐ,ぬぐ,옷을 벗다,ここで靴を脱がなければなりませんか。,to take off clothes,https://tatoeba.org/sentences/show/224569,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-024,N5 단어 024,2f01adebd7,温い,ぬるい,미지근한,このコーヒーはぬるいです。,luke warm,https://tatoeba.org/sentences/show/223801,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-024,N5 단어 024,18046e46a1,ネクタイ,ネクタイ,넥타이; 넥타이,このネクタイはいくらですか。,tie; necktie,https://tatoeba.org/sentences/show/223401,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-024,N5 단어 024,cbbfc8cad6,猫,ねこ,고양이,猫はにゃーにゃーいいつづけた。,cat,https://tatoeba.org/sentences/show/121967,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-024,N5 단어 024,0c6e923ef9,寝る,ねる,잠자리에 들다; 잠들다,本を読んでるうちに寝てしまった。,to go to bed; to sleep,https://tatoeba.org/sentences/show/81604,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-024,N5 단어 024,278c1e0e04,ノート,ノート,공책; 연습장,これらの語をノートに書きなさい。,notebook; exercise book,https://tatoeba.org/sentences/show/217911,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-024,N5 단어 024,7817fc9d64,登る,のぼる,오르다,木は高ければ高いほど登りにくい。,to climb,https://tatoeba.org/sentences/show/80091,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-024,N5 단어 024,5e8fc8669c,飲み物,のみもの,음료,何か飲み物をいただけますか。,a drink,https://tatoeba.org/sentences/show/188051,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-024,N5 단어 024,e0bcec9bd9,飲む,のむ,마시다,コーラはみんな飲んでしまったの。,to drink,https://tatoeba.org/sentences/show/224842,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-024,N5 단어 024,822c5e11a6,乗る,のる,타다; 타다,ほら、あなたの乗る電車が来たわ。,to get on; to ride,https://tatoeba.org/sentences/show/195969,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-025,N5 단어 025,390ac6443d,歯,は,이빨,その赤ちゃんは歯が生えはじめている。,tooth,https://tatoeba.org/sentences/show/208598,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-025,N5 단어 025,28111455cd,パーティー,パーティー,파티,パーティーはたのしかったですか。,party,https://tatoeba.org/sentences/show/198449,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-025,N5 단어 025,542f39c93d,はい,はい,예,「もしもし、ブラウンさんですか」「はい、そうです」,yes,https://tatoeba.org/sentences/show/236422,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-025,N5 단어 025,5cc1dad1e8,灰皿,はいざら,재떨이,灰皿を下さい。,ashtray,https://tatoeba.org/sentences/show/185012,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-025,N5 단어 025,c428d02d43,入る,はいる,들어가다; 담다,入る前にドアをノックして下さい。,to enter; to contain,https://tatoeba.org/sentences/show/122091,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-025,N5 단어 025,645e1e3b4d,葉書,はがき,엽서,この店に葉書がたくさんある。,postcard,https://tatoeba.org/sentences/show/220432,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-025,N5 단어 025,4729cc56f4,はく,はく,입다; 바지를 입다,この靴はきつすぎてはけない。,to wear; to put on trousers,https://tatoeba.org/sentences/show/222263,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-025,N5 단어 025,658b912df8,箱,はこ,상자,その箱はほとんどいっぱいでした。,box,https://tatoeba.org/sentences/show/207213,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-025,N5 단어 025,7ce7f7d305,はし,はし,젓가락,パーカーさんは箸で食べてみました。,chopsticks,https://tatoeba.org/sentences/show/198541,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-025,N5 단어 025,8f663254b0,橋,はし,다리,その橋はどれくらいの長さですか。,bridge,https://tatoeba.org/sentences/show/211389,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-025,N5 단어 025,8fea1e3f3c,始まる,はじまる,시작하다,今コンサートが始まろうとしている。,to begin,https://tatoeba.org/sentences/show/172848,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-025,N5 단어 025,e5b36d7b24,初め,はじめ,시작,旅行の初めの二日間は雨降りだった。,beginning,https://tatoeba.org/sentences/show/162444,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-025,N5 단어 025,3f18999e09,初めて,はじめて,처음으로,初めてドリアンを食べました。,for the first time,https://tatoeba.org/sentences/show/147562,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-025,N5 단어 025,a2c1e54c17,はじめまして,はじめまして,안녕하세요? 만나서 반갑습니다.,初めましてケン。,How do you do?; I am glad to meet you,https://tatoeba.org/sentences/show/147522,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-025,N5 단어 025,244e138920,走る,はしる,실행하다,あの走ってる少年をごらんなさい。,to run,https://tatoeba.org/sentences/show/230641,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-025,N5 단어 025,bd7df6c7a2,バス,バス,버스,バス通学と積極的差別是正措置などが論争の多い話題だった。,bus,https://tatoeba.org/sentences/show/77225,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-025,N5 단어 025,4385616659,バター,バター,버터,バターはミルクから出来る。,butter,https://tatoeba.org/sentences/show/198015,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-025,N5 단어 025,c65a346458,二十歳,はたち,20세; 20년차,ムーリエルは２０歳になりました。,20 years old; 20th year,https://tatoeba.org/sentences/show/4707,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-025,N5 단어 025,9ea671262d,働く,はたらく,일하기 위해,スイッチは時間通りに働かなかった。,to work,https://tatoeba.org/sentences/show/215137,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-025,N5 단어 025,6eeff514e0,八,はち,여덟,そのハイキングは八時間もかかるでしょう。,eight,https://tatoeba.org/sentences/show/212749,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-026,N5 단어 026,153de06669,二十日,はつか,20일; 20번째,私は二十日までに帰るつもりです。,twenty days; twentieth,https://tatoeba.org/sentences/show/154765,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-026,N5 단어 026,6485c3c2a7,花,はな,꽃,テーブルの上に花が一本あります。,flower,https://tatoeba.org/sentences/show/202395,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-026,N5 단어 026,8b5843f7fb,鼻,はな,코,鼻が出ているよ。かみなさい。,nose,https://tatoeba.org/sentences/show/85518,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-026,N5 단어 026,1ed0362cc3,話,はなし,이야기; 이야기,話を聞かせてくれ。,talk; story,https://tatoeba.org/sentences/show/77142,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-026,N5 단어 026,9d5bde24ec,話す,はなす,말하다,英語はカナダで話されている。,to speak,https://tatoeba.org/sentences/show/189149,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-026,N5 단어 026,4db42e0181,早い,はやい,일찍,時のたつのは早いものだ。,early,https://tatoeba.org/sentences/show/150671,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-026,N5 단어 026,406d15f6e9,速い,はやい,빠른,ショットはとても速いものもある。,quick,https://tatoeba.org/sentences/show/215557,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-026,N5 단어 026,f16244c585,春,はる,봄,カッコウは春にここにやってくる。,spring,https://tatoeba.org/sentences/show/226353,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-026,N5 단어 026,f47c4aee42,貼る,はる,붙다,その写真はアルバムに貼ったほうがよい。,to stick,https://tatoeba.org/sentences/show/209617,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-026,N5 단어 026,9edf8548bb,晴れ,はれ,맑은 날씨,ロンドンの天気は晴れです。,clear weather,https://tatoeba.org/sentences/show/192149,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-026,N5 단어 026,3be88666ba,晴れる,はれる,햇볕이 잘 들다,あした晴れてくれるといいなあ。,to be sunny,https://tatoeba.org/sentences/show/234462,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-026,N5 단어 026,9cd7c780c3,半,はん,반,半時間したら彼はここに来るでしょう。,half,https://tatoeba.org/sentences/show/121264,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-026,N5 단어 026,532c73de5d,晩,ばん,저녁,晩までにはおそらく雨になるだろう。,evening,https://tatoeba.org/sentences/show/121181,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-026,N5 단어 026,098e9e7e67,パン,パン,빵,朝ご飯にパンを食べます。,bread,Codex 작성 · 미검수,자동번역 · 미검수,AI 작성 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-026,N5 단어 026,ee3206bb3f,ハンカチ,ハンカチ,손수건,このハンカチはいくらですか。,handkerchief,https://tatoeba.org/sentences/show/223306,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-026,N5 단어 026,67775e3b25,番号,ばんごう,숫자,番号をまちがえじゃありませんか。,number,https://tatoeba.org/sentences/show/121170,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-026,N5 단어 026,246b5ae84d,晩御飯,ばんごはん,저녁 식사,晩ご飯ですよ、お父さん。,evening meal,https://tatoeba.org/sentences/show/121185,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-026,N5 단어 026,a1cda8cb11,半分,はんぶん,30초,ケーキのどちらの半分でもとりなさい。,half minute,https://tatoeba.org/sentences/show/225320,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-026,N5 단어 026,0a38c65004,東,ひがし,동쪽,その市はロンドンの東にある。,east,https://tatoeba.org/sentences/show/210091,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-026,N5 단어 026,5b84039234,引く,ひく,당기다,カーテンがゆっくり引かれた。,to pull,https://tatoeba.org/sentences/show/226492,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-027,N5 단어 027,23911a0718,弾く,ひく,현악기를 연주하다. 피아노도 포함된다.,ギターをひくのはおもしろい。,to play an instrument with strings; including piano,https://tatoeba.org/sentences/show/226059,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-027,N5 단어 027,e25cf6ed2f,低い,ひくい,짧은; 낮은,ラジオの音を低くして下さい。,short; low,https://tatoeba.org/sentences/show/192612,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-027,N5 단어 027,a81612169c,飛行機,ひこうき,비행기,あなたは飛行機で旅行したことがありますか。,aeroplane,https://tatoeba.org/sentences/show/231608,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-027,N5 단어 027,ec5bd86b72,左,ひだり,왼쪽,アラビア語は右から左へ書きます。,left hand side,https://tatoeba.org/sentences/show/230059,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-027,N5 단어 027,d91ee7a9ed,人,ひと,사람,どんな人でもいないよりはましだ。,person,https://tatoeba.org/sentences/show/199395,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-027,N5 단어 027,537f8af3d6,一つ,ひとつ,하나,車にはハンドルが一つある。,one,https://tatoeba.org/sentences/show/149093,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-027,N5 단어 027,3554fb81b8,一月,ひとつき,한 달,金がなくなる頃にはもうひと月ある。,one month,https://tatoeba.org/sentences/show/179773,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-027,N5 단어 027,3fb1b70809,一人,ひとり,한 사람,どうしてあなたは一人になったの？,one person,https://tatoeba.org/sentences/show/201572,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-027,N5 단어 027,7a9ce8e2df,暇,ひま,자유 시간,ジョンはひどく急いでいたので話をする暇もなかった。,free time,https://tatoeba.org/sentences/show/215363,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-027,N5 단어 027,13696bc9b5,百,ひゃく,백,百年後にはみな同じになる。,hundred,https://tatoeba.org/sentences/show/85413,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-027,N5 단어 027,734d275fd9,病院,びょういん,병원,この近くに病院はありますか。,hospital,https://tatoeba.org/sentences/show/222301,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-027,N5 단어 027,c551bc3f7c,病気,びょうき,병,ボブはいったい病気なのだろうか。,illness,https://tatoeba.org/sentences/show/196062,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-027,N5 단어 027,5d7a8d133b,昼,ひる,정오; 낮,昼はホットドッグを食べたんだ。,noon; daytime,https://tatoeba.org/sentences/show/155091,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-027,N5 단어 027,0b492c3209,昼御飯,ひるごはん,점심 식사,昼ご飯を食べに外に出ませんか。,midday meal,https://tatoeba.org/sentences/show/126420,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-027,N5 단어 027,230d5c7343,広い,ひろい,넓은; 넓은,この通りは広いが、あまり長くない。,spacious; wide,https://tatoeba.org/sentences/show/220476,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-027,N5 단어 027,ef9babb012,フィルム,フィルム,필름 롤,カラーフィルムを一本ください。,roll of film,https://tatoeba.org/sentences/show/226201,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-027,N5 단어 027,d156402900,封筒,ふうとう,봉투,だれがこの封筒を破って開けたのか。,envelope,https://tatoeba.org/sentences/show/203217,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-027,N5 단어 027,55c1439239,プール,プール,수영장,サウナとプールがあります。,swimming pool,https://tatoeba.org/sentences/show/2301777,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-027,N5 단어 027,71e2aefb9d,フォーク,フォーク,포크,フォークでサラダを食べました。,fork,Codex 작성 · 미검수,자동번역 · 미검수,AI 작성 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-027,N5 단어 027,15f4136421,吹く,ふく,불다,あの日は強い風が吹いていました。,to blow,https://tatoeba.org/sentences/show/230511,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-028,N5 단어 028,68571540e1,服,ふく,옷,この服はわたしにはもったいない。,clothes,https://tatoeba.org/sentences/show/219956,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-028,N5 단어 028,0c1dbd4838,二つ,ふたつ,둘,二つのうちでどちらが高いですか。,two,https://tatoeba.org/sentences/show/123179,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-028,N5 단어 028,c518fb9116,豚肉,ぶたにく,돼지고기,この豚肉は１キロいくらですか。,pork,https://tatoeba.org/sentences/show/220250,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-028,N5 단어 028,94c2076821,二人,ふたり,두 사람,二人は何をしているところですか。,two people,https://tatoeba.org/sentences/show/123073,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-028,N5 단어 028,750786cc55,二日,ふつか,이틀; 해당 월의 둘째 날,それは１週間前、すなわち４月２日に行われた。,two days; second day of the month,https://tatoeba.org/sentences/show/205590,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-028,N5 단어 028,4162724f9a,太い,ふとい,지방,彼は太い首をしている。,fat,https://tatoeba.org/sentences/show/102554,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-028,N5 단어 028,eb9acca7ba,冬,ふゆ,겨울,まもなく冬だ。,winter,https://tatoeba.org/sentences/show/195261,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-028,N5 단어 028,5791e248f1,降る,ふる,(비나 눈이) 내리다,シカゴのあたりでは雨が降っていました。,to fall (e.g. rain or snow),https://tatoeba.org/sentences/show/216365,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-028,N5 단어 028,aa60dd4a11,古い,ふるい,오래된 (사람에게는 사용되지 않음),時は金なりと古いことわざにもある。,old (not used for people),https://tatoeba.org/sentences/show/150654,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-028,N5 단어 028,34784ed6ca,ふろ,ふろ,욕조,私は一日おきにふろに入ります。,bath,https://tatoeba.org/sentences/show/158438,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-028,N5 단어 028,79ddbb2b98,文章,ぶんしょう,문장; 텍스트,ヘミングウェイの文章は悪文だった。,sentence; text,https://tatoeba.org/sentences/show/74604,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-028,N5 단어 028,f8fc73bd75,ページ,ページ,페이지,もう３ページ残っている。,page,https://tatoeba.org/sentences/show/194523,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-028,N5 단어 028,619dae70e9,下手,へた,미숙한,いいわけをするのがとても下手。,unskillful,https://tatoeba.org/sentences/show/229378,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-028,N5 단어 028,91cf4ea2fd,ベッド,ベッド,침대,どんなベッドでもないよりはよい。,bed,https://tatoeba.org/sentences/show/199480,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-028,N5 단어 028,db38ebd955,ペット,ペット,애완 동물,あなたはペットの世話ができない。,pet,https://tatoeba.org/sentences/show/232403,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-028,N5 단어 028,e78074927c,部屋,へや,방,マユコは部屋に入った。,room,https://tatoeba.org/sentences/show/195194,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-028,N5 단어 028,71c372d7b2,辺,へん,영역,この辺にホテルはありますか。,area,https://tatoeba.org/sentences/show/223208,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-028,N5 단어 028,dd1183b005,ペン,ペン,펜,リンゴと本の間にペンがあります。,pen,https://tatoeba.org/sentences/show/192465,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-028,N5 단어 028,65783b95dd,勉強,べんきょう,공부하다,あなたは何時間勉強していますか。,to study,https://tatoeba.org/sentences/show/232202,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-028,N5 단어 028,84887dde48,便利,べんり,유용한; 편리한,電話は便利なものである。,useful; convenient,https://tatoeba.org/sentences/show/124682,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-029,N5 단어 029,cfc75623ae,帽子,ぼうし,모자,この帽子は１０００円なら安い。,hat,https://tatoeba.org/sentences/show/219814,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-029,N5 단어 029,785a997045,ボールペン,ボールペン,볼펜,ボールペンのインクがなくなった。,ball-point pen,https://tatoeba.org/sentences/show/196456,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-029,N5 단어 029,f71c69492e,ほか,ほか,기타; 나머지,ほかの女の子たちはどこにいるの。,other; the rest,https://tatoeba.org/sentences/show/196427,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-029,N5 단어 029,ab9f2792c4,ポケット,ポケット,포켓,ポケットに何を持っていますか。,pocket,https://tatoeba.org/sentences/show/232398,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-029,N5 단어 029,418493d941,欲しい,ほしい,원하다,友人はマイカーを欲しがっている。,want,https://tatoeba.org/sentences/show/79360,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-029,N5 단어 029,2dbe65ee1d,ポスト,ポスト,우편,ポストはどこにありますか。,post,https://tatoeba.org/sentences/show/196278,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-029,N5 단어 029,785adc4f9d,細い,ほそい,얇은,彼は太っているくせに声は細い。,thin,https://tatoeba.org/sentences/show/102553,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-029,N5 단어 029,04ab635f4b,ボタン,ボタン,단추,レーンコートのボタンがとれた。,button,https://tatoeba.org/sentences/show/192366,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-029,N5 단어 029,23ec5a0b3d,ホテル,ホテル,호텔,あなたはこのホテルのお客ですか。,hotel,https://tatoeba.org/sentences/show/232725,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-029,N5 단어 029,0e8f798dbf,本,ほん,책,ウイスキーを１本持っています。,book,https://tatoeba.org/sentences/show/228339,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-029,N5 단어 029,3839786bac,本棚,ほんだな,책장,私は本棚の本をすべて読んだわけではない。,bookshelves,https://tatoeba.org/sentences/show/152787,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-029,N5 단어 029,849baaf2c3,ほんとう,ほんとう,진실,本当のマンションではありません。,truth,https://tatoeba.org/sentences/show/81497,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-029,N5 단어 029,a59ba12bc5,毎朝,まいあさ,매일 아침,毎朝ジョギングすることにした。,every morning,https://tatoeba.org/sentences/show/81346,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-029,N5 단어 029,771fbe6b4d,毎月,まいげつ,매달,毎月のガス代はいくらですか。,every month,https://tatoeba.org/sentences/show/81361,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-029,N5 단어 029,fd1c93832f,毎週,まいしゅう,매주,父は毎週日曜日にゴルフをします。,every week,https://tatoeba.org/sentences/show/84362,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-029,N5 단어 029,039a696225,毎日,まいにち,매일,毎日うっとうしくていやですね。,every day,https://tatoeba.org/sentences/show/81316,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-029,N5 단어 029,83700909d4,毎年,まいねん,매년,毎年ここに来なきゃ。,every year,https://tatoeba.org/sentences/show/81248,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-029,N5 단어 029,2584943533,毎晩,まいばん,매일 밤,私は毎晩家にいます。,every night,https://tatoeba.org/sentences/show/152681,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-029,N5 단어 029,319e218950,前,まえ,~ 전에,外へ出る前に靴を磨きなさい。,before,https://tatoeba.org/sentences/show/184856,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-029,N5 단어 029,ae3e0a705f,曲る,まがる,돌리다; 구부리다,２ブロック先まで歩き、左へ曲がりなさい。,to turn; to bend,https://tatoeba.org/sentences/show/235525,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-030,N5 단어 030,b19034ded1,まずい,まずい,불쾌한,あ！まずい！ガソリンが切れてきた。,unpleasant,https://tatoeba.org/sentences/show/234772,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-030,N5 단어 030,162e00c6ef,また,また,다시; 그리고,ジムもまたパーティーに来ます。,again; and,https://tatoeba.org/sentences/show/215924,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-030,N5 단어 030,6a7163f5f7,まだ,まだ,아직; 여전히,なすべきことがまだたくさんある。,yet; still,https://tatoeba.org/sentences/show/199298,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-030,N5 단어 030,4d76d06d84,町,まち,마을; 도시,その町はロンドンのすぐ北にある。,town; city,https://tatoeba.org/sentences/show/207801,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-030,N5 단어 030,6a39701228,待つ,まつ,기다리다,ちょっと待っていてもらえますか。,to wait,https://tatoeba.org/sentences/show/202739,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-030,N5 단어 030,ede9ab2f7f,まっすぐ,まっすぐ,정면; 바로 앞,まっすぐ前を見てください。,straight ahead; direct,https://tatoeba.org/sentences/show/195363,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-030,N5 단어 030,27f9d40392,マッチ,マッチ,성냥,マッチありますか。,match,https://tatoeba.org/sentences/show/195351,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-030,N5 단어 030,7734194821,窓,まど,창문,窓を開けっぱなしにしておいたの？,window,https://tatoeba.org/sentences/show/231771,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-030,N5 단어 030,ab36109960,丸い,まるい,둥근; 원형,ボールは丸い。,round; circular,https://tatoeba.org/sentences/show/196476,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-030,N5 단어 030,a0ff0f67c8,万,まん,만,このテープレコーダーは４万円しました。,ten thousand,https://tatoeba.org/sentences/show/223521,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-030,N5 단어 030,6318b0423a,万年筆,まんねんひつ,만년필,新しい万年筆をなくしてしまった。,fountain pen,https://tatoeba.org/sentences/show/155723,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-030,N5 단어 030,7309a238e8,磨く,みがく,이를 닦다; 닦다,そのなべを磨いていただけませんか。,to brush teeth; to polish,https://tatoeba.org/sentences/show/212854,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-030,N5 단어 030,f1046f3190,右,みぎ,오른쪽,アラビア語は右から左へ書きます。,right side,https://tatoeba.org/sentences/show/230059,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-030,N5 단어 030,8568eded6e,短い,みじかい,짧은,日がだんだん短くなっている。,short,https://tatoeba.org/sentences/show/122959,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-030,N5 단어 030,69a792520f,水,みず,물,ひざに水がたまっているようです。,water,https://tatoeba.org/sentences/show/197613,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-030,N5 단어 030,0c8a588e53,店,みせ,가게,店はたたまれ、それっきりだった。,shop,https://tatoeba.org/sentences/show/124989,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-030,N5 단어 030,db35a99e28,見せる,みせる,보여주기 위해,パスポートを見せてくれませんか。,to show,https://tatoeba.org/sentences/show/198083,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-030,N5 단어 030,dc29195f18,道,みち,거리,二本の道はそこでクロスしている。,street,https://tatoeba.org/sentences/show/75827,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-030,N5 단어 030,1713d0bbe8,三日,みっか,사흘; 그 달의 셋째 날,１０月３日です。,three days; third day of the month,https://tatoeba.org/sentences/show/236068,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-030,N5 단어 030,b36b221d33,三つ,みっつ,삼,コーヒー三つおねがいします。,three,https://tatoeba.org/sentences/show/224844,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-031,N5 단어 031,85e4ba2f28,緑,みどり,녹색,東京ミッドタウンは緑がいっぱい！,green,https://tatoeba.org/sentences/show/74154,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-031,N5 단어 031,d2b9c47656,皆さん,みなさん,모든 사람,皆さんじっとしていてください。,everyone,https://tatoeba.org/sentences/show/195074,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-031,N5 단어 031,84e465b526,南,みなみ,남쪽,フランスは英国の南にある。,south,https://tatoeba.org/sentences/show/196997,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-031,N5 단어 031,e8cdf8b85a,耳,みみ,귀,なぜ、あなたの耳はそんなに大きいの？,ear,https://tatoeba.org/sentences/show/199295,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-031,N5 단어 031,85b37b6884,見る,みる,보다; 지켜보다,わたしはそれを見てぎょっとした。,to see; to watch,https://tatoeba.org/sentences/show/191835,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-031,N5 단어 031,2676514561,みんな,みんな,모든 사람,女の子はほとんどみんなやさしい。,everyone,https://tatoeba.org/sentences/show/147335,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-031,N5 단어 031,bf44ddad08,六日,むいか,6일; 그 달의 6일,４月５日か６日に会っていただけませんか。,six days; sixth day of the month,https://tatoeba.org/sentences/show/235224,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-031,N5 단어 031,8e862f05f0,向こう,むこう,저쪽,その男の子は向こうにいます。,over there,https://tatoeba.org/sentences/show/208147,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-031,N5 단어 031,0a3894175f,難しい,むずかしい,어려운,外国人が日本語を学ぶのは難しい。,difficult,https://tatoeba.org/sentences/show/184760,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-031,N5 단어 031,7ecc2c4bfc,六つ,むっつ,육,彼は６行のうちに６つまちがいをした。,six,https://tatoeba.org/sentences/show/93506,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-031,N5 단어 031,5028971b39,村,むら,마을,町は村よりも大きい。,village,https://tatoeba.org/sentences/show/126109,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-031,N5 단어 031,ae534d4ca8,目,め,눈,彼女はきれいな目をしている。,eye,https://tatoeba.org/sentences/show/92969,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-031,N5 단어 031,eb5450490b,メートル,メートル,미터,前の人から1メートル離れて並んでください。,metre,https://tatoeba.org/sentences/show/140982,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-031,N5 단어 031,72eb77e07a,眼鏡,めがね,안경,私はメガネがなくては読めない。,glasses,https://tatoeba.org/sentences/show/158805,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-031,N5 단어 031,c5b7ad76fd,もう,もう,이미,もう～、なにやってんだよ。,already,https://tatoeba.org/sentences/show/74910,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-031,N5 단어 031,3ae16ad93a,もう一度,もういちど,다시,もう一度ゆっくりお話しください。,again,https://tatoeba.org/sentences/show/194309,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-031,N5 단어 031,d10bb92f3e,木曜日,もくようび,목요일,やあ、フレッド。木曜日にバドミントンはどう。,Thursday,https://tatoeba.org/sentences/show/193147,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-031,N5 단어 031,16fda19d79,持つ,もつ,잡다,コートを持ちましょうか。,to hold,https://tatoeba.org/sentences/show/224958,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-031,N5 단어 031,a8f5f4c59e,もっと,もっと,더,父がもっと長生きしていたらなあ。,more,https://tatoeba.org/sentences/show/84880,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-031,N5 단어 031,782272bfda,物,もの,물건,どちらのかばんがあなたの物ですか。,thing,https://tatoeba.org/sentences/show/200773,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-032,N5 단어 032,5b92758003,門,もん,문,ジョンは門のところまで出てきた。,gate,https://tatoeba.org/sentences/show/215219,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-032,N5 단어 032,4f0f6b6ae7,問題,もんだい,문제,問題はお金がないということです。,problem,https://tatoeba.org/sentences/show/79848,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-032,N5 단어 032,8d29f60b23,八百屋,やおや,청과물 상인,その八百屋は客にとても親切だ。,greengrocer,https://tatoeba.org/sentences/show/207193,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-032,N5 단어 032,936289666e,野菜,やさい,채소,その店は野菜を売っている。,vegetable,https://tatoeba.org/sentences/show/207603,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-032,N5 단어 032,ead1ae2736,易しい,やさしい,쉬운; 간단한,もっと易しい事を聞いて下さい。,easy; simple,https://tatoeba.org/sentences/show/193198,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-032,N5 단어 032,33b86212ca,安い,やすい,값이 싼,もっと安いものを見せてください。,cheap,https://tatoeba.org/sentences/show/193311,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-032,N5 단어 032,d4a1d27d3b,休み,やすみ,휴식; 휴일,学校はクリスマスで休みになった。,rest; holiday,https://tatoeba.org/sentences/show/184412,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-032,N5 단어 032,3e3efcb45f,休む,やすむ,쉬다,父はまだ休んでいる。,to rest,https://tatoeba.org/sentences/show/84662,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-032,N5 단어 032,62c4216674,八つ,やっつ,여덟,そこに八つの小石があった。,eight,https://tatoeba.org/sentences/show/519714,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-032,N5 단어 032,e8a5cbdf0a,山,やま,산,その山はどれくらいの高さですか。,mountain,https://tatoeba.org/sentences/show/210451,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-032,N5 단어 032,f81d503d6f,やる,やる,하다,５ドルをやる。,to do,https://tatoeba.org/sentences/show/235161,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-032,N5 단어 032,285b008622,夕方,ゆうがた,저녁,ひょっとすると夕方前に雨になるかもしれない。,evening,https://tatoeba.org/sentences/show/197417,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-032,N5 단어 032,ae2b9f6d7e,夕飯,ゆうはん,저녁,夕飯はもう食べましたか。,dinner,https://tatoeba.org/sentences/show/79059,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-032,N5 단어 032,8b86921749,郵便局,ゆうびんきょく,우체국,あの～郵便局はどちらでしょうか。,post office,https://tatoeba.org/sentences/show/231383,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-032,N5 단어 032,39fff8fc4b,昨夜,ゆうべ,어젯밤,昨夜はよく眠れましたか。,last night,https://tatoeba.org/sentences/show/169654,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-032,N5 단어 032,50b217ed0b,有名,ゆうめい,유명한,そのホテルは食事で有名である。,famous,https://tatoeba.org/sentences/show/212598,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-032,N5 단어 032,78c044b951,雪,ゆき,눈,ひどい雪のため外出できなかった。,snow,https://tatoeba.org/sentences/show/197547,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-032,N5 단어 032,d980cb1531,ゆっくりと,ゆっくりと,느리게,おじいさんはとてもゆっくりと話す。,slowly,https://tatoeba.org/sentences/show/227740,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-032,N5 단어 032,4f8e83945d,八日,ようか,8일; 그 달의 8일,学校は４月８日から始まります。,eight days; eighth day of the month,https://tatoeba.org/sentences/show/184424,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-032,N5 단어 032,1907b6fc38,洋服,ようふく,서양식 옷,お前に新しい洋服を作ってあげよう。,western-style clothes,https://tatoeba.org/sentences/show/226963,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-033,N5 단어 033,19db29fbbb,よく,よく,자주; 잘,ジャック、よく来てくれたね。,often; well,https://tatoeba.org/sentences/show/215788,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-033,N5 단어 033,4cb7c969c4,横,よこ,옆에; 측면; 너비,母親は赤ん坊をベッドに横にした。,beside; side; width,https://tatoeba.org/sentences/show/82787,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-033,N5 단어 033,222ae96df7,四日,よっか,4일; 그 달의 넷째 날,長くても４日しか待てませんよ。,four days; fouth day of the month,https://tatoeba.org/sentences/show/125908,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-033,N5 단어 033,1000ee441a,四つ,よっつ,넷,その紙を四つ折りにしなさい。,four,https://tatoeba.org/sentences/show/210071,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-033,N5 단어 033,76f05a0739,呼ぶ,よぶ,부르다; 초대하다,あなたをケパと呼ぶことにします。,to call out; to invite,https://tatoeba.org/sentences/show/231456,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-033,N5 단어 033,eb7e675902,読む,よむ,읽기,本を読む時間がほとんどないんだ。,to read,https://tatoeba.org/sentences/show/152798,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-033,N5 단어 033,6c214111ea,より,より,~보다; (비교용으로 사용됨),もうこれよりほかに手はない。,than; (used for comparison),https://tatoeba.org/sentences/show/194478,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-033,N5 단어 033,1a0aec6793,夜,よる,저녁; 밤,あなたは夜よく寝れませんか。,evening; night,https://tatoeba.org/sentences/show/231522,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-033,N5 단어 033,83da293775,弱い,よわい,약한,それを言われると弱いなあ。,weak,https://tatoeba.org/sentences/show/204593,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-033,N5 단어 033,61fd50f12e,来月,らいげつ,다음 달,来月タクシー料金があがります。,next month,https://tatoeba.org/sentences/show/78688,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-033,N5 단어 033,7a4ef637be,来週,らいしゅう,다음 주,来週ヨーロッパへ行くつもりなんです。,next week,https://tatoeba.org/sentences/show/191765,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-033,N5 단어 033,c68f2caa2f,来年,らいねん,내년,あなたは来年この本を読むことが出来るでしょう。,next year,https://tatoeba.org/sentences/show/231498,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-033,N5 단어 033,670f2dd0dc,ラジオ,ラジオ,라디오,そのニュースはラジオで聞いたよ。,radio,https://tatoeba.org/sentences/show/212803,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-033,N5 단어 033,924572e50c,ラジカセ,ラジカセ,라디오 카세트 플레이어,確かに今の日本では、「ラジカセ」はもう古い言葉なのかもしれない。,radio cassette player,https://tatoeba.org/sentences/show/1174918,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-033,N5 단어 033,a45af4ed89,りっぱ,りっぱ,화려한,どうもごりっぱな言いわけだよ。,splendid,https://tatoeba.org/sentences/show/201196,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-033,N5 단어 033,dc7d39c7af,留学生,りゅうがくせい,해외 유학생,留学生も入れるのかしら。,overseas student,https://tatoeba.org/sentences/show/237462,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-033,N5 단어 033,0139a208fe,両親,りょうしん,부모님 모두,両親は二人ともまだ生きています。,both parents,https://tatoeba.org/sentences/show/77996,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-033,N5 단어 033,ee85169acd,料理,りょうり,요리,これらのりんごは料理用にもってこいだ。,cuisine,https://tatoeba.org/sentences/show/217962,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-033,N5 단어 033,2ba96bef9a,旅行,りょこう,여행하다,いつ旅行においでになりますか。,travel,https://tatoeba.org/sentences/show/228596,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-033,N5 단어 033,92b3bb727e,零,れい,영,今朝の気温は零度でした。,zero,Codex 작성 · 미검수,자동번역 · 미검수,AI 작성 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-034,N5 단어 034,f7a15687a1,冷蔵庫,れいぞうこ,냉장고,冷蔵庫の中にバターが２ポンドある。,refrigerator,https://tatoeba.org/sentences/show/77638,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-034,N5 단어 034,0455201fe6,レコード,レコード,기록,ステレオにレコードをかけてください。,record,https://tatoeba.org/sentences/show/214601,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-034,N5 단어 034,31893e4378,レストラン,レストラン,식당,あのレストランはサービスがよい。,restaurant,https://tatoeba.org/sentences/show/231226,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-034,N5 단어 034,d23f06249a,練習,れんしゅう,연습하다,あなたはいつピアノの練習をしますか。,to practice,https://tatoeba.org/sentences/show/232827,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-034,N5 단어 034,5fc0f979e6,廊下,ろうか,복도,廊下の突き当たりで火事が起きました。,corridor,https://tatoeba.org/sentences/show/77345,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-034,N5 단어 034,f9ccc7bfdf,六,ろく,육,私は毎朝六時に起きます。,six,https://tatoeba.org/sentences/show/152733,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-034,N5 단어 034,38249a2dd2,ワイシャツ,ワイシャツ,비즈니스 셔츠,ワイシャツにボタンをつけて。,business shirt,https://tatoeba.org/sentences/show/192073,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-034,N5 단어 034,640761cb8b,若い,わかい,어린,「彼女は若いですか」「はい」,young,https://tatoeba.org/sentences/show/236166,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-034,N5 단어 034,ecee43eb04,分かる,わかる,이해되기 위해,ボブがいつ来日したか分からない。,to be understood,https://tatoeba.org/sentences/show/196088,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-034,N5 단어 034,0ca0de9dea,忘れる,わすれる,잊다,電話するのを忘れてごめんなさい。,to forget,https://tatoeba.org/sentences/show/124723,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-034,N5 단어 034,d5c2e69813,私,わたくし,(겸손하게) 나; 나 자신,私は泳げません。,(humble) I; myself,https://tatoeba.org/sentences/show/159334,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-034,N5 단어 034,b1d440d4e1,渡す,わたす,넘겨주다,わたしを川のむこうに渡してください。,to hand over,https://tatoeba.org/sentences/show/191763,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-034,N5 단어 034,78255b9860,渡る,わたる,건너가다,一行はアメリカへ渡った。,to go across,https://tatoeba.org/sentences/show/190628,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
-N5-034,N5 단어 034,13b6dbec03,悪い,わるい,나쁜,これは悪い話ではないでしょう？,bad,https://tatoeba.org/sentences/show/74724,자동번역 · 미검수,원문 예문,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+stack_id,stack,card_id,japanese,reading,korean,english,translation_status,source,license
+N5-001,N5 단어 001,ada066edfd,会う,あう,만나다,to meet,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-001,N5 단어 001,ebec658463,青,あお,파란색,blue,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-001,N5 단어 001,51a671ec17,青い,あおい,파랗다; 푸르다,blue,자동번역 후 AI 교정 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-001,N5 단어 001,2dacb910b2,赤,あか,빨간색,red,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-001,N5 단어 001,44ba38cf8b,赤い,あかい,빨갛다,red,자동번역 후 AI 교정 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-001,N5 단어 001,91987ae840,明るい,あかるい,밝다,bright,자동번역 후 AI 교정 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-001,N5 단어 001,8dc7006bda,秋,あき,가을,autumn,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-001,N5 단어 001,fc3bc1e6f1,開く,あく,열리다,to open; to become open,자동번역 후 AI 교정 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-001,N5 단어 001,321963ed35,開ける,あける,열다,to open,자동번역 후 AI 교정 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-001,N5 단어 001,9661cbac61,上げる,あげる,올리다; 주다,to give,자동번역 후 AI 교정 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-001,N5 단어 001,d46ae79a26,朝,あさ,아침,morning,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-001,N5 단어 001,98bc6f72ae,朝ごはん,あさごはん,아침밥,breakfast,자동번역 후 AI 교정 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-001,N5 단어 001,b3b4041c52,あさって,あさって,모레,day after tomorrow,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-001,N5 단어 001,27df3d5802,足,あし,발; 다리,foot; leg,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-001,N5 단어 001,115ec83476,明日,あした,내일,tomorrow,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-001,N5 단어 001,bee501faf0,あそこ,あそこ,저쪽,over there,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-001,N5 단어 001,2d55571300,遊ぶ,あそぶ,놀다; 방문하다,to play; to make a visit,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-001,N5 단어 001,f665c2128a,暖かい,あたたかい,따뜻한,warm,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-001,N5 단어 001,b62cb9ce4c,頭,あたま,머리,head,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-001,N5 단어 001,8ae27e3b51,新しい,あたらしい,새로운,new,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-002,N5 단어 002,34e6f7d220,あちら,あちら,거기,there,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-002,N5 단어 002,9949d87445,厚い,あつい,친절한; 깊은; 두꺼운,kind; deep; thick,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-002,N5 단어 002,7b4aecdf7b,暑い,あつい,더운,hot,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-002,N5 단어 002,a379d413fd,熱い,あつい,만지면 뜨겁다,hot to the touch,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-002,N5 단어 002,60dd63379e,あっち,あっち,저쪽,over there,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-002,N5 단어 002,4f134c9b38,後,あと,나중에,afterwards,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-002,N5 단어 002,afdf384f68,あなた,あなた,너,you,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-002,N5 단어 002,4aab699864,兄,あに,(겸손한) 형,(humble) older brother,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-002,N5 단어 002,8bfeb208b4,姉,あね,(겸손한) 언니,(humble) older sister,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-002,N5 단어 002,ac4706068b,あの,あの,저기 있는 것,that over there,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-002,N5 단어 002,0cf05b3a0d,アパート,アパート,아파트,apartment,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-002,N5 단어 002,a5aceb6426,あびる,あびる,목욕하다; 샤워하다,to bathe; to shower,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-002,N5 단어 002,0509cb3b27,危ない,あぶない,위험한,dangerous,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-002,N5 단어 002,4afffe5811,甘い,あまい,달콤한,sweet,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-002,N5 단어 002,eac90e8e98,あまり,あまり,별로,not very,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-002,N5 단어 002,5d72771a3c,飴,あめ,사탕,candy,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-002,N5 단어 002,277a58c9df,雨,あめ,비,rain,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-002,N5 단어 002,f8fa96946f,洗う,あらう,씻다,to wash,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-002,N5 단어 002,93461820fe,ありがとう,ありがとう,감사합니다,Thank you,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-002,N5 단어 002,ac08788418,ある,ある,있다; 가지다 (무생물에 사용됨),to be; to have (used for inanimate objects),자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-003,N5 단어 003,55f3080ce4,歩く,あるく,걷다,to walk,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-003,N5 단어 003,d727a76b22,あれ,あれ,저것,that,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-003,N5 단어 003,e37a087c0f,いい,いい,좋은,good,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-003,N5 단어 003,6d4596ae46,いいえ,いいえ,아니요,no,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-003,N5 단어 003,ae0cc00f94,言う,いう,말하다,to say,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-003,N5 단어 003,9f074820b1,家,いえ,집,house,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-003,N5 단어 003,a3f296ad9a,いかが,いかが,어떻게,how,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-003,N5 단어 003,66e4692df7,行く,いく,가다,to go,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-003,N5 단어 003,026ae57b50,いくつ,いくつ,몇 명입니까? 나이는 몇 살입니까?,how many?; how old?,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-003,N5 단어 003,4fc98c6938,いくら,いくら,얼마나 많이?,how much?,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-003,N5 단어 003,43c874a6c8,池,いけ,연못,pond,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-003,N5 단어 003,ca76162587,医者,いしゃ,의사,medical doctor,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-003,N5 단어 003,d305fa14a8,いす,いす,의자,chair,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-003,N5 단어 003,cd1bcc2b1b,忙しい,いそがしい,바쁜; 짜증난,busy; irritated,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-003,N5 단어 003,4dae367794,痛い,いたい,아픈,painful,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-003,N5 단어 003,eac7a22620,いただきます,いただきます,식사 전 감사의 표현,expression of gratitude before meals,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-003,N5 단어 003,9d8f862791,一,いち,하나,one,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-003,N5 단어 003,1cfccd0cdd,一日,いちにち,하루; 월초,one day; first of month,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-003,N5 단어 003,cb96f363df,いちばん,いちばん,최고; 첫 번째,best; first,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-003,N5 단어 003,fac6fc0838,いつ,いつ,언제,when,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-004,N5 단어 004,2a7c4baf86,五日,いつか,5일; 다섯째 날,five days; fifth day,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-004,N5 단어 004,2dc7289c82,一緒,いっしょ,함께,together,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-004,N5 단어 004,9ac35c3990,五つ,いつつ,다섯,five,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-004,N5 단어 004,dea2a1df8b,いつも,いつも,언제나,always,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-004,N5 단어 004,0df89f5010,犬,いぬ,개,dog,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-004,N5 단어 004,ce75c75644,今,いま,지금,now,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-004,N5 단어 004,cb29ccdd2a,意味,いみ,의미,meaning,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-004,N5 단어 004,12047d019b,妹,いもうと,(겸손한) 여동생,(humble) younger sister,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-004,N5 단어 004,eda751e069,嫌,いや,불쾌한,unpleasant,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-004,N5 단어 004,1ff0529d03,入口,いりぐち,입구,entrance,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-004,N5 단어 004,9438889173,いる,いる,있다; 가지다 (사람과 동물에 사용됨),to be; to have (used for people and animals),자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-004,N5 단어 004,7a84208708,要る,いる,필요하다,to need,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-004,N5 단어 004,6d824d5110,入れる,いれる,넣다,to put in,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-004,N5 단어 004,523266ea6f,色,いろ,색상,colour,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-004,N5 단어 004,f74dd1ee9a,いろいろ,いろいろ,다양한,various,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-004,N5 단어 004,08a3ed212d,上,うえ,위에,on top of,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-004,N5 단어 004,93bdc81dd9,後ろ,うしろ,뒤에,behind,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-004,N5 단어 004,d2b2316e45,薄い,うすい,얇은; 약한,thin; weak,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-004,N5 단어 004,036f4180a2,歌,うた,노래,song,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-004,N5 단어 004,3464318c23,歌う,うたう,노래하다,to sing,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-005,N5 단어 005,63bc7722fa,生まれる,うまれる,태어나다,to be born,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-005,N5 단어 005,06ac21dc7d,海,うみ,바다,sea,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-005,N5 단어 005,f7e1da43df,売る,うる,팔다,to sell,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-005,N5 단어 005,7ecfe0d248,煩い,うるさい,시끄러운; 짜증나는,noisy; annoying,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-005,N5 단어 005,1ef8a05bf3,上着,うわぎ,재킷,jacket,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-005,N5 단어 005,5bb390da0b,絵,え,그림,picture,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-005,N5 단어 005,92b1621231,映画,えいが,영화,movie,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-005,N5 단어 005,8a88cfbcb8,映画館,えいがかん,영화,cinema,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-005,N5 단어 005,16adc7bd03,英語,えいご,영어,English language,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-005,N5 단어 005,8ac60a4060,ええ,ええ,예,yes,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-005,N5 단어 005,d5f359c20b,駅,えき,역,station,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-005,N5 단어 005,eb1695baf6,エレベーター,エレベーター,엘리베이터,elevator,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-005,N5 단어 005,381da4d060,鉛筆,えんぴつ,연필,pencil,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-005,N5 단어 005,7f02ae8fa1,おいしい,おいしい,맛있는,delicious,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-005,N5 단어 005,60813fffd1,多い,おおい,많은,many,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-005,N5 단어 005,8fa5a63fc7,大きい,おおきい,큰,big,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-005,N5 단어 005,3a2de0afca,大きな,おおきな,큰,big,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-005,N5 단어 005,57ed89b240,大勢,おおぜい,많은 사람들,great number of people,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-005,N5 단어 005,2007947770,お母さん,おかあさん,(존경하는) 어머니,(honorable) mother,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-005,N5 단어 005,669019c625,お菓子,おかし,과자; 사탕,sweets; candy,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-006,N5 단어 006,3e015d0a8b,お金,おかね,돈,money,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-006,N5 단어 006,248a353e09,起きる,おきる,일어나다,to get up,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-006,N5 단어 006,96845304fd,置く,おく,놓다,to put,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-006,N5 단어 006,6c4661d672,奥さん,おくさん,(존경하는) 아내,(honorable) wife,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-006,N5 단어 006,f843b00173,お酒,おさけ,술; 쌀 와인,alcohol; rice wine,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-006,N5 단어 006,101d46a061,お皿,おさら,접시; 그릇,plate; dish,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-006,N5 단어 006,1b89f0f993,お祖父さん,おじいさん,할아버지; 남성 노인,grandfather; male senior citizen,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-006,N5 단어 006,f2fa049fdd,教える,おしえる,가르치다; 말하다,to teach; to tell,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-006,N5 단어 006,ce8facdf69,押す,おす,밀다; 무언가를 찍다,to push; to stamp something,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-006,N5 단어 006,a082687f7a,遅い,おそい,늦은; 느린,late; slow,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-006,N5 단어 006,edca336b1f,お茶,おちゃ,녹차,green tea,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-006,N5 단어 006,75a36b034c,お手洗い,おてあらい,화장실,bathroom,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-006,N5 단어 006,89807c7c22,お父さん,おとうさん,(존경하는) 아버지,(honorable) father,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-006,N5 단어 006,db32745bbc,弟,おとうと,남동생,younger brother,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-006,N5 단어 006,2fd7d45c8d,男,おとこ,남성,man,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-006,N5 단어 006,6f664d3ded,男の子,おとこのこ,소년,boy,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-006,N5 단어 006,f0f3826045,一昨日,おととい,그저께,day before yesterday,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-006,N5 단어 006,b75778f0ce,一昨年,おととし,재작년,year before last,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-006,N5 단어 006,6f5049e2d4,大人,おとな,성인,adult,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-006,N5 단어 006,3707072a6b,おなか,おなか,위,stomach,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-007,N5 단어 007,7c134ec812,同じ,おなじ,같은,same,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-007,N5 단어 007,c6f43a8cc3,お兄さん,おにいさん,(존경하는) 형,(honorable) older brother,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-007,N5 단어 007,af378a4c86,お姉さん,おねえさん,(존경하는) 언니,(honorable) older sister,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-007,N5 단어 007,4df6eda2a2,お願いします,おねがいします,제발,please,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-007,N5 단어 007,12d9487797,おばあさん,おばあさん,할머니; 여성 노인,grandmother; female senior-citizen,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-007,N5 단어 007,03d7b15720,伯母さん,おばさん,이모,aunt,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-007,N5 단어 007,36bff8d879,おはよう,おはよう,(약어) 좋은 아침입니다,(abbreviation) Good morning,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-007,N5 단어 007,f347485004,お風呂,おふろ,욕조,bath,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-007,N5 단어 007,7a073616e5,お弁当,おべんとう,도시락,boxed lunch,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-007,N5 단어 007,dad2d16220,覚える,おぼえる,기억하기 위해,to remember,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-007,N5 단어 007,ae5d1778d1,おまわりさん,おまわりさん,경찰관을 부르는 친근한 표현,friendly term for policeman,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-007,N5 단어 007,cdfb776826,重い,おもい,무거운,heavy,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-007,N5 단어 007,2568873ebd,おもしろい,おもしろい,흥미로운,interesting,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-007,N5 단어 007,3c5bb8f223,泳ぐ,およぐ,수영하다,to swim,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-007,N5 단어 007,ae00442122,降りる,おりる,내리다; 내려가다,to get off; to descend,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-007,N5 단어 007,d7960dc78d,終る,おわる,끝내기 위해,to finish,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-007,N5 단어 007,cdea017272,音楽,おんがく,음악,music,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-007,N5 단어 007,980a922ad3,女,おんな,여성,woman,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-007,N5 단어 007,e6afab391a,女の子,おんなのこ,소녀,girl,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-007,N5 단어 007,31a803c7f5,外国,がいこく,외국,foreign country,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-008,N5 단어 008,70f1678111,外国人,がいこくじん,외국인,foreigner,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-008,N5 단어 008,2120ff505c,会社,かいしゃ,회사,company,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-008,N5 단어 008,7cb27c411e,階段,かいだん,계단,stairs,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-008,N5 단어 008,a771d4f949,買い物,かいもの,쇼핑,shopping,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-008,N5 단어 008,bdb125e5c6,買う,かう,구매하다,to buy,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-008,N5 단어 008,8ea4b03d7f,返す,かえす,무언가를 반환하다,to return something,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-008,N5 단어 008,1d22f1d023,帰る,かえる,돌아가다,to go back,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-008,N5 단어 008,687082e55c,かかる,かかる,시간이나 돈을 들이다,to take time or money,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-008,N5 단어 008,e2d6576c76,かぎ,かぎ,열쇠,key,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-008,N5 단어 008,f7c7f35d9e,書く,かく,쓰다,to write,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-008,N5 단어 008,452102ad0a,学生,がくせい,학생,student,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-008,N5 단어 008,0ce2b98d3b,かける,かける,전화로 전화하다,to call by phone,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-008,N5 단어 008,6f54881e59,傘,かさ,우산,umbrella,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-008,N5 단어 008,1122cac409,貸す,かす,빌려주다,to lend,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-008,N5 단어 008,c1a28465a2,風,かぜ,바람,wind,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-008,N5 단어 008,c9b5da4d10,風邪,かぜ,감기,a cold,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-008,N5 단어 008,1c9db63bdc,家族,かぞく,가족,family,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-008,N5 단어 008,e34295f3e1,方,かた,사람; 하는 방식,person; way of doing,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-008,N5 단어 008,dd8ac16bd2,学校,がっこう,학교,school,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-008,N5 단어 008,613c41bd1d,カップ,カップ,컵,cup,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-009,N5 단어 009,66eeeb818b,家庭,かてい,가정,household,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-009,N5 단어 009,4092bfd9bb,角,かど,모퉁이,a corner,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-009,N5 단어 009,6e6a06687d,かばん,かばん,가방; 바구니,bag; basket,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-009,N5 단어 009,749f78c9d1,花瓶,かびん,꽃병,a vase,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-009,N5 단어 009,cd08f9cdc2,紙,かみ,종이,paper,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-009,N5 단어 009,9d648d38ad,カメラ,カメラ,카메라,camera,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-009,N5 단어 009,0dbf9ef8ca,火曜日,かようび,화요일,Tuesday,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-009,N5 단어 009,d2546ac97b,辛い,からい,매운,spicy,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-009,N5 단어 009,a556e5edce,体,からだ,몸,body,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-009,N5 단어 009,8cd440a181,借りる,かりる,빌리다,to borrow,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-009,N5 단어 009,a8b9eb425d,軽い,かるい,빛,light,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-009,N5 단어 009,9decc44f4e,カレー,カレー,카레,curry,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-009,N5 단어 009,6382448bd3,カレンダー,カレンダー,달력,calendar,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-009,N5 단어 009,bcf12e002d,川,かわ,강,river,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-009,N5 단어 009,bad3423a93,かわいい,かわいい,귀여운,cute,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-009,N5 단어 009,fdc787af58,漢字,かんじ,한자,Chinese character,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-009,N5 단어 009,22836046e2,木,き,나무; 목재,tree; wood,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-009,N5 단어 009,5d679a1af2,黄色,きいろ,노란색,yellow,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-009,N5 단어 009,0b36c8d6c6,黄色い,きいろい,노란색,yellow,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-009,N5 단어 009,6030b50276,消える,きえる,사라지다,to disappear,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-010,N5 단어 010,dc19a213cd,聞く,きく,듣다; 경청하다; 묻다,to hear; to listen to; to ask,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-010,N5 단어 010,fa320a51ea,北,きた,북쪽,north,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-010,N5 단어 010,4fb1c0d758,ギター,ギター,기타,guitar,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-010,N5 단어 010,7d1cf1538b,汚い,きたない,더러운,dirty,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-010,N5 단어 010,5620a00afc,喫茶店,きっさてん,커피 라운지,coffee lounge,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-010,N5 단어 010,e101e41f54,切手,きって,우표,postage stamp,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-010,N5 단어 010,4fee5be397,切符,きっぷ,표,ticket,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-010,N5 단어 010,a94a4be08f,昨日,きのう,어제,yesterday,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-010,N5 단어 010,8f81565ad7,九,きゅう,아홉,nine,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-010,N5 단어 010,b4faf372f3,牛肉,ぎゅうにく,소고기,beef,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-010,N5 단어 010,797ae8d562,牛乳,ぎゅうにゅう,우유,milk,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-010,N5 단어 010,0400a204bd,今日,きょう,오늘,today,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-010,N5 단어 010,85eb994887,教室,きょうしつ,교실,classroom,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-010,N5 단어 010,976c4f7174,兄弟,きょうだい,(겸손한) 형제자매들,(humble) siblings,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-010,N5 단어 010,ec4e1dfc87,去年,きょねん,작년,last year,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-010,N5 단어 010,d106dac023,嫌い,きらい,싫어하다,hate,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-010,N5 단어 010,cf23f5fba1,切る,きる,자르다,to cut,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-010,N5 단어 010,45fbcb8670,着る,きる,어깨부터 아래로 입다,to put on from the shoulders down,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-010,N5 단어 010,43cd9825f0,きれい,きれい,예쁜; 깨끗한,pretty; clean,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-010,N5 단어 010,36016e0c51,キロ,キロ,킬로미터; 킬로그램,kilometre; kilogram,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-011,N5 단어 011,a59efa3057,銀行,ぎんこう,은행,bank,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-011,N5 단어 011,b00c4af0a2,金曜日,きんようび,금요일,Friday,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-011,N5 단어 011,95ccaa32f5,薬,くすり,약,medicine,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-011,N5 단어 011,a36841ba49,ください,ください,제발,please,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-011,N5 단어 011,6b454b895e,果物,くだもの,과일,fruit,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-011,N5 단어 011,a123a147d7,口,くち,입; 열림,mouth; opening,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-011,N5 단어 011,9dd0572f05,靴,くつ,신발,shoes,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-011,N5 단어 011,20a1278928,靴下,くつした,양말,socks,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-011,N5 단어 011,b55dd305d1,国,くに,국가,country,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-011,N5 단어 011,eec0f93991,曇り,くもり,흐린 날씨,cloudy weather,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-011,N5 단어 011,c34fdb6092,曇る,くもる,흐려지다; 어두워지다,to become cloudy; to become dim,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-011,N5 단어 011,01a0587b49,暗い,くらい,음울한,gloomy,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-011,N5 단어 011,72c04ce067,クラス,クラス,수업,class,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-011,N5 단어 011,5538df2bce,グラム,グラム,그램,gram,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-011,N5 단어 011,2e2abd26ca,来る,くる,오다,to come,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-011,N5 단어 011,d6b85573f3,車,くるま,자동차; 차량,car; vehicle,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-011,N5 단어 011,3c32cfb08a,黒,くろ,검은색,black,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-011,N5 단어 011,5e5300cf62,黒い,くろい,검은색,black,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-011,N5 단어 011,e1634cb3e9,警官,けいかん,경관,policeman,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-011,N5 단어 011,9c1d724a61,今朝,けさ,오늘 아침,this morning,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-012,N5 단어 012,19f270c68f,消す,けす,지우다; 전원을 끄다,to erase; to turn off power,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-012,N5 단어 012,dd34250740,結構,けっこう,훌륭한; 충분한,splendid; enough,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-012,N5 단어 012,2eb252da72,結婚,けっこん,결혼,marriage,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-012,N5 단어 012,04e80a2ba1,月曜日,げつようび,월요일,Monday,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-012,N5 단어 012,2e1642b248,玄関,げんかん,현관 홀,entry hall,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-012,N5 단어 012,442c4aa1ca,元気,げんき,건강; 활력,health; vitality,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-012,N5 단어 012,47c1fdbe2f,五,ご,다섯,five,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-012,N5 단어 012,05cf590971,公園,こうえん,공원,park,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-012,N5 단어 012,8699b8bec2,交差点,こうさてん,교차로,intersection,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-012,N5 단어 012,1288e600be,紅茶,こうちゃ,홍차,black tea,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-012,N5 단어 012,402eb0d21f,交番,こうばん,경찰 박스,police box,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-012,N5 단어 012,d890e45616,声,こえ,목소리,voice,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-012,N5 단어 012,c552e79d34,コート,コート,코트; 테니스 코트,coat; tennis court,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-012,N5 단어 012,67126059f1,コーヒー,コーヒー,커피,coffee,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-012,N5 단어 012,05123676c2,ここ,ここ,여기,here,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-012,N5 단어 012,9a7c962266,午後,ごご,오후,afternoon,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-012,N5 단어 012,f114f6f499,九日,ここのか,9일; 9번째 날,nine days; ninth day,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-012,N5 단어 012,cff3c57405,九つ,ここのつ,아홉,nine,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-012,N5 단어 012,c92dbe626a,午前,ごぜん,아침,morning,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-012,N5 단어 012,d5d8c608aa,答える,こたえる,답변하기,to answer,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-013,N5 단어 013,a9191729e3,ごちそうさま,ごちそうさま,잔치,feast,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-013,N5 단어 013,e9e492c68a,こちら,こちら,이 사람 또는 이 방식,this person or way,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-013,N5 단어 013,be9b8bcb5e,こっち,こっち,이 사람 또는 이 방식,this person or way,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-013,N5 단어 013,2da7034c1e,コップ,コップ,유리잔,a glass,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-013,N5 단어 013,0020b9ee4e,今年,ことし,올해,this year,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-013,N5 단어 013,491cfa69be,言葉,ことば,단어; 언어,word; language,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-013,N5 단어 013,1f4bb6e503,子供,こども,어린이,child,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-013,N5 단어 013,bd3a2ad2ad,この,この,이것,this,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-013,N5 단어 013,a2694d259e,御飯,ごはん,밥; 식사,cooked rice; meal,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-013,N5 단어 013,f586d7d023,コピーする,コピーする,복사하다,to copy,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-013,N5 단어 013,61994485cb,困る,こまる,걱정하다,to be worried,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-013,N5 단어 013,4a11eb5fb4,ごめんなさい,ごめんなさい,"죄송합니다, 실례합니다",I beg your pardon; excuse me,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-013,N5 단어 013,6313cc9cb5,これ,これ,이것,this,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-013,N5 단어 013,3793173687,今月,こんげつ,이번 달,this month,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-013,N5 단어 013,7a27eadef1,今週,こんしゅう,이번 주,this week,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-013,N5 단어 013,e1978f90df,こんな,こんな,그런,such,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-013,N5 단어 013,0a65b39cf7,こんにちは,こんにちは,"안녕하세요; 좋은 하루 되세요 (낮 시간 인사말, 아이디)","hello; good day (daytime greeting, id)",자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-013,N5 단어 013,eb1c9a5df9,今晩,こんばん,오늘 저녁,this evening,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-013,N5 단어 013,6c0551dd8a,こんばんは,こんばんは,좋은 저녁이에요,good evening,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-013,N5 단어 013,7ba7ba2434,さあ,さあ,잘…,well…,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-014,N5 단어 014,a96e3a2b33,財布,さいふ,지갑,wallet,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-014,N5 단어 014,dbd7cd319c,魚,さかな,물고기,fish,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-014,N5 단어 014,20fcc4f54f,先,さき,미래; 이전,the future; previous,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-014,N5 단어 014,4c39babf5f,咲く,さく,꽃을 피우다,to bloom,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-014,N5 단어 014,c10cb3070d,作文,さくぶん,작문; 글쓰기,composition; writing,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-014,N5 단어 014,4e2aefb855,差す,さす,손을 뻗다; 우산을 펼치다,to stretch out hands; to raise an umbrella,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-014,N5 단어 014,a371cc6a54,雑誌,ざっし,잡지,magazine,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-014,N5 단어 014,8af5030b7a,砂糖,さとう,설탕,sugar,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-014,N5 단어 014,688bc67044,寒い,さむい,추운,cold,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-014,N5 단어 014,0a1f511640,さようなら,さようなら,안녕히 가세요,good-bye,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-014,N5 단어 014,45c705d5b2,再来年,さらいねん,내년 이후,year after next,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-014,N5 단어 014,5cb07674a3,三,さん,삼,three,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-014,N5 단어 014,e2695084c9,散歩,さんぽ,산책하다,to stroll,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-014,N5 단어 014,da4b805e0b,四,し,넷,four,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-014,N5 단어 014,b366a3d677,塩,しお,소금,salt,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-014,N5 단어 014,2c41aedcba,しかし,しかし,하지만,however,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-014,N5 단어 014,d5c916ca85,時間,じかん,시간,time,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-014,N5 단어 014,573bc15b1d,仕事,しごと,직업,job,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-014,N5 단어 014,8ec35978bd,辞書,じしょ,사전,dictionary,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-014,N5 단어 014,178469ba7a,静か,しずか,조용한,quiet,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-015,N5 단어 015,dd36cae3a9,下,した,아래에,below,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-015,N5 단어 015,988db98632,七,しち,일곱,seven,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-015,N5 단어 015,2c5c99977c,質問,しつもん,질문,question,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-015,N5 단어 015,ebf194a316,自転車,じてんしゃ,자전거,bicycle,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-015,N5 단어 015,78fd1a0e8a,自動車,じどうしゃ,자동차,automobile,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-015,N5 단어 015,ec6fd2f845,死ぬ,しぬ,죽다,to die,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-015,N5 단어 015,6156bfb418,字引,じびき,사전,dictionary,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-015,N5 단어 015,995a632b12,自分,じぶん,자신,oneself,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-015,N5 단어 015,01420cdf0f,閉まる,しまる,닫히다; 닫혀 있다,to close; to be closed,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-015,N5 단어 015,8e6c15bef9,締める,しめる,묶다,to tie,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-015,N5 단어 015,95827b08e3,閉める,しめる,무언가를 닫다,to close something,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-015,N5 단어 015,091c8c0e07,じゃ,じゃ,그럼…,well then…,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-015,N5 단어 015,5101640e7e,写真,しゃしん,사진,photograph,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-015,N5 단어 015,f71424e3ff,シャツ,シャツ,셔츠,shirt,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-015,N5 단어 015,d9c88143a2,シャワー,シャワー,샤워,shower,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-015,N5 단어 015,db9f5d4422,十,じゅう,열,ten,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-015,N5 단어 015,5bae559507,授業,じゅぎょう,수업; 수업 활동,lesson; class work,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-015,N5 단어 015,4daa103d7d,宿題,しゅくだい,숙제,homework,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-015,N5 단어 015,1763fc412a,上手,じょうず,잘 만들어진,skillful,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-015,N5 단어 015,50525927ee,丈夫,じょうぶ,튼튼한; 내구성이 좋은,strong; durable,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-016,N5 단어 016,9476d7966d,しょうゆ,しょうゆ,간장,soy sauce,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-016,N5 단어 016,dcc87a37fb,食堂,しょくどう,식당,dining hall,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-016,N5 단어 016,1fcb2fece8,知る,しる,알다,to know,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-016,N5 단어 016,98eace7008,白,しろ,하얀색,white,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-016,N5 단어 016,8997f64f52,白い,しろい,하얀색,white,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-016,N5 단어 016,b8317395af,新聞,しんぶん,신문,newspaper,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-016,N5 단어 016,44d9d70862,水曜日,すいようび,수요일,Wednesday,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-016,N5 단어 016,e82727193e,吸う,すう,담배를 피우다; 빨다,to smoke; to suck,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-016,N5 단어 016,f0f5f6b29b,スカート,スカート,치마,skirt,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-016,N5 단어 016,20cbecd474,好き,すき,바람직한,likeable,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-016,N5 단어 016,ce75057c4c,すぐ,すぐ,즉시; 곧; 쉽게; 바로 (가까운); 정직한; 올바른,immediately; soon; easily; right (near); honest; upright,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-016,N5 단어 016,0d38b01113,少ない,すくない,몇 개,a few,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-016,N5 단어 016,a8722990f1,すぐに,すぐに,곧,instantly,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-016,N5 단어 016,c373555102,少し,すこし,약간의,few,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-016,N5 단어 016,67f5908e10,涼しい,すずしい,상쾌함,refreshing,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-016,N5 단어 016,8149d77689,ストーブ,ストーブ,히터,heater,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-016,N5 단어 016,938a169f6c,スプーン,スプーン,숟가락,spoon,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-016,N5 단어 016,0a33903ccf,スポーツ,スポーツ,스포츠,sport,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-016,N5 단어 016,10fe0704ca,ズボン,ズボン,바지,trousers,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-016,N5 단어 016,feae64eac4,すみません,すみません,죄송합니다. 실례합니다.,sorry; excuse me,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-017,N5 단어 017,d671097071,住む,すむ,살다,to live in,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-017,N5 단어 017,508131fe89,スリッパ,スリッパ,슬리퍼,slippers,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-017,N5 단어 017,c4cdc162d7,する,する,하다,to do,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-017,N5 단어 017,c9a15e8777,座る,すわる,앉다,to sit,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-017,N5 단어 017,898b067287,背,せ,키; 신장,height; stature,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-017,N5 단어 017,af7459ef1e,生徒,せいと,학생,pupil,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-017,N5 단어 017,4b0b49a42d,セーター,セーター,스웨터; 점퍼,sweater; jumper,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-017,N5 단어 017,b48d0c99d4,せっけん,せっけん,경제,economy,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-017,N5 단어 017,9d432ac114,背広,せびろ,비즈니스 정장,business suit,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-017,N5 단어 017,d12ee2e932,狭い,せまい,좁은,narrow,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-017,N5 단어 017,434707d737,ゼロ,ゼロ,영,zero,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-017,N5 단어 017,1729d60f09,千,せん,천,thousand,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-017,N5 단어 017,0eaa93c144,先月,せんげつ,전달,last month,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-017,N5 단어 017,b8c4cd80db,先週,せんしゅう,지난주,last week,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-017,N5 단어 017,814bdc2cec,先生,せんせい,선생님; 의사,teacher; doctor,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-017,N5 단어 017,4d0ca7b320,洗濯,せんたく,세탁,washing,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-017,N5 단어 017,acba6e07ba,全部,ぜんぶ,모두,all,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-017,N5 단어 017,501df34d31,掃除,そうじ,청소하다; 쓸다,to clean; to sweep,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-017,N5 단어 017,e75777d218,そうして,そうして,그리고,and,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-017,N5 단어 017,5ef867ff81,そこ,そこ,그곳,that place,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-018,N5 단어 018,105df79571,そちら,そちら,저쪽,over there,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-018,N5 단어 018,80981fa136,そっち,そっち,저쪽,over there,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-018,N5 단어 018,68ad5f4363,外,そと,밖의,outside,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-018,N5 단어 018,cb1c02a574,その,その,저것,that,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-018,N5 단어 018,38c854e97f,そば,そば,가까이; 옆에,near; beside,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-018,N5 단어 018,6ff51bace3,空,そら,하늘,sky,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-018,N5 단어 018,79d922e359,それ,それ,저것,that,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-018,N5 단어 018,799b7cabe0,それから,それから,이후,after that,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-018,N5 단어 018,46c1721526,それでは,それでは,그러한 상황에서,in that situation,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-018,N5 단어 018,5b303264b9,大学,だいがく,대학교,university,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-018,N5 단어 018,992fc07339,大使館,たいしかん,대사관,embassy,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-018,N5 단어 018,2f62b9db5e,大丈夫,だいじょうぶ,괜찮은,all right,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-018,N5 단어 018,9ee7cd3382,大好き,だいすき,매우 호감이 가는,to be very likeable,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-018,N5 단어 018,b3a8593e53,大切,たいせつ,중요한,important,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-018,N5 단어 018,1c0b0f77b6,台所,だいどころ,주방,kitchen,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-018,N5 단어 018,e04372c490,たいへん,たいへん,매우,very,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-018,N5 단어 018,c74892f565,高い,たかい,키가 큰; 비싼,tall; expensive,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-018,N5 단어 018,a7c72d9bb1,たくさん,たくさん,많은,many,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-018,N5 단어 018,2d5a93eb11,タクシー,タクシー,택시,taxi,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-018,N5 단어 018,6298cfc5d6,出す,だす,내놓다,to put out,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-019,N5 단어 019,932afda20b,立つ,たつ,서다,to stand,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-019,N5 단어 019,e7ca1b2fd5,たて,たて,길이; 높이,length; height,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-019,N5 단어 019,372b08211e,建物,たてもの,건물,building,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-019,N5 단어 019,9b2d455dfe,楽しい,たのしい,재미있는,enjoyable,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-019,N5 단어 019,7e9d38afeb,頼む,たのむ,묻다,to ask,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-019,N5 단어 019,80beed00bf,たばこ,たばこ,담배; 담배,tobacco; cigarettes,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-019,N5 단어 019,d9eba03b7b,たぶん,たぶん,아마,probably,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-019,N5 단어 019,5c89b3094a,食べ物,たべもの,음식,food,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-019,N5 단어 019,86f67e2dc3,食べる,たべる,먹다,to eat,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-019,N5 단어 019,4d66739694,卵,たまご,계란,egg,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-019,N5 단어 019,3d2ca62c5f,誰,だれ,WHO,who,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-019,N5 단어 019,2e610178ae,誕生日,たんじょうび,생일,birthday,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-019,N5 단어 019,55dbb815ba,だんだん,だんだん,서서히,gradually,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-019,N5 단어 019,d4779ac36c,小さい,ちいさい,작은,little,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-019,N5 단어 019,38a8411ec3,小さな,ちいさな,작은,little,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-019,N5 단어 019,a21ba677f2,近い,ちかい,가까운,near,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-019,N5 단어 019,35e9881c22,違う,ちがう,다르다,to differ,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-019,N5 단어 019,6d7293f7cf,近く,ちかく,가까운,near,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-019,N5 단어 019,3134199c25,地下鉄,ちかてつ,지하철,underground train,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-019,N5 단어 019,ffa3dda331,地図,ちず,지도,map,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-020,N5 단어 020,f9b377e253,茶色,ちゃいろ,갈색,brown,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-020,N5 단어 020,3d12036023,ちゃわん,ちゃわん,밥그릇,rice bowl,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-020,N5 단어 020,9b08365493,ちょうど,ちょうど,정확히,exactly,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-020,N5 단어 020,602fdffbf2,ちょっと,ちょっと,약간,somewhat,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-020,N5 단어 020,c88e0ba104,使う,つかう,사용하기 위해,to use,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-020,N5 단어 020,156f17113e,疲れる,つかれる,피곤해지다,to get tired,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-020,N5 단어 020,d00ef0a9d5,次,つぎ,다음,next,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-020,N5 단어 020,9d4a68ce12,着く,つく,도착하기 위해,to arrive at,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-020,N5 단어 020,672321bac9,机,つくえ,책상,desk,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-020,N5 단어 020,6e922a750e,作る,つくる,만들다,to make,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-020,N5 단어 020,edc22b8d98,つける,つける,켜다,to turn on,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-020,N5 단어 020,ba6c46f68c,勤める,つとめる,누군가를 위해 일하다,to work for someone,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-020,N5 단어 020,3a94b5e981,つまらない,つまらない,지루한,boring,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-020,N5 단어 020,a23d308800,冷たい,つめたい,만져보면 차갑다,cold to the touch,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-020,N5 단어 020,d99745fbb6,強い,つよい,강한,powerful,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-020,N5 단어 020,5b9670420a,手,て,손,hand,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-020,N5 단어 020,0cf2b43e9c,テープ,テープ,줄자,tape,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-020,N5 단어 020,ff161262dd,テーブル,テーブル,테이블,table,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-020,N5 단어 020,dc0ae29019,テープレコーダー,テープレコーダー,테이프 레코더,tape recorder,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-020,N5 단어 020,375cfbefdd,出かける,でかける,나가다,to go out,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-021,N5 단어 021,218ea67735,手紙,てがみ,편지,letter,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-021,N5 단어 021,69d0d632fa,できる,できる,할 수 있도록,to be able to,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-021,N5 단어 021,151fd72164,出口,でぐち,출구,exit,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-021,N5 단어 021,90e9410bff,テスト,テスト,시험,test,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-021,N5 단어 021,d33540fe8e,では,では,그렇게 해서...,with that...,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-021,N5 단어 021,0144505953,デパート,デパート,백화점,department store,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-021,N5 단어 021,3f71089c32,でも,でも,하지만,but,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-021,N5 단어 021,5ef4f7dde9,出る,でる,나타나다; 떠나다,to appear; to leave,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-021,N5 단어 021,c7e14d8454,テレビ,テレビ,텔레비전,television,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-021,N5 단어 021,679e34031e,天気,てんき,날씨,weather,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-021,N5 단어 021,a7c36fdb70,電気,でんき,전기; 전등,electricity; electric light,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-021,N5 단어 021,62b5c13164,電車,でんしゃ,전기 열차,electric train,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-021,N5 단어 021,3c039918ba,電話,でんわ,전화,telephone,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-021,N5 단어 021,6f4691297f,戸,と,일본식 문,Japanese style door,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-021,N5 단어 021,677d3c5fac,ドア,ドア,서양식 문,Western style door,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-021,N5 단어 021,e1e7c2d290,トイレ,トイレ,화장실,toilet,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-021,N5 단어 021,d0fb41651f,どう,どう,어떻게; 어떤 방식으로,how; in what way,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-021,N5 단어 021,a891b73f8b,どうして,どうして,어떤 이유로,for what reason,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-021,N5 단어 021,a71cbc3ce4,どうぞ,どうぞ,제발,please,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-021,N5 단어 021,93b9cec3d4,どうぞよろしく,どうぞよろしく,만나서 반갑습니다,pleased to meet you,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-022,N5 단어 022,03d03cf25d,動物,どうぶつ,동물,animal,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-022,N5 단어 022,d2cb14f88a,どうも,どうも,감사해요,thanks,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-022,N5 단어 022,f840779b9e,遠い,とおい,멀리,far,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-022,N5 단어 022,e8579084ba,十日,とおか,열흘; 열 번째 날,ten days; the tenth day,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-022,N5 단어 022,978a2cefa5,時々,ときどき,때때로,sometimes,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-022,N5 단어 022,e3ad76810f,時計,とけい,시계; 시계,watch; clock,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-022,N5 단어 022,ad884a3b70,どこ,どこ,어디,where,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-022,N5 단어 022,ca332ac7b4,所,ところ,장소,place,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-022,N5 단어 022,358fc382cb,年,とし,년도,year,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-022,N5 단어 022,de5a452667,図書館,としょかん,도서관,library,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-022,N5 단어 022,5480c153dc,どちら,どちら,둘 중 어느 것,which of two,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-022,N5 단어 022,e8a4843059,どっち,どっち,어느,which,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-022,N5 단어 022,a3679ee665,とても,とても,매우,very,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-022,N5 단어 022,10fb2e55c0,どなた,どなた,WHO,who,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-022,N5 단어 022,c597c353cb,隣,となり,바로 옆집,next door to,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-022,N5 단어 022,cd4b8c6381,どの,どの,어느,which,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-022,N5 단어 022,397b682fa7,飛ぶ,とぶ,날다; 뛰다,to fly; to hop,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-022,N5 단어 022,9d1aa046d6,止まる,とまる,멈추다,to come to a halt,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-022,N5 단어 022,72c525f37a,友達,ともだち,친구,friend,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-022,N5 단어 022,86e7fb81c6,土曜日,どようび,토요일,Saturday,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-023,N5 단어 023,7e4fccba7f,鳥,とり,새,bird,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-023,N5 단어 023,3669c65744,鶏肉,とりにく,닭고기,chicken meat,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-023,N5 단어 023,4cc27797ba,撮る,とる,사진을 찍거나 영상을 녹화하다,to take a photo or record a film,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-023,N5 단어 023,1313ed47fb,取る,とる,무언가를 가져가다,to take something,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-023,N5 단어 023,b21477c7db,どれ,どれ,(세 개 이상 중에서) 어느 것,which (of three or more),자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-023,N5 단어 023,3ae88c29c4,ナイフ,ナイフ,칼,knife,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-023,N5 단어 023,5d32281da9,中,なか,가운데,middle,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-023,N5 단어 023,fcea29f192,長い,ながい,긴,long,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-023,N5 단어 023,07a4101167,鳴く,なく,(동물이) 소리를 내다; 울다; 지저귀다; (새가) 노래하다,to make a sound (of an animal); to cry; to chirp; to sing (of birds),자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-023,N5 단어 023,04015c3825,無くす,なくす,무언가를 잃다,to lose something,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-023,N5 단어 023,ef9536b1ee,なぜ,なぜ,왜,why,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-023,N5 단어 023,641ddbf693,夏,なつ,여름,summer,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-023,N5 단어 023,e09167a3d4,夏休み,なつやすみ,여름휴가,summer holiday,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-023,N5 단어 023,cf58476318,など,など,등등,et cetera,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-023,N5 단어 023,e65bf7ad23,七つ,ななつ,일곱,seven,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-023,N5 단어 023,75ed3c3b2b,七日,なのか,칠일; 일곱째 날,seven days; the seventh day,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-023,N5 단어 023,a812b1ac7f,名前,なまえ,이름,name,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-023,N5 단어 023,a95b0a87ad,習う,ならう,배우다,to learn,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-023,N5 단어 023,1227b20370,並ぶ,ならぶ,줄을 서다; 줄을 맞춰 서다,to line up; to stand in a line,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-023,N5 단어 023,1635de1a94,並べる,ならべる,줄을 서다; 준비하다,to line up; to set up,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-024,N5 단어 024,e05de4981d,なる,なる,되다,to become,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-024,N5 단어 024,558866ef86,何,なん,무엇,what,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-024,N5 단어 024,34108268e1,二,に,둘,two,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-024,N5 단어 024,c17f97fafc,賑やか,にぎやか,분주한; 바쁜,bustling; busy,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-024,N5 단어 024,efac1fc502,肉,にく,고기,meat,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-024,N5 단어 024,436f1c3c65,西,にし,서쪽,west,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-024,N5 단어 024,d8c3a3f0d0,日曜日,にちようび,일요일,Sunday,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-024,N5 단어 024,2e6c7d2d9d,荷物,にもつ,수화물,luggage,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-024,N5 단어 024,b824bec2c5,ニュース,ニュース,소식,news,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-024,N5 단어 024,9ef6c9d703,庭,にわ,정원,garden,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-024,N5 단어 024,3af80b5b2a,脱ぐ,ぬぐ,옷을 벗다,to take off clothes,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-024,N5 단어 024,2f01adebd7,温い,ぬるい,미지근한,luke warm,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-024,N5 단어 024,18046e46a1,ネクタイ,ネクタイ,넥타이; 넥타이,tie; necktie,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-024,N5 단어 024,cbbfc8cad6,猫,ねこ,고양이,cat,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-024,N5 단어 024,0c6e923ef9,寝る,ねる,잠자리에 들다; 잠들다,to go to bed; to sleep,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-024,N5 단어 024,278c1e0e04,ノート,ノート,공책; 연습장,notebook; exercise book,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-024,N5 단어 024,7817fc9d64,登る,のぼる,오르다,to climb,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-024,N5 단어 024,5e8fc8669c,飲み物,のみもの,음료,a drink,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-024,N5 단어 024,e0bcec9bd9,飲む,のむ,마시다,to drink,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-024,N5 단어 024,822c5e11a6,乗る,のる,타다; 타다,to get on; to ride,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-025,N5 단어 025,390ac6443d,歯,は,이빨,tooth,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-025,N5 단어 025,28111455cd,パーティー,パーティー,파티,party,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-025,N5 단어 025,542f39c93d,はい,はい,예,yes,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-025,N5 단어 025,5cc1dad1e8,灰皿,はいざら,재떨이,ashtray,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-025,N5 단어 025,c428d02d43,入る,はいる,들어가다; 담다,to enter; to contain,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-025,N5 단어 025,645e1e3b4d,葉書,はがき,엽서,postcard,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-025,N5 단어 025,4729cc56f4,はく,はく,입다; 바지를 입다,to wear; to put on trousers,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-025,N5 단어 025,658b912df8,箱,はこ,상자,box,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-025,N5 단어 025,7ce7f7d305,はし,はし,젓가락,chopsticks,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-025,N5 단어 025,8f663254b0,橋,はし,다리,bridge,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-025,N5 단어 025,8fea1e3f3c,始まる,はじまる,시작하다,to begin,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-025,N5 단어 025,e5b36d7b24,初め,はじめ,시작,beginning,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-025,N5 단어 025,3f18999e09,初めて,はじめて,처음으로,for the first time,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-025,N5 단어 025,a2c1e54c17,はじめまして,はじめまして,안녕하세요? 만나서 반갑습니다.,How do you do?; I am glad to meet you,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-025,N5 단어 025,244e138920,走る,はしる,실행하다,to run,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-025,N5 단어 025,bd7df6c7a2,バス,バス,버스,bus,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-025,N5 단어 025,4385616659,バター,バター,버터,butter,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-025,N5 단어 025,c65a346458,二十歳,はたち,20세; 20년차,20 years old; 20th year,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-025,N5 단어 025,9ea671262d,働く,はたらく,일하기 위해,to work,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-025,N5 단어 025,6eeff514e0,八,はち,여덟,eight,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-026,N5 단어 026,153de06669,二十日,はつか,20일; 20번째,twenty days; twentieth,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-026,N5 단어 026,6485c3c2a7,花,はな,꽃,flower,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-026,N5 단어 026,8b5843f7fb,鼻,はな,코,nose,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-026,N5 단어 026,1ed0362cc3,話,はなし,이야기; 이야기,talk; story,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-026,N5 단어 026,9d5bde24ec,話す,はなす,말하다,to speak,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-026,N5 단어 026,4db42e0181,早い,はやい,일찍,early,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-026,N5 단어 026,406d15f6e9,速い,はやい,빠른,quick,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-026,N5 단어 026,f16244c585,春,はる,봄,spring,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-026,N5 단어 026,f47c4aee42,貼る,はる,붙다,to stick,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-026,N5 단어 026,9edf8548bb,晴れ,はれ,맑은 날씨,clear weather,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-026,N5 단어 026,3be88666ba,晴れる,はれる,햇볕이 잘 들다,to be sunny,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-026,N5 단어 026,9cd7c780c3,半,はん,반,half,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-026,N5 단어 026,532c73de5d,晩,ばん,저녁,evening,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-026,N5 단어 026,098e9e7e67,パン,パン,빵,bread,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-026,N5 단어 026,ee3206bb3f,ハンカチ,ハンカチ,손수건,handkerchief,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-026,N5 단어 026,67775e3b25,番号,ばんごう,숫자,number,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-026,N5 단어 026,246b5ae84d,晩御飯,ばんごはん,저녁 식사,evening meal,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-026,N5 단어 026,a1cda8cb11,半分,はんぶん,30초,half minute,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-026,N5 단어 026,0a38c65004,東,ひがし,동쪽,east,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-026,N5 단어 026,5b84039234,引く,ひく,당기다,to pull,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-027,N5 단어 027,23911a0718,弾く,ひく,현악기를 연주하다. 피아노도 포함된다.,to play an instrument with strings; including piano,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-027,N5 단어 027,e25cf6ed2f,低い,ひくい,짧은; 낮은,short; low,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-027,N5 단어 027,a81612169c,飛行機,ひこうき,비행기,aeroplane,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-027,N5 단어 027,ec5bd86b72,左,ひだり,왼쪽,left hand side,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-027,N5 단어 027,d91ee7a9ed,人,ひと,사람,person,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-027,N5 단어 027,537f8af3d6,一つ,ひとつ,하나,one,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-027,N5 단어 027,3554fb81b8,一月,ひとつき,한 달,one month,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-027,N5 단어 027,3fb1b70809,一人,ひとり,한 사람,one person,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-027,N5 단어 027,7a9ce8e2df,暇,ひま,자유 시간,free time,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-027,N5 단어 027,13696bc9b5,百,ひゃく,백,hundred,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-027,N5 단어 027,734d275fd9,病院,びょういん,병원,hospital,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-027,N5 단어 027,c551bc3f7c,病気,びょうき,병,illness,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-027,N5 단어 027,5d7a8d133b,昼,ひる,정오; 낮,noon; daytime,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-027,N5 단어 027,0b492c3209,昼御飯,ひるごはん,점심 식사,midday meal,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-027,N5 단어 027,230d5c7343,広い,ひろい,넓은; 넓은,spacious; wide,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-027,N5 단어 027,ef9babb012,フィルム,フィルム,필름 롤,roll of film,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-027,N5 단어 027,d156402900,封筒,ふうとう,봉투,envelope,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-027,N5 단어 027,55c1439239,プール,プール,수영장,swimming pool,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-027,N5 단어 027,71e2aefb9d,フォーク,フォーク,포크,fork,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-027,N5 단어 027,15f4136421,吹く,ふく,불다,to blow,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-028,N5 단어 028,68571540e1,服,ふく,옷,clothes,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-028,N5 단어 028,0c1dbd4838,二つ,ふたつ,둘,two,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-028,N5 단어 028,c518fb9116,豚肉,ぶたにく,돼지고기,pork,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-028,N5 단어 028,94c2076821,二人,ふたり,두 사람,two people,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-028,N5 단어 028,750786cc55,二日,ふつか,이틀; 해당 월의 둘째 날,two days; second day of the month,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-028,N5 단어 028,4162724f9a,太い,ふとい,지방,fat,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-028,N5 단어 028,eb9acca7ba,冬,ふゆ,겨울,winter,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-028,N5 단어 028,5791e248f1,降る,ふる,(비나 눈이) 내리다,to fall (e.g. rain or snow),자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-028,N5 단어 028,aa60dd4a11,古い,ふるい,오래된 (사람에게는 사용되지 않음),old (not used for people),자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-028,N5 단어 028,34784ed6ca,ふろ,ふろ,욕조,bath,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-028,N5 단어 028,79ddbb2b98,文章,ぶんしょう,문장; 텍스트,sentence; text,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-028,N5 단어 028,f8fc73bd75,ページ,ページ,페이지,page,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-028,N5 단어 028,619dae70e9,下手,へた,미숙한,unskillful,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-028,N5 단어 028,91cf4ea2fd,ベッド,ベッド,침대,bed,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-028,N5 단어 028,db38ebd955,ペット,ペット,애완 동물,pet,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-028,N5 단어 028,e78074927c,部屋,へや,방,room,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-028,N5 단어 028,71c372d7b2,辺,へん,영역,area,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-028,N5 단어 028,dd1183b005,ペン,ペン,펜,pen,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-028,N5 단어 028,65783b95dd,勉強,べんきょう,공부하다,to study,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-028,N5 단어 028,84887dde48,便利,べんり,유용한; 편리한,useful; convenient,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-029,N5 단어 029,cfc75623ae,帽子,ぼうし,모자,hat,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-029,N5 단어 029,785a997045,ボールペン,ボールペン,볼펜,ball-point pen,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-029,N5 단어 029,f71c69492e,ほか,ほか,기타; 나머지,other; the rest,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-029,N5 단어 029,ab9f2792c4,ポケット,ポケット,포켓,pocket,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-029,N5 단어 029,418493d941,欲しい,ほしい,원하다,want,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-029,N5 단어 029,2dbe65ee1d,ポスト,ポスト,우편,post,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-029,N5 단어 029,785adc4f9d,細い,ほそい,얇은,thin,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-029,N5 단어 029,04ab635f4b,ボタン,ボタン,단추,button,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-029,N5 단어 029,23ec5a0b3d,ホテル,ホテル,호텔,hotel,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-029,N5 단어 029,0e8f798dbf,本,ほん,책,book,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-029,N5 단어 029,3839786bac,本棚,ほんだな,책장,bookshelves,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-029,N5 단어 029,849baaf2c3,ほんとう,ほんとう,진실,truth,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-029,N5 단어 029,a59ba12bc5,毎朝,まいあさ,매일 아침,every morning,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-029,N5 단어 029,771fbe6b4d,毎月,まいげつ,매달,every month,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-029,N5 단어 029,fd1c93832f,毎週,まいしゅう,매주,every week,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-029,N5 단어 029,039a696225,毎日,まいにち,매일,every day,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-029,N5 단어 029,83700909d4,毎年,まいねん,매년,every year,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-029,N5 단어 029,2584943533,毎晩,まいばん,매일 밤,every night,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-029,N5 단어 029,319e218950,前,まえ,~ 전에,before,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-029,N5 단어 029,ae3e0a705f,曲る,まがる,돌리다; 구부리다,to turn; to bend,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-030,N5 단어 030,b19034ded1,まずい,まずい,불쾌한,unpleasant,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-030,N5 단어 030,162e00c6ef,また,また,다시; 그리고,again; and,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-030,N5 단어 030,6a7163f5f7,まだ,まだ,아직; 여전히,yet; still,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-030,N5 단어 030,4d76d06d84,町,まち,마을; 도시,town; city,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-030,N5 단어 030,6a39701228,待つ,まつ,기다리다,to wait,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-030,N5 단어 030,ede9ab2f7f,まっすぐ,まっすぐ,정면; 바로 앞,straight ahead; direct,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-030,N5 단어 030,27f9d40392,マッチ,マッチ,성냥,match,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-030,N5 단어 030,7734194821,窓,まど,창문,window,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-030,N5 단어 030,ab36109960,丸い,まるい,둥근; 원형,round; circular,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-030,N5 단어 030,a0ff0f67c8,万,まん,만,ten thousand,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-030,N5 단어 030,6318b0423a,万年筆,まんねんひつ,만년필,fountain pen,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-030,N5 단어 030,7309a238e8,磨く,みがく,이를 닦다; 닦다,to brush teeth; to polish,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-030,N5 단어 030,f1046f3190,右,みぎ,오른쪽,right side,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-030,N5 단어 030,8568eded6e,短い,みじかい,짧은,short,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-030,N5 단어 030,69a792520f,水,みず,물,water,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-030,N5 단어 030,0c8a588e53,店,みせ,가게,shop,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-030,N5 단어 030,db35a99e28,見せる,みせる,보여주기 위해,to show,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-030,N5 단어 030,dc29195f18,道,みち,거리,street,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-030,N5 단어 030,1713d0bbe8,三日,みっか,사흘; 그 달의 셋째 날,three days; third day of the month,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-030,N5 단어 030,b36b221d33,三つ,みっつ,삼,three,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-031,N5 단어 031,85e4ba2f28,緑,みどり,녹색,green,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-031,N5 단어 031,d2b9c47656,皆さん,みなさん,모든 사람,everyone,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-031,N5 단어 031,84e465b526,南,みなみ,남쪽,south,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-031,N5 단어 031,e8cdf8b85a,耳,みみ,귀,ear,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-031,N5 단어 031,85b37b6884,見る,みる,보다; 지켜보다,to see; to watch,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-031,N5 단어 031,2676514561,みんな,みんな,모든 사람,everyone,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-031,N5 단어 031,bf44ddad08,六日,むいか,6일; 그 달의 6일,six days; sixth day of the month,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-031,N5 단어 031,8e862f05f0,向こう,むこう,저쪽,over there,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-031,N5 단어 031,0a3894175f,難しい,むずかしい,어려운,difficult,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-031,N5 단어 031,7ecc2c4bfc,六つ,むっつ,육,six,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-031,N5 단어 031,5028971b39,村,むら,마을,village,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-031,N5 단어 031,ae534d4ca8,目,め,눈,eye,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-031,N5 단어 031,eb5450490b,メートル,メートル,미터,metre,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-031,N5 단어 031,72eb77e07a,眼鏡,めがね,안경,glasses,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-031,N5 단어 031,c5b7ad76fd,もう,もう,이미,already,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-031,N5 단어 031,3ae16ad93a,もう一度,もういちど,다시,again,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-031,N5 단어 031,d10bb92f3e,木曜日,もくようび,목요일,Thursday,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-031,N5 단어 031,16fda19d79,持つ,もつ,잡다,to hold,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-031,N5 단어 031,a8f5f4c59e,もっと,もっと,더,more,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-031,N5 단어 031,782272bfda,物,もの,물건,thing,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-032,N5 단어 032,5b92758003,門,もん,문,gate,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-032,N5 단어 032,4f0f6b6ae7,問題,もんだい,문제,problem,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-032,N5 단어 032,8d29f60b23,八百屋,やおや,청과물 상인,greengrocer,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-032,N5 단어 032,936289666e,野菜,やさい,채소,vegetable,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-032,N5 단어 032,ead1ae2736,易しい,やさしい,쉬운; 간단한,easy; simple,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-032,N5 단어 032,33b86212ca,安い,やすい,값이 싼,cheap,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-032,N5 단어 032,d4a1d27d3b,休み,やすみ,휴식; 휴일,rest; holiday,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-032,N5 단어 032,3e3efcb45f,休む,やすむ,쉬다,to rest,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-032,N5 단어 032,62c4216674,八つ,やっつ,여덟,eight,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-032,N5 단어 032,e8a5cbdf0a,山,やま,산,mountain,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-032,N5 단어 032,f81d503d6f,やる,やる,하다,to do,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-032,N5 단어 032,285b008622,夕方,ゆうがた,저녁,evening,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-032,N5 단어 032,ae2b9f6d7e,夕飯,ゆうはん,저녁,dinner,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-032,N5 단어 032,8b86921749,郵便局,ゆうびんきょく,우체국,post office,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-032,N5 단어 032,39fff8fc4b,昨夜,ゆうべ,어젯밤,last night,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-032,N5 단어 032,50b217ed0b,有名,ゆうめい,유명한,famous,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-032,N5 단어 032,78c044b951,雪,ゆき,눈,snow,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-032,N5 단어 032,d980cb1531,ゆっくりと,ゆっくりと,느리게,slowly,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-032,N5 단어 032,4f8e83945d,八日,ようか,8일; 그 달의 8일,eight days; eighth day of the month,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-032,N5 단어 032,1907b6fc38,洋服,ようふく,서양식 옷,western-style clothes,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-033,N5 단어 033,19db29fbbb,よく,よく,자주; 잘,often; well,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-033,N5 단어 033,4cb7c969c4,横,よこ,옆에; 측면; 너비,beside; side; width,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-033,N5 단어 033,222ae96df7,四日,よっか,4일; 그 달의 넷째 날,four days; fouth day of the month,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-033,N5 단어 033,1000ee441a,四つ,よっつ,넷,four,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-033,N5 단어 033,76f05a0739,呼ぶ,よぶ,부르다; 초대하다,to call out; to invite,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-033,N5 단어 033,eb7e675902,読む,よむ,읽기,to read,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-033,N5 단어 033,6c214111ea,より,より,~보다; (비교용으로 사용됨),than; (used for comparison),자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-033,N5 단어 033,1a0aec6793,夜,よる,저녁; 밤,evening; night,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-033,N5 단어 033,83da293775,弱い,よわい,약한,weak,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-033,N5 단어 033,61fd50f12e,来月,らいげつ,다음 달,next month,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-033,N5 단어 033,7a4ef637be,来週,らいしゅう,다음 주,next week,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-033,N5 단어 033,c68f2caa2f,来年,らいねん,내년,next year,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-033,N5 단어 033,670f2dd0dc,ラジオ,ラジオ,라디오,radio,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-033,N5 단어 033,924572e50c,ラジカセ,ラジカセ,라디오 카세트 플레이어,radio cassette player,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-033,N5 단어 033,a45af4ed89,りっぱ,りっぱ,화려한,splendid,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-033,N5 단어 033,dc7d39c7af,留学生,りゅうがくせい,해외 유학생,overseas student,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-033,N5 단어 033,0139a208fe,両親,りょうしん,부모님 모두,both parents,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-033,N5 단어 033,ee85169acd,料理,りょうり,요리,cuisine,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-033,N5 단어 033,2ba96bef9a,旅行,りょこう,여행하다,travel,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-033,N5 단어 033,92b3bb727e,零,れい,영,zero,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-034,N5 단어 034,f7a15687a1,冷蔵庫,れいぞうこ,냉장고,refrigerator,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-034,N5 단어 034,0455201fe6,レコード,レコード,기록,record,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-034,N5 단어 034,31893e4378,レストラン,レストラン,식당,restaurant,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-034,N5 단어 034,d23f06249a,練習,れんしゅう,연습하다,to practice,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-034,N5 단어 034,5fc0f979e6,廊下,ろうか,복도,corridor,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-034,N5 단어 034,f9ccc7bfdf,六,ろく,육,six,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-034,N5 단어 034,38249a2dd2,ワイシャツ,ワイシャツ,비즈니스 셔츠,business shirt,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-034,N5 단어 034,640761cb8b,若い,わかい,어린,young,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-034,N5 단어 034,ecee43eb04,分かる,わかる,이해되기 위해,to be understood,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-034,N5 단어 034,0ca0de9dea,忘れる,わすれる,잊다,to forget,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-034,N5 단어 034,d5c2e69813,私,わたくし,(겸손하게) 나; 나 자신,(humble) I; myself,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-034,N5 단어 034,b1d440d4e1,渡す,わたす,넘겨주다,to hand over,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-034,N5 단어 034,78255b9860,渡る,わたる,건너가다,to go across,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0
+N5-034,N5 단어 034,13b6dbec03,悪い,わるい,나쁜,bad,자동번역 · 미검수,https://github.com/evanclan/OpenJLPT,CC BY-SA 4.0

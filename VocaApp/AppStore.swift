@@ -57,6 +57,10 @@ import AlarmKit
             self.error = "저장된 데이터를 읽지 못했습니다. 원본 파일은 유지됩니다. 앱을 다시 실행해 주세요. \(error.localizedDescription)"
         }
         haptics = UserDefaults.standard.object(forKey: "haptics") as? Bool ?? true
+        let removedExamples = archive.removeLegacyExamples()
+        let needsGroupedLibrary = !archive.server.contains { $0.id == GroupedExpressions.libraryID }
+        if needsGroupedLibrary { archive.server.append(GroupedExpressions.library) }
+        if removedExamples || needsGroupedLibrary { save() }
         if archive.microReviewSettings?.usesSystemAlarm == true {
             archive.microReviewSettings?.usesSystemAlarm = false
             needsNotificationPermissionAfterMigration = archive.microReviewSettings?.enabled == true

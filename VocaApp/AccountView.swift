@@ -493,7 +493,7 @@ struct WordReportComposer: View {
                 }
             }
             if let word {
-                Section("선택한 카드") { Text(word.japanese); Text(word.korean); Text(word.example) }
+                Section("선택한 카드") { Text(word.japanese); Text(word.korean) }
             }
             Section {
                 TextField("올바른 한국어 뜻을 적어 주세요", text: $correctedKorean, axis: .vertical).lineLimit(3...8).accessibilityIdentifier("reportMessage")

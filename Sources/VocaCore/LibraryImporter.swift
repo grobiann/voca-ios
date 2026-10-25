@@ -10,24 +10,28 @@ public enum LibraryImporter {
         var title: String
         var stacks: [Deck]
         struct Deck: Decodable { var title: String; var cards: [Card] }
-        struct Card: Decodable { var japanese: String; var korean: String; var example: String }
+        struct Card: Decodable { var japanese: String; var korean: String; var reading: String? }
     }
     public static func read(_ data: Data, filename: String, namespace: String? = nil) throws -> Library {
         let result: Library
         if filename.lowercased().hasSuffix(".json") {
             let doc: Document
             do { doc = try JSONDecoder().decode(Document.self, from: data) }
-            catch { throw ImportFailure.invalid("JSON 형식을 확인해 주세요. title, stacks, cards와 카드의 japanese, korean, example이 필요합니다.") }
+            catch { throw ImportFailure.invalid("JSON 형식을 확인해 주세요. title, stacks, cards와 카드의 japanese, korean이 필요합니다.") }
             result = Library(title: doc.title, stacks: doc.stacks.map { deck in
-                Stack(title: deck.title, words: deck.cards.map { Word(japanese: $0.japanese, korean: $0.korean, example: $0.example) })
+                Stack(title: deck.title, words: deck.cards.map { card in
+                    var word = Word(japanese: card.japanese, korean: card.korean, example: "")
+                    word.reading = card.reading
+                    return word
+                })
             })
         } else {
             guard let raw = String(data: data, encoding: .utf8) else { throw ImportFailure.invalid("UTF-8로 저장한 CSV 파일을 선택해 주세요.") }
             let rows = try parseCSV(raw.replacingOccurrences(of: "\u{FEFF}", with: ""))
             guard let header = rows.first else { throw ImportFailure.invalid("파일이 비어 있습니다.") }
             let names = header.map { $0.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() }
-            guard let jp = names.firstIndex(of: "japanese"), let ko = names.firstIndex(of: "korean"), let ex = names.firstIndex(of: "example") else {
-                throw ImportFailure.invalid("CSV 첫 행에는 japanese,korean,example 열이 필요합니다. stack 열은 선택 사항입니다.")
+            guard let jp = names.firstIndex(of: "japanese"), let ko = names.firstIndex(of: "korean") else {
+                throw ImportFailure.invalid("CSV 첫 행에는 japanese,korean 열이 필요합니다. stack 열은 선택 사항입니다.")
             }
             guard Set(names).count == names.count else { throw ImportFailure.invalid("CSV 헤더가 중복되어 있습니다.") }
             let stackColumn = names.firstIndex(of: "stack")
@@ -46,11 +50,10 @@ public enum LibraryImporter {
                 guard !key.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
                       !wordKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
                       wordKeys.insert(key + ":" + wordKey).inserted else { throw ImportFailure.invalid("스택/카드 ID가 비어 있거나 카드 ID가 중복됩니다: \(index + 2)행") }
-                var word = Word(id: namespace.map { stableID($0 + ":word:" + key + ":" + wordKey) } ?? UUID(), japanese: row[jp], korean: row[ko], example: row[ex])
+                var word = Word(id: namespace.map { stableID($0 + ":word:" + key + ":" + wordKey) } ?? UUID(), japanese: row[jp], korean: row[ko], example: "")
                 word.reading = readingColumn.map { row[$0] }
                 word.source = names.firstIndex(of: "source").map { row[$0] }
                 word.license = names.firstIndex(of: "license").map { row[$0] }
-                word.exampleSource = names.firstIndex(of: "example_source").map { row[$0] }
                 word.translationStatus = names.firstIndex(of: "translation_status").map { row[$0] }
                 if let i = keys.firstIndex(of: key) { stacks[i].words.append(word) }
                 else { keys.append(key); stacks.append(Stack(id: namespace.map { stableID($0 + ":stack:" + key) } ?? UUID(), title: title, words: [word])) }

@@ -82,7 +82,7 @@ struct LibraryDetailView: View {
                         Text(library.title).font(.largeTitle.bold())
                         Text("\(library.stacks.count)개 스택 · \(library.wordCount)개 단어").foregroundStyle(.secondary)
                         if library.stacks.flatMap(\.words).contains(where: { $0.source == "https://github.com/evanclan/OpenJLPT" }) {
-                            Text("한국어 자동번역 · 예문 일부 AI 작성 · 미검수").font(.caption).foregroundStyle(.secondary)
+                            Text("한국어 자동번역 · 미검수").font(.caption).foregroundStyle(.secondary)
                             Link("OpenJLPT 및 원본 출처 · CC BY-SA 4.0", destination: URL(string: "https://github.com/evanclan/OpenJLPT/blob/main/NOTICE.md")!).font(.caption)
                         }
                         if local {
@@ -168,7 +168,7 @@ struct LibraryStackEditor: View {
                         CopyJapaneseButton(text: word.japanese)
                         SearchJapaneseButton(text: word.japanese)
                     }
-                    Text(word.korean); Text(word.example).font(.caption).foregroundStyle(.secondary)
+                    Text(word.korean)
                 }
             }.onDelete { offsets in mutate { $0.words.remove(atOffsets: offsets) } }
             Button("카드 추가", systemImage: "plus") { add = true }
@@ -208,8 +208,8 @@ struct SheetImportView: View {
                 }
                 Section {
                     Text("시트를 ‘링크가 있는 모든 사용자: 뷰어’로 공유하고 원본 링크를 입력해 주세요. 파일의 실제 시트 목록에서 하나를 선택합니다.")
-                    Text("필수 열: japanese, korean, example\n스택 구분: stack_id, stack\n카드 식별: card_id · 읽기: reading").font(.system(.caption, design: .monospaced))
-                    Text("JLPT 단어장은 비공식 공개 목록이며 한국어 자동번역과 일부 작성 예문은 미검수입니다. 가져온 데이터는 로컬 사본으로 저장되며 자동 동기화되지 않습니다.").font(.caption).foregroundStyle(.secondary)
+                    Text("필수 열: japanese, korean\n스택 구분: stack_id, stack\n카드 식별: card_id · 읽기: reading").font(.system(.caption, design: .monospaced))
+                    Text("JLPT 단어장은 비공식 공개 목록이며 한국어 자동번역은 미검수입니다. 가져온 데이터는 로컬 사본으로 저장되며 자동 동기화되지 않습니다.").font(.caption).foregroundStyle(.secondary)
                 }
                 if let error { Section { Text(error).foregroundStyle(.red) } }
                 Button { load() } label: { if loading { ProgressView() } else { Text(tabs.isEmpty ? "시트 목록 확인" : "가져오기") } }.disabled(loading || link.isEmpty || (!tabs.isEmpty && name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty))

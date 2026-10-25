@@ -113,6 +113,38 @@ public struct Archive: Codable, Sendable {
     public init(stacks: [Stack] = [], libraries: [Library] = [], server: [Library] = []) {
         self.stacks = stacks; self.libraries = libraries; self.server = server
     }
+    @discardableResult public mutating func removeLegacyExamples() -> Bool {
+        var changed = false
+        func clear(_ word: inout Word) {
+            if !word.example.isEmpty { word.example = ""; changed = true }
+            if word.exampleSource != nil { changed = true }
+            word.exampleSource = nil
+        }
+        for stackIndex in stacks.indices {
+            for wordIndex in stacks[stackIndex].words.indices { clear(&stacks[stackIndex].words[wordIndex]) }
+        }
+        for libraryIndex in libraries.indices {
+            for stackIndex in libraries[libraryIndex].stacks.indices {
+                for wordIndex in libraries[libraryIndex].stacks[stackIndex].words.indices {
+                    clear(&libraries[libraryIndex].stacks[stackIndex].words[wordIndex])
+                }
+            }
+        }
+        for libraryIndex in server.indices {
+            for stackIndex in server[libraryIndex].stacks.indices {
+                for wordIndex in server[libraryIndex].stacks[stackIndex].words.indices {
+                    clear(&server[libraryIndex].stacks[stackIndex].words[wordIndex])
+                }
+            }
+        }
+        if microReviewEntries != nil {
+            for index in microReviewEntries!.indices { clear(&microReviewEntries![index].word) }
+        }
+        if wordReports != nil {
+            for index in wordReports!.indices { clear(&wordReports![index].word) }
+        }
+        return changed
+    }
     @discardableResult public mutating func recordMeaningCorrection(library: Library?, stack: Stack, word: Word, correctedKorean: String) -> Bool {
         let correction = correctedKorean.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !correction.isEmpty else { return false }
@@ -134,14 +166,14 @@ public struct Archive: Codable, Sendable {
     }
     public static var sample: Archive {
         let daily = Stack(title: "하루를 시작하는 말", words: [
-            Word(japanese: "おはようございます", korean: "좋은 아침이에요", example: "先生、おはようございます。"),
-            Word(japanese: "楽しみ", korean: "기대, 즐거움", example: "明日の旅行が楽しみです。"),
-            Word(japanese: "散歩", korean: "산책", example: "毎朝、公園を散歩します。"),
-            Word(japanese: "ゆっくり", korean: "천천히, 느긋하게", example: "今日はゆっくり休みます。")])
+            Word(japanese: "おはようございます", korean: "좋은 아침이에요", example: ""),
+            Word(japanese: "楽しみ", korean: "기대, 즐거움", example: ""),
+            Word(japanese: "散歩", korean: "산책", example: ""),
+            Word(japanese: "ゆっくり", korean: "천천히, 느긋하게", example: "")])
         let travel = Stack(title: "카페에서", words: [
-            Word(japanese: "おすすめ", korean: "추천", example: "おすすめの飲み物は何ですか。"),
-            Word(japanese: "持ち帰り", korean: "포장, 테이크아웃", example: "持ち帰りでお願いします。")])
-        return Archive(stacks: [daily], server: [Library(title: "작은 일본어 생활", subtitle: "매일 만나는 표현부터, 가볍게", stacks: [daily, travel])])
+            Word(japanese: "おすすめ", korean: "추천", example: ""),
+            Word(japanese: "持ち帰り", korean: "포장, 테이크아웃", example: "")])
+        return Archive(stacks: [daily], server: [Library(title: "작은 일본어 생활", subtitle: "매일 만나는 표현부터, 가볍게", stacks: [daily, travel]), GroupedExpressions.library])
     }
 }
 
@@ -220,6 +252,76 @@ public struct WordReport: Identifiable, Codable, Equatable, Sendable {
         self.correctedKorean = correctedKorean
     }
     public var shareText: String {
-        "틀린 단어 제보\n라이브러리: \(libraryTitle ?? "내 스택")\n스택: \(stackTitle)\n일본어: \(word.japanese)\n읽기: \(word.reading ?? "")\n기존 한국어 뜻: \(word.korean)\n예문: \(word.example)\n\(correctedKorean.map { "올바른 한국어 뜻: \($0)" } ?? "제보 내용: \(message)")\n단어 ID: \(word.id)\n스택 ID: \(stackID)\n출처: \(word.source ?? "직접 등록")"
+        "틀린 단어 제보\n라이브러리: \(libraryTitle ?? "내 스택")\n스택: \(stackTitle)\n일본어: \(word.japanese)\n읽기: \(word.reading ?? "")\n기존 한국어 뜻: \(word.korean)\n\(correctedKorean.map { "올바른 한국어 뜻: \($0)" } ?? "제보 내용: \(message)")\n단어 ID: \(word.id)\n스택 ID: \(stackID)\n출처: \(word.source ?? "직접 등록")"
+    }
+}
+
+
+public enum GroupedExpressions {
+    public static let libraryID = LibraryImporter.stableID("voca:built-in:grouped-expressions:v1")
+
+    public static var library: Library {
+        let stacks = [
+            stack("요일", [
+                ("月曜日", "げつようび", "월요일"), ("火曜日", "かようび", "화요일"),
+                ("水曜日", "すいようび", "수요일"), ("木曜日", "もくようび", "목요일"),
+                ("金曜日", "きんようび", "금요일"), ("土曜日", "どようび", "토요일"),
+                ("日曜日", "にちようび", "일요일")
+            ]),
+            stack("월 · 1~12월", [
+                ("一月", "いちがつ", "1월"), ("二月", "にがつ", "2월"),
+                ("三月", "さんがつ", "3월"), ("四月", "しがつ", "4월"),
+                ("五月", "ごがつ", "5월"), ("六月", "ろくがつ", "6월"),
+                ("七月", "しちがつ", "7월"), ("八月", "はちがつ", "8월"),
+                ("九月", "くがつ", "9월"), ("十月", "じゅうがつ", "10월"),
+                ("十一月", "じゅういちがつ", "11월"), ("十二月", "じゅうにがつ", "12월")
+            ]),
+            stack("날짜 · 1~16일", Array(zip(
+                ["一日","二日","三日","四日","五日","六日","七日","八日","九日","十日","十一日","十二日","十三日","十四日","十五日","十六日"],
+                ["ついたち","ふつか","みっか","よっか","いつか","むいか","なのか","ようか","ここのか","とおか","じゅういちにち","じゅうににち","じゅうさんにち","じゅうよっか","じゅうごにち","じゅうろくにち"]
+            ).enumerated().map { (index, pair) in (pair.0, pair.1, "\(index + 1)일") })),
+            stack("날짜 · 17~31일", Array(zip(
+                ["十七日","十八日","十九日","二十日","二十一日","二十二日","二十三日","二十四日","二十五日","二十六日","二十七日","二十八日","二十九日","三十日","三十一日"],
+                ["じゅうしちにち","じゅうはちにち","じゅうくにち","はつか","にじゅういちにち","にじゅうににち","にじゅうさんにち","にじゅうよっか","にじゅうごにち","にじゅうろくにち","にじゅうしちにち","にじゅうはちにち","にじゅうくにち","さんじゅうにち","さんじゅういちにち"]
+            ).enumerated().map { (index, pair) in (pair.0, pair.1, "\(index + 17)일") })),
+            stack("사람 수 · 1~10명", [
+                ("一人","ひとり","1명"), ("二人","ふたり","2명"), ("三人","さんにん","3명"),
+                ("四人","よにん","4명"), ("五人","ごにん","5명"), ("六人","ろくにん","6명"),
+                ("七人","ななにん","7명"), ("八人","はちにん","8명"), ("九人","きゅうにん","9명"),
+                ("十人","じゅうにん","10명")
+            ]),
+            stack("물건 수 · 1~10개", [
+                ("一つ","ひとつ","1개"), ("二つ","ふたつ","2개"), ("三つ","みっつ","3개"),
+                ("四つ","よっつ","4개"), ("五つ","いつつ","5개"), ("六つ","むっつ","6개"),
+                ("七つ","ななつ","7개"), ("八つ","やっつ","8개"), ("九つ","ここのつ","9개"),
+                ("十","とお","10개")
+            ]),
+            stack("책 수 · 1~10권", counter("冊", "권", ["いっさつ","にさつ","さんさつ","よんさつ","ごさつ","ろくさつ","ななさつ","はっさつ","きゅうさつ","じゅっさつ"])),
+            stack("가늘고 긴 물건 · 1~10개", counter("本", "개 · 가늘고 긴 물건", ["いっぽん","にほん","さんぼん","よんほん","ごほん","ろっぽん","ななほん","はっぽん","きゅうほん","じゅっぽん"])),
+            stack("납작한 물건 · 1~10장", counter("枚", "장", ["いちまい","にまい","さんまい","よんまい","ごまい","ろくまい","ななまい","はちまい","きゅうまい","じゅうまい"])),
+            stack("작은 동물 · 1~10마리", counter("匹", "마리 · 작은 동물", ["いっぴき","にひき","さんびき","よんひき","ごひき","ろっぴき","ななひき","はっぴき","きゅうひき","じゅっぴき"])),
+            stack("시각 · 1~12시", [
+                ("一時","いちじ","1시"), ("二時","にじ","2시"), ("三時","さんじ","3시"),
+                ("四時","よじ","4시"), ("五時","ごじ","5시"), ("六時","ろくじ","6시"),
+                ("七時","しちじ","7시"), ("八時","はちじ","8시"), ("九時","くじ","9시"),
+                ("十時","じゅうじ","10시"), ("十一時","じゅういちじ","11시"), ("十二時","じゅうにじ","12시")
+            ])
+        ]
+        return Library(id: libraryID, title: "묶어서 외우는 일본어", subtitle: "요일 · 월 · 날짜 · 사람 수 · 여러 가지 세는 법", stacks: stacks)
+    }
+
+    private static func stack(_ title: String, _ entries: [(String, String, String)]) -> Stack {
+        let id = LibraryImporter.stableID("voca:grouped:\(title)")
+        let words = entries.enumerated().map { index, entry in
+            var word = Word(id: LibraryImporter.stableID("voca:grouped:\(title):\(index)"), japanese: entry.0, korean: entry.2, example: "")
+            word.reading = entry.1
+            return word
+        }
+        return Stack(id: id, title: title, words: words)
+    }
+
+    private static func counter(_ suffix: String, _ unit: String, _ readings: [String]) -> [(String, String, String)] {
+        let numbers = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十"]
+        return numbers.enumerated().map { index, number in (number + suffix, readings[index], "\(index + 1)\(unit)") }
     }
 }

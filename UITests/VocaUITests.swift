@@ -1,5 +1,17 @@
 import XCTest
 @MainActor final class VocaUITests: XCTestCase {
+    func testGroupedLibraryCanEnrollWeekdays() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
+        app.launch()
+        app.tabBars.buttons["라이브러리"].tap()
+        app.buttons["둘러보기"].tap()
+        app.staticTexts["묶어서 외우는 일본어"].tap()
+        XCTAssertTrue(app.staticTexts["요일"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["11개 스택 · 122개 단어"].exists)
+        app.buttons["내 스택에 추가"].firstMatch.tap()
+        XCTAssertTrue(app.buttons["학습 이어가기"].firstMatch.waitForExistence(timeout: 5))
+    }
     func testFiveSecondNotificationCanBeScheduled() {
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting"]

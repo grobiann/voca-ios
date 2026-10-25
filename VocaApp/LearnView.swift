@@ -126,7 +126,6 @@ struct StackDetailView: View {
                                     }.buttonStyle(.borderless).accessibilityLabel("\(word.japanese) 카드 삭제")
                                 }
                                 Text(word.korean)
-                                Text(word.example).font(.caption).foregroundStyle(.secondary)
                             }.padding(.vertical, 6)
                         }.onDelete { indices in
                             var updated = stack; updated.words.remove(atOffsets: indices); updated.prepare(poolSize: store.poolSize); store.update(updated)
@@ -179,17 +178,16 @@ struct NameSheet: View {
 struct CardEditor: View {
     @Environment(\.dismiss) private var dismiss
     var onSave: (Word) -> Void
-    @State private var japanese = ""; @State private var korean = ""; @State private var example = ""
-    private var valid: Bool { [japanese, korean, example].allSatisfy { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty } }
+    @State private var japanese = ""; @State private var korean = ""
+    private var valid: Bool { [japanese, korean].allSatisfy { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty } }
     var body: some View {
         NavigationStack {
             Form {
                 Section("학습할 표현") { TextField("일본어", text: $japanese, axis: .vertical); TextField("한국어 뜻", text: $korean, axis: .vertical) }
-                Section("문장으로 기억하기") { TextField("일본어 사용 예문", text: $example, axis: .vertical).lineLimit(3...6) }
             }.navigationTitle("카드 추가").toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("취소") { dismiss() } }
                 ToolbarItem(placement: .confirmationAction) { Button("저장") {
-                    onSave(Word(japanese: japanese.trimmingCharacters(in: .whitespacesAndNewlines), korean: korean.trimmingCharacters(in: .whitespacesAndNewlines), example: example.trimmingCharacters(in: .whitespacesAndNewlines))); dismiss()
+                    onSave(Word(japanese: japanese.trimmingCharacters(in: .whitespacesAndNewlines), korean: korean.trimmingCharacters(in: .whitespacesAndNewlines), example: "")); dismiss()
                 }.disabled(!valid) }
             }
         }
