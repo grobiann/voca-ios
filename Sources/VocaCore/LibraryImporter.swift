@@ -50,13 +50,18 @@ public enum LibraryImporter {
                 guard !key.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
                       !wordKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
                       wordKeys.insert(key + ":" + wordKey).inserted else { throw ImportFailure.invalid("스택/카드 ID가 비어 있거나 카드 ID가 중복됩니다: \(index + 2)행") }
-                var word = Word(id: namespace.map { stableID($0 + ":word:" + key + ":" + wordKey) } ?? UUID(), japanese: row[jp], korean: row[ko], example: "")
+                let wordID = UUID(uuidString: wordKey) ?? namespace.map { stableID($0 + ":word:" + key + ":" + wordKey) } ?? UUID()
+                var word = Word(id: wordID, japanese: row[jp], korean: row[ko], example: "")
                 word.reading = readingColumn.map { row[$0] }
                 word.source = names.firstIndex(of: "source").map { row[$0] }
                 word.license = names.firstIndex(of: "license").map { row[$0] }
                 word.translationStatus = names.firstIndex(of: "translation_status").map { row[$0] }
                 if let i = keys.firstIndex(of: key) { stacks[i].words.append(word) }
-                else { keys.append(key); stacks.append(Stack(id: namespace.map { stableID($0 + ":stack:" + key) } ?? UUID(), title: title, words: [word])) }
+                else {
+                    let stackID = UUID(uuidString: key) ?? namespace.map { stableID($0 + ":stack:" + key) } ?? UUID()
+                    keys.append(key)
+                    stacks.append(Stack(id: stackID, title: title, words: [word]))
+                }
             }
             result = Library(id: namespace.map { stableID($0) } ?? UUID(), title: (filename as NSString).deletingPathExtension, stacks: stacks)
         }

@@ -130,6 +130,14 @@ final class VocaCoreTests: XCTestCase {
         XCTAssertTrue(archive.libraries[0].stacks[0].words[0].example.isEmpty)
         XCTAssertFalse(archive.removeLegacyExamples())
     }
+    func testGroupedSheetKeepsBuiltInStackAndCardIDs() throws {
+        let original = GroupedExpressions.library.stacks[0]
+        let card = original.words[0]
+        let csv = "stack_id,stack,card_id,japanese,reading,korean\n\(original.id),\(original.title),\(card.id),\(card.japanese),\(card.reading!),\(card.korean)\n"
+        let imported = try LibraryImporter.read(Data(csv.utf8), filename: "묶어서 외우는 일본어.csv", namespace: "sheet-link")
+        XCTAssertEqual(imported.stacks[0].id, original.id)
+        XCTAssertEqual(imported.stacks[0].words[0].id, card.id)
+    }
     func testPoolLimitAndWrongAnswersDoNotAdmitWords() {
         var stack = Stack(title: "100 words", words: (0..<100).map { Word(japanese: "語\($0)", korean: "말\($0)", example: "例") })
         stack.prepare()

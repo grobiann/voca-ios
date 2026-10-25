@@ -85,6 +85,10 @@ struct LibraryDetailView: View {
                             Text("한국어 자동번역 · 미검수").font(.caption).foregroundStyle(.secondary)
                             Link("OpenJLPT 및 원본 출처 · CC BY-SA 4.0", destination: URL(string: "https://github.com/evanclan/OpenJLPT/blob/main/NOTICE.md")!).font(.caption)
                         }
+                        if library.id == GroupedExpressions.libraryID {
+                            Link("Google Sheets 원본 보기", destination: URL(string: "https://docs.google.com/spreadsheets/d/1CZiD8VuxZ6iqrMeBGREO-MAhStjL-dOIJQsj2SiP-Q4/edit?gid=2026102501")!)
+                                .font(.caption)
+                        }
                         if local {
                             Button { store.publish(library); uploaded = true } label: { Label("서버에 올리기", systemImage: "arrow.up.circle") }.disabled(library.wordCount == 0)
                             Text("이 기기의 둘러보기에 저장됩니다.").font(.caption).foregroundStyle(.secondary)
@@ -196,7 +200,7 @@ struct SheetImportView: View {
                     TextField("https://docs.google.com/spreadsheets/…", text: $link).keyboardType(.URL).textInputAutocapitalization(.never).autocorrectionDisabled()
                         .accessibilityIdentifier("sheetLink")
                         .onChange(of: link) { _, _ in task?.cancel(); tabs = []; selectedID = "" }
-                    Button("JLPT N5–N1 단어장 링크 사용") {
+                    Button("공개 단어장 링크 사용") {
                         link = "https://docs.google.com/spreadsheets/d/1CZiD8VuxZ6iqrMeBGREO-MAhStjL-dOIJQsj2SiP-Q4/edit"
                     }
                     if !tabs.isEmpty {

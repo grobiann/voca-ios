@@ -268,7 +268,7 @@ import XCTest
         app.tabBars.buttons["라이브러리"].tap()
         app.buttons["만들기 또는 가져오기"].tap()
         app.buttons["Google Sheets 링크"].tap()
-        app.buttons["JLPT N5–N1 단어장 링크 사용"].tap()
+        app.buttons["공개 단어장 링크 사용"].tap()
         app.buttons["시트 목록 확인"].tap()
         XCTAssertTrue(app.buttons["가져오기"].waitForExistence(timeout: 30))
         screenshot("09-Sheet-Selection")

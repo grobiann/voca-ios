@@ -2,6 +2,8 @@
 
 [Google Sheets 단어장](https://docs.google.com/spreadsheets/d/1CZiD8VuxZ6iqrMeBGREO-MAhStjL-dOIJQsj2SiP-Q4/edit)의 단어 데이터를 2026-10-25에 예문 없이 갱신한 CSV 백업이다. 앱 바이너리에 자동 포함되지 않는다. Google Sheets 또는 CSV로 가져온다.
 
+같은 Google 파일의 [‘묶어서 외우는 일본어’ 탭](https://docs.google.com/spreadsheets/d/1CZiD8VuxZ6iqrMeBGREO-MAhStjL-dOIJQsj2SiP-Q4/edit?gid=2026102501)은 별도의 라이브러리이며, 아래 JLPT 합계에는 포함하지 않는다.
+
 | 시트 | 단어 항목 | 스택 (최대 20단어) |
 | --- | ---: | ---: |
 | N5 | 674 | 34 |
