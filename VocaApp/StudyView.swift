@@ -14,6 +14,7 @@ struct StudyView: View {
     @State private var undo: Stack?
     @State private var advanceTask: Task<Void, Never>?
     @State private var reporting = false
+    @State private var deletingWord: Word?
     private var item: ReviewItem? { stack.queue.first }
     private var word: Word? { stack.words.first { $0.id == item?.wordID } }
     private var sourceLibrary: Library? {
@@ -79,7 +80,7 @@ struct StudyView: View {
                         responseButton("다시 볼게요", icon: "arrow.left", known: false, width: geometry.size.width)
                         responseButton("알았어요", icon: "arrow.right", known: true, width: geometry.size.width)
                     }.disabled(!revealed || exiting).opacity(revealed ? 1 : 0.35)
-                    HStack(spacing: 12) {
+                    VStack(spacing: 6) {
                         Button {
                             store.addMicroWord(word, sourceTitle: stack.title)
                         } label: {
@@ -87,12 +88,23 @@ struct StudyView: View {
                                   systemImage: store.microEntry(for: word)?.status == .active ? "checkmark.circle.fill" : "bell.badge")
                         }
                         .disabled(store.microEntry(for: word)?.status == .active || exiting)
-                        Button("오류 제보", systemImage: "flag") { reporting = true }
-                            .disabled(exiting)
+                        HStack(spacing: 8) {
+                            Button("오류 제보", systemImage: "flag") { reporting = true }
+                                .disabled(exiting)
+                            Button("세트에서 제거", systemImage: "trash", role: .destructive) { deletingWord = word }
+                                .disabled(exiting)
+                        }
                     }
-                    .buttonStyle(.bordered)
+                    .buttonStyle(.bordered).font(.caption)
                     Text(revealed ? "모르면 왼쪽, 알면 오른쪽으로 밀어 주세요" : "카드를 누르면 뜻을 확인할 수 있어요")
                         .font(.caption).foregroundStyle(.secondary)
+                } else if stack.words.isEmpty {
+                    Spacer()
+                    Image(systemName: "rectangle.stack.badge.minus").font(.system(size: 64)).foregroundStyle(Palette.accent)
+                    Text("스택에 카드가 없어요").font(.title.bold())
+                    Text("새 카드를 추가하거나 다른 스택을 선택해 주세요.").foregroundStyle(.secondary)
+                    Spacer()
+                    Button("학습 마치기") { dismiss() }.buttonStyle(PrimaryButton())
                 } else {
                     Spacer()
                     Image(systemName: "checkmark.seal.fill").font(.system(size: 76)).foregroundStyle(Palette.accent)
@@ -112,6 +124,13 @@ struct StudyView: View {
                 WordReportComposer(library: sourceLibrary, stacks: [stack], initialWordID: word?.id)
             }
         }
+        .confirmationDialog("이 카드를 내 스택에서 제거할까요?", isPresented: Binding(
+            get: { deletingWord != nil }, set: { if !$0 { deletingWord = nil } }
+        ), titleVisibility: .visible) {
+            if let deletingWord {
+                Button("세트에서 제거", role: .destructive) { removeCurrentWord(deletingWord.id) }
+            }
+        } message: { Text("양방향 학습 대기열에서도 제거됩니다. 라이브러리의 원본은 유지됩니다.") }
     }
     private func card(_ word: Word, item: ReviewItem) -> some View {
         let japaneseFirst = item.direction == .japaneseToKorean
@@ -228,5 +247,15 @@ struct StudyView: View {
             var transaction = Transaction(); transaction.disablesAnimations = true
             withTransaction(transaction) { revealed = false; offset = .zero; exiting = false }
         }
+    }
+    private func removeCurrentWord(_ wordID: UUID) {
+        guard !exiting, stack.words.contains(where: { $0.id == wordID }) else { deletingWord = nil; return }
+        advanceTask?.cancel()
+        store.removeWord(wordID, from: stackID)
+        if let updated = store.archive.stacks.first(where: { $0.id == stackID }) { stack = updated }
+        undo = nil
+        revealed = false
+        offset = .zero
+        deletingWord = nil
     }
 }
