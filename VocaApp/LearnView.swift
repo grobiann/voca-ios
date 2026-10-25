@@ -29,7 +29,12 @@ struct LearnView: View {
     @Environment(AppStore.self) private var store
     @State private var studying: Stack?
     @State private var creating = false
+    @State private var restarting: Stack?
+    @State private var showRestartConfirmation = false
+    @State private var completedExpanded = false
     private var next: Stack? { store.archive.stacks.first { !$0.words.isEmpty && !$0.isComplete } }
+    private var activeStacks: [Stack] { store.archive.stacks.filter { !$0.isComplete } }
+    private var completedStacks: [Stack] { store.archive.stacks.filter(\.isComplete) }
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -60,9 +65,22 @@ struct LearnView: View {
                         Text("내 스택").font(.title2.bold()); Text("\(store.archive.stacks.count)").foregroundStyle(.secondary)
                         Spacer(); Button { creating = true } label: { Image(systemName: "plus").font(.title3) }.accessibilityLabel("스택 만들기")
                     }
-                    if store.archive.stacks.isEmpty { EmptyState(icon: "rectangle.stack", title: "첫 스택을 만들어 보세요", message: "직접 카드를 추가하거나 라이브러리에서 가져올 수 있어요.") }
-                    ForEach(store.archive.stacks) { stack in
-                        NavigationLink { StackDetailView(stackID: stack.id) } label: { StackRow(stack: stack) }.buttonStyle(.plain)
+                    if store.archive.stacks.isEmpty {
+                        EmptyState(icon: "rectangle.stack", title: "첫 스택을 만들어 보세요", message: "직접 카드를 추가하거나 라이브러리에서 가져올 수 있어요.")
+                    } else {
+                        stackSection("진행 중", stacks: activeStacks)
+                        VStack(alignment: .leading, spacing: 10) {
+                            Button { withAnimation(.easeInOut(duration: 0.2)) { completedExpanded.toggle() } } label: {
+                                HStack {
+                                    Text("완료").font(.headline)
+                                    Text("\(completedStacks.count)").foregroundStyle(.secondary)
+                                    Spacer()
+                                    Image(systemName: completedExpanded ? "chevron.up" : "chevron.down")
+                                        .font(.caption).foregroundStyle(.secondary)
+                                }.contentShape(Rectangle())
+                            }.buttonStyle(.plain).accessibilityLabel("완료된 스택 \(completedStacks.count)개 \(completedExpanded ? "접기" : "펼치기")")
+                            if completedExpanded { stackSectionRows(completedStacks, completed: true) }
+                        }
                     }
                 }.padding(22)
             }.background(Palette.canvas).navigationTitle("학습").toolbarTitleDisplayMode(.inline)
@@ -70,23 +88,59 @@ struct LearnView: View {
                     store.archive.stacks.append(Stack(title: name)); store.save()
                 } }
                 .fullScreenCover(item: $studying) { StudyView(stackID: $0.id) }
+                .confirmationDialog("현재 내 스택의 카드로 다시 학습할까요?", isPresented: $showRestartConfirmation, titleVisibility: .visible) {
+                    Button("다시 학습하기") {
+                        if let stack = restarting, store.restartStack(stack.id) {
+                            studying = store.archive.stacks.first { $0.id == stack.id }
+                        }
+                        restarting = nil
+                    }
+                } message: { Text("삭제한 카드는 제외하고 수정한 내용은 그대로 사용합니다.") }
+        }
+    }
+    private func stackSection(_ title: String, stacks: [Stack]) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack { Text(title).font(.headline); Text("\(stacks.count)").foregroundStyle(.secondary) }
+            stackSectionRows(stacks, completed: false)
+        }
+    }
+    @ViewBuilder private func stackSectionRows(_ stacks: [Stack], completed: Bool) -> some View {
+        if stacks.isEmpty {
+            Text(completed ? "완료한 스택이 없어요." : "진행 중인 스택이 없어요.")
+                .font(.subheadline).foregroundStyle(.secondary).padding(.vertical, 12)
+        } else {
+            VStack(spacing: 0) {
+                ForEach(Array(stacks.enumerated()), id: \.element.id) { index, stack in
+                    HStack(spacing: 0) {
+                        NavigationLink { StackDetailView(stackID: stack.id) } label: { StackRow(stack: stack) }
+                            .buttonStyle(.plain)
+                        if completed {
+                            Button { restarting = stack; showRestartConfirmation = true } label: { Image(systemName: "arrow.counterclockwise").frame(width: 44, height: 44) }
+                                .buttonStyle(.plain).foregroundStyle(Palette.accent)
+                                .accessibilityLabel("\(stack.title) 다시 학습하기")
+                        }
+                    }
+                    if index < stacks.count - 1 { Divider().padding(.leading, 52) }
+                }
+            }.background(.background, in: RoundedRectangle(cornerRadius: 18))
         }
     }
 }
 struct StackRow: View {
     var stack: Stack
     var body: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: 12) {
             Image(systemName: stack.isComplete ? "checkmark.seal.fill" : "rectangle.stack.fill")
-                .font(.title2).foregroundStyle(Palette.accent).frame(width: 48, height: 54)
-                .background(Palette.accent.opacity(0.08), in: RoundedRectangle(cornerRadius: 14))
-            VStack(alignment: .leading, spacing: 8) {
-                Text(stack.title).font(.headline)
-                Text("\(stack.words.count)개 단어 · \(stack.isComplete ? "학습 완료" : "\(Int(stack.progress * 100))% 학습")").font(.caption).foregroundStyle(.secondary)
-                ProgressView(value: stack.progress).tint(Palette.accent)
+                .font(.body).foregroundStyle(Palette.accent).frame(width: 32, height: 32)
+                .background(Palette.accent.opacity(0.08), in: RoundedRectangle(cornerRadius: 9))
+            VStack(alignment: .leading, spacing: 3) {
+                Text(stack.title).font(.subheadline.weight(.semibold)).lineLimit(1)
+                Text("\(stack.words.count)개 단어 · \(stack.isComplete ? "학습 완료" : stack.words.isEmpty ? "카드 없음" : "\(Int(stack.progress * 100))% 완료")")
+                    .font(.caption).foregroundStyle(.secondary)
             }
+            Spacer(minLength: 4)
             Image(systemName: "chevron.right").font(.caption).foregroundStyle(.tertiary)
-        }.padding(18).background(.background, in: RoundedRectangle(cornerRadius: 22))
+        }.padding(.leading, 12).padding(.trailing, 8).padding(.vertical, 9)
     }
 }
 struct StackDetailView: View {
@@ -147,8 +201,8 @@ struct StackDetailView: View {
         } }
         .fullScreenCover(isPresented: $study) { StudyView(stackID: stackID) }
         .confirmationDialog("완료 기록을 초기화하고 다시 학습할까요?", isPresented: $reset, titleVisibility: .visible) {
-            Button("다시 학습하기") { if var updated = stack { updated.reset(poolSize: store.poolSize); store.update(updated); study = true } }
-        }
+            Button("다시 학습하기") { if store.restartStack(stackID) { study = true } }
+        } message: { Text("삭제한 카드는 제외하고 수정한 내용은 그대로 사용합니다.") }
         .confirmationDialog("내 스택에서 제거할까요?", isPresented: $deletingStack, titleVisibility: .visible) {
             Button("스택과 학습 기록 삭제", role: .destructive) { store.removeStack(stackID); dismiss() }
         } message: { Text("라이브러리의 원본 카드는 그대로 남습니다.") }

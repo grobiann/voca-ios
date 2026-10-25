@@ -48,6 +48,20 @@ final class VocaCoreTests: XCTestCase {
         XCTAssertFalse(stack.queue.contains { $0.wordID == reviewed })
         XCTAssertEqual(stack.allItems.count, 6)
     }
+    func testRestartUsesOnlyCurrentLocalWordsAndCorrections() {
+        var stack = Archive.sample.stacks[0]
+        stack.prepare()
+        let removedID = stack.words.removeLast().id
+        stack.words[0].korean = "수정한 뜻"
+        stack.prepare()
+        while !stack.queue.isEmpty { stack.answer(known: true) }
+        XCTAssertTrue(stack.isComplete)
+        stack.reset()
+        XCTAssertEqual(stack.words[0].korean, "수정한 뜻")
+        XCTAssertEqual(stack.allItems.count, stack.words.count * 2)
+        XCTAssertFalse(stack.allItems.contains { $0.wordID == removedID })
+        XCTAssertFalse(stack.isComplete)
+    }
     func testMicroReviewThreeSuccessesAndStop() throws {
         let word = Archive.sample.stacks[0].words[0]
         var entry = MicroReviewEntry(word: word, sourceTitle: "인사")

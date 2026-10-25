@@ -76,6 +76,15 @@ import AlarmKit
         guard let i = archive.stacks.firstIndex(where: { $0.id == stack.id }) else { return }
         archive.stacks[i] = stack; save()
     }
+    @discardableResult
+    func restartStack(_ stackID: UUID) -> Bool {
+        guard let i = archive.stacks.firstIndex(where: { $0.id == stackID }),
+              !archive.stacks[i].words.isEmpty else { return false }
+        // Reset the local copy so removed cards stay removed and corrections are retained.
+        archive.stacks[i].reset(poolSize: poolSize)
+        save()
+        return true
+    }
     func recordMeaningCorrection(library: Library?, stack: Stack, word: Word, correctedKorean: String) {
         guard storageReadable else { error = "원본 데이터 보호를 위해 제보 저장을 중단했습니다. 앱을 다시 실행해 주세요."; return }
         archive.recordMeaningCorrection(library: library, stack: stack, word: word, correctedKorean: correctedKorean)
