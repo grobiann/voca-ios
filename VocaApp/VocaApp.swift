@@ -108,8 +108,10 @@ enum Palette {
     static let orange = Color(red: 0.82, green: 0.36, blue: 0.20)
 }
 struct PrimaryButton: ButtonStyle {
+    var height: CGFloat? = nil
     func makeBody(configuration: Configuration) -> some View {
-        configuration.label.font(.headline).frame(maxWidth: .infinity).padding(.vertical, 19)
+        configuration.label.font(.headline).lineLimit(1).frame(maxWidth: .infinity)
+            .frame(height: height ?? 24).padding(.vertical, height == nil ? 19 : 0)
             .foregroundStyle(.white).background(Palette.accent, in: RoundedRectangle(cornerRadius: 22))
             .scaleEffect(configuration.isPressed ? 0.97 : 1)
             .animation(.spring(response: 0.3), value: configuration.isPressed)

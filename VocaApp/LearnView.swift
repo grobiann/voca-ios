@@ -81,13 +81,13 @@ struct LearnView: View {
                     Button { studying = next } label: {
                         Label("학습 시작", systemImage: "play.fill")
                     }
-                    .buttonStyle(PrimaryButton())
+                    .buttonStyle(PrimaryButton(height: 60))
                     .disabled(next == nil)
                     .opacity(next == nil ? 0.45 : 1)
                     Button { studyingDepth = nextDepth } label: {
                         Label("단계별 학습 시작", systemImage: "square.stack.3d.up.fill")
                     }
-                    .buttonStyle(PrimaryButton())
+                    .buttonStyle(PrimaryButton(height: 60))
                     .disabled(nextDepth == nil)
                     .opacity(nextDepth == nil ? 0.45 : 1)
                     NavigationLink { MyStackListView() } label: {
@@ -131,6 +131,7 @@ struct MyStackListView: View {
     @State private var restarting: Stack?
     @State private var showRestartConfirmation = false
     @State private var completedExpanded = false
+    @State private var confirmingRemoveAll = false
     private var activeStacks: [Stack] { store.archive.stacks.filter { !$0.isComplete } }
     private var completedStacks: [Stack] { store.archive.stacks.filter(\.isComplete) }
     var body: some View {
@@ -140,6 +141,11 @@ struct MyStackListView: View {
                     Text("내 스택").font(.title2.bold())
                     Text("\(store.archive.stacks.count)").foregroundStyle(.secondary)
                     Spacer()
+                    if !store.archive.stacks.isEmpty {
+                        Button(role: .destructive) { confirmingRemoveAll = true } label: {
+                            Image(systemName: "trash").font(.body).frame(width: 44, height: 44)
+                        }.accessibilityLabel("내 스택 전체 제거")
+                    }
                     Button { creating = true } label: { Image(systemName: "plus").font(.title3) }
                         .accessibilityLabel("스택 만들기")
                 }
@@ -177,6 +183,9 @@ struct MyStackListView: View {
                 restarting = nil
             }
         } message: { Text("삭제한 카드는 제외하고 수정한 내용은 그대로 사용합니다.") }
+        .confirmationDialog("내 스택을 모두 제거할까요?", isPresented: $confirmingRemoveAll, titleVisibility: .visible) {
+            Button("모든 내 스택과 학습 기록 삭제", role: .destructive) { store.removeAllStacks() }
+        } message: { Text("내 스택과 학습 기록이 삭제됩니다. 라이브러리 원본은 유지됩니다.") }
     }
     private func stackSection(_ title: String, stacks: [Stack]) -> some View {
         VStack(alignment: .leading, spacing: 10) {

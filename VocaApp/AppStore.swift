@@ -158,6 +158,10 @@ import AlarmKit
         archive.stacks.removeAll { $0.id == stackID }
         save()
     }
+    func removeAllStacks() {
+        archive.stacks = []
+        save()
+    }
     func removeLibrary(_ libraryID: UUID) {
         archive.libraries.removeAll { $0.id == libraryID }
         save()
