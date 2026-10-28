@@ -86,9 +86,8 @@ struct LearnView: View {
                     .opacity(next == nil ? 0.45 : 1)
                     Button { studyingDepth = nextDepth } label: {
                         Label("단계별 학습 시작", systemImage: "square.stack.3d.up.fill")
-                            .font(.headline).frame(maxWidth: .infinity).padding(.vertical, 17)
                     }
-                    .buttonStyle(.borderedProminent).tint(Palette.accent)
+                    .buttonStyle(PrimaryButton())
                     .disabled(nextDepth == nil)
                     .opacity(nextDepth == nil ? 0.45 : 1)
                     NavigationLink { MyStackListView() } label: {
