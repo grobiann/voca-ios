@@ -81,6 +81,21 @@ final class VocaCoreTests: XCTestCase {
         XCTAssertEqual(restored.reviewDepthStacks![4].words, [word])
         XCTAssertEqual(restored.configuredReviewDepthCount, 5)
     }
+    func testMovingReviewWordRemovesOnlyPreviousDepthAndPrunesQueue() {
+        var archive = Archive.sample
+        let word = archive.stacks[0].words[0]
+        XCTAssertTrue(archive.addToReviewDepth(word, at: 1))
+        XCTAssertTrue(archive.moveToReviewDepth(word, from: 1))
+        XCTAssertTrue(archive.reviewDepthStacks![0].words.isEmpty)
+        XCTAssertTrue(archive.reviewDepthStacks![0].queue.isEmpty)
+        XCTAssertEqual(archive.reviewDepthStacks![1].words, [word])
+        XCTAssertEqual(archive.stacks[0].words[0], word)
+        XCTAssertFalse(archive.moveToReviewDepth(word, from: 1))
+        XCTAssertTrue(archive.moveToReviewDepth(word, from: 2))
+        XCTAssertTrue(archive.reviewDepthStacks![1].words.isEmpty)
+        XCTAssertEqual(archive.reviewDepthStacks![2].words, [word])
+        XCTAssertFalse(archive.moveToReviewDepth(word, from: 3))
+    }
     func testDepthCorrectionAndLegacyCardCountSetting() throws {
         var archive = Archive.sample
         let stack = archive.stacks[0]

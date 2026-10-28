@@ -28,89 +28,118 @@ struct SearchJapaneseButton: View {
 struct LearnView: View {
     @Environment(AppStore.self) private var store
     @State private var studying: Stack?
+    @State private var studyingDepth: Int?
+    private var next: Stack? { store.archive.stacks.first { !$0.words.isEmpty && !$0.isComplete } }
+    private var nextDepth: Int? {
+        (1...store.reviewDepthCount).first { depth in
+            guard let stack = store.reviewDepthStack(at: depth) else { return false }
+            return !stack.words.isEmpty && !stack.isComplete
+        }
+    }
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 14) {
+                    Button { studying = next } label: {
+                        Label("학습 시작", systemImage: "play.fill")
+                    }
+                    .buttonStyle(PrimaryButton())
+                    .disabled(next == nil)
+                    .opacity(next == nil ? 0.45 : 1)
+                    Button { studyingDepth = nextDepth } label: {
+                        Label("단계별 학습 시작", systemImage: "square.stack.3d.up.fill")
+                            .font(.headline).frame(maxWidth: .infinity).padding(.vertical, 17)
+                    }
+                    .buttonStyle(.borderedProminent).tint(Palette.accent)
+                    .disabled(nextDepth == nil)
+                    .opacity(nextDepth == nil ? 0.45 : 1)
+                    NavigationLink { MyStackListView() } label: {
+                        compactEntry("내 스택", detail: "\(store.archive.stacks.count)개", icon: "rectangle.stack")
+                    }.buttonStyle(.plain).accessibilityLabel("내 스택")
+                    NavigationLink { ReviewDepthListView() } label: {
+                        compactEntry("단계별 단어풀", detail: "\(store.reviewDepthStacks.reduce(0) { $0 + $1.words.count })개", icon: "square.stack.3d.up")
+                    }.buttonStyle(.plain).accessibilityLabel("단계별 단어풀")
+                }.padding(22)
+            }
+            .background(Palette.canvas)
+            .navigationTitle("학습")
+            .toolbarTitleDisplayMode(.inline)
+            .fullScreenCover(item: $studying) { StudyView(stackID: $0.id) }
+            .fullScreenCover(isPresented: Binding(
+                get: { studyingDepth != nil },
+                set: { if !$0 { studyingDepth = nil } }
+            )) {
+                if let depth = studyingDepth, let stack = store.reviewDepthStack(at: depth) {
+                    StudyView(stackID: stack.id, reviewDepth: depth)
+                }
+            }
+        }
+    }
+    private func compactEntry(_ title: String, detail: String, icon: String) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon).foregroundStyle(Palette.accent).frame(width: 28)
+            Text(title).font(.subheadline.weight(.semibold))
+            Spacer()
+            Text(detail).font(.caption).foregroundStyle(.secondary)
+            Image(systemName: "chevron.right").font(.caption).foregroundStyle(.tertiary)
+        }
+        .padding(.horizontal, 16).padding(.vertical, 14)
+        .background(.background, in: RoundedRectangle(cornerRadius: 14))
+    }
+}
+struct MyStackListView: View {
+    @Environment(AppStore.self) private var store
+    @State private var studying: Stack?
     @State private var creating = false
     @State private var restarting: Stack?
     @State private var showRestartConfirmation = false
     @State private var completedExpanded = false
-    private var next: Stack? { store.archive.stacks.first { !$0.words.isEmpty && !$0.isComplete } }
     private var activeStacks: [Stack] { store.archive.stacks.filter { !$0.isComplete } }
     private var completedStacks: [Stack] { store.archive.stacks.filter(\.isComplete) }
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 26) {
-                    HStack { Label("일본어", systemImage: "globe.asia.australia"); Image(systemName: "arrow.right"); Text("한국어") }
-                        .font(.caption.weight(.semibold)).foregroundStyle(Palette.accent)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 22) {
+                HStack {
+                    Text("내 스택").font(.title2.bold())
+                    Text("\(store.archive.stacks.count)").foregroundStyle(.secondary)
+                    Spacer()
+                    Button { creating = true } label: { Image(systemName: "plus").font(.title3) }
+                        .accessibilityLabel("스택 만들기")
+                }
+                if store.archive.stacks.isEmpty {
+                    EmptyState(icon: "rectangle.stack", title: "첫 스택을 만들어 보세요", message: "직접 카드를 추가하거나 라이브러리에서 가져올 수 있어요.")
+                } else {
+                    stackSection("진행 중", stacks: activeStacks)
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("조금씩,\n내 말이 되는 시간.").font(.system(size: 34, weight: .bold, design: .rounded))
-                        Text("오늘도 한 장부터 시작해 볼까요?").foregroundStyle(.secondary)
-                        HStack(alignment: .bottom) {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text("\(store.archive.stacks.reduce(0) { $0 + $1.words.count })").font(.system(size: 52, weight: .light, design: .rounded))
-                                Text("내가 모은 단어").font(.caption).foregroundStyle(.secondary)
-                            }
-                            Spacer()
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 18).fill(Palette.accent.opacity(0.10)).frame(width: 94, height: 115).rotationEffect(.degrees(-13)).offset(x: -15, y: -3)
-                                RoundedRectangle(cornerRadius: 18).fill(Palette.accent).frame(width: 94, height: 115).rotationEffect(.degrees(8))
-                                Text("あ").font(.system(size: 52, weight: .medium)).foregroundStyle(.white).rotationEffect(.degrees(8))
-                            }.padding(.trailing, 16).accessibilityHidden(true)
-                        }.padding(.vertical, 18)
-                        Button { studying = next } label: { Label("학습 시작", systemImage: "play.fill") }
-                            .buttonStyle(PrimaryButton()).disabled(next == nil).opacity(next == nil ? 0.45 : 1)
-                        Text(next.map { "\($0.title) · 양방향 학습" } ?? "모든 학습을 마쳤어요. 스택을 추가하거나 다시 학습해 보세요.")
-                            .font(.caption).foregroundStyle(.secondary).frame(maxWidth: .infinity)
-                    }.padding(24).background(.background, in: RoundedRectangle(cornerRadius: 28))
-                    NavigationLink {
-                        ReviewDepthListView()
-                    } label: {
-                        HStack(spacing: 12) {
-                            Image(systemName: "square.stack.3d.up.fill").foregroundStyle(Palette.accent)
-                            VStack(alignment: .leading, spacing: 3) {
-                                Text("단계별 단어").font(.headline)
-                                Text("내가 다시 확인할 단어 · \(store.reviewDepthCount)단계")
+                        Button { withAnimation(.easeInOut(duration: 0.2)) { completedExpanded.toggle() } } label: {
+                            HStack {
+                                Text("완료").font(.headline)
+                                Text("\(completedStacks.count)").foregroundStyle(.secondary)
+                                Spacer()
+                                Image(systemName: completedExpanded ? "chevron.up" : "chevron.down")
                                     .font(.caption).foregroundStyle(.secondary)
-                            }
-                            Spacer()
-                            Image(systemName: "chevron.right").font(.caption).foregroundStyle(.secondary)
-                        }.padding(16).background(.background, in: RoundedRectangle(cornerRadius: 18))
-                    }.buttonStyle(.plain)
-                    HStack {
-                        Text("내 스택").font(.title2.bold()); Text("\(store.archive.stacks.count)").foregroundStyle(.secondary)
-                        Spacer(); Button { creating = true } label: { Image(systemName: "plus").font(.title3) }.accessibilityLabel("스택 만들기")
+                            }.contentShape(Rectangle())
+                        }.buttonStyle(.plain)
+                            .accessibilityLabel("완료된 스택 \(completedStacks.count)개 \(completedExpanded ? "접기" : "펼치기")")
+                        if completedExpanded { stackSectionRows(completedStacks, completed: true) }
                     }
-                    if store.archive.stacks.isEmpty {
-                        EmptyState(icon: "rectangle.stack", title: "첫 스택을 만들어 보세요", message: "직접 카드를 추가하거나 라이브러리에서 가져올 수 있어요.")
-                    } else {
-                        stackSection("진행 중", stacks: activeStacks)
-                        VStack(alignment: .leading, spacing: 10) {
-                            Button { withAnimation(.easeInOut(duration: 0.2)) { completedExpanded.toggle() } } label: {
-                                HStack {
-                                    Text("완료").font(.headline)
-                                    Text("\(completedStacks.count)").foregroundStyle(.secondary)
-                                    Spacer()
-                                    Image(systemName: completedExpanded ? "chevron.up" : "chevron.down")
-                                        .font(.caption).foregroundStyle(.secondary)
-                                }.contentShape(Rectangle())
-                            }.buttonStyle(.plain).accessibilityLabel("완료된 스택 \(completedStacks.count)개 \(completedExpanded ? "접기" : "펼치기")")
-                            if completedExpanded { stackSectionRows(completedStacks, completed: true) }
-                        }
-                    }
-                }.padding(22)
-            }.background(Palette.canvas).navigationTitle("학습").toolbarTitleDisplayMode(.inline)
-                .sheet(isPresented: $creating) { NameSheet(title: "새 스택", placeholder: "예: 여행에서 만나는 말") { name in
-                    store.archive.stacks.append(Stack(title: name)); store.save()
-                } }
-                .fullScreenCover(item: $studying) { StudyView(stackID: $0.id) }
-                .confirmationDialog("현재 내 스택의 카드로 다시 학습할까요?", isPresented: $showRestartConfirmation, titleVisibility: .visible) {
-                    Button("다시 학습하기") {
-                        if let stack = restarting, store.restartStack(stack.id) {
-                            studying = store.archive.stacks.first { $0.id == stack.id }
-                        }
-                        restarting = nil
-                    }
-                } message: { Text("삭제한 카드는 제외하고 수정한 내용은 그대로 사용합니다.") }
+                }
+            }.padding(22)
         }
+        .background(Palette.canvas)
+        .navigationTitle("내 스택")
+        .sheet(isPresented: $creating) { NameSheet(title: "새 스택", placeholder: "예: 여행에서 만나는 말") { name in
+            store.archive.stacks.append(Stack(title: name)); store.save()
+        } }
+        .fullScreenCover(item: $studying) { StudyView(stackID: $0.id) }
+        .confirmationDialog("현재 내 스택의 카드로 다시 학습할까요?", isPresented: $showRestartConfirmation, titleVisibility: .visible) {
+            Button("다시 학습하기") {
+                if let stack = restarting, store.restartStack(stack.id) {
+                    studying = store.archive.stacks.first { $0.id == stack.id }
+                }
+                restarting = nil
+            }
+        } message: { Text("삭제한 카드는 제외하고 수정한 내용은 그대로 사용합니다.") }
     }
     private func stackSection(_ title: String, stacks: [Stack]) -> some View {
         VStack(alignment: .leading, spacing: 10) {

@@ -16,16 +16,8 @@ struct AccountView: View {
                 Section("학습 설정") {
                     Stepper("학습 풀 크기: \(store.poolSize)개", value: $store.poolSize, in: 1...100)
                     Stepper("단계별 단어: \(store.reviewDepthCount)단계", value: $store.reviewDepthCount, in: store.highestUsedReviewDepth...5)
-                    Text("학습 중 다음 단계에 담은 단어를 독립적으로 다시 학습합니다. 단어가 있는 단계는 설정을 줄여도 유지됩니다.")
-                        .font(.caption).foregroundStyle(.secondary)
-                    Text("기본 20개 · 1~100개 중 선택할 수 있어요. 모르는 카드는 풀 안에서 반복하고, 같은 단어의 반대 방향은 간격을 두고 보여 줍니다.").font(.caption).foregroundStyle(.secondary)
                     Toggle("앞면에 히라가나 표시", isOn: $store.showReadingOnFront)
-                    Text("끄면 일반 학습과 1-3-3 카드 앞면에서 읽는 법을 숨깁니다. 뒷면에는 항상 표시합니다.")
-                        .font(.caption).foregroundStyle(.secondary)
-                    LabeledContent("학습 언어", value: "일본어")
-                    LabeledContent("모국어", value: "한국어")
                     Toggle("카드 햅틱 피드백", isOn: $store.haptics).onChange(of: store.haptics) { _, value in UserDefaults.standard.set(value, forKey: "haptics") }
-                    LabeledContent("완료 기준", value: "양방향 정답")
                 }
                 Section("1-3-3 알림") {
                     NavigationLink {
@@ -38,14 +30,9 @@ struct AccountView: View {
                         }
                     }.accessibilityIdentifier("microReviewSettings")
                 }
-                Section {
-                    LabeledContent("로그인", value: "연결 없이 사용 중")
-                    LabeledContent("구독", value: "개인용 · 무료")
-                } header: { Text("계정") } footer: { Text("로그인과 구독은 아직 제공하지 않습니다. 카드와 학습 기록은 이 기기에 저장됩니다.") }
                 Section("앱 정보") {
                     NavigationLink("단어 오류 제보함") { WordReportList() }
                     LabeledContent("voca-ios", value: "1.0")
-                    Text("매일 한 장, 조금 더 가까운 일본어.").foregroundStyle(.secondary)
                 }
             }.navigationTitle("계정")
         }
@@ -81,7 +68,7 @@ struct MicroReviewSettingsView: View {
                 }
                 .accessibilityIdentifier("microReviewPool")
                 Button("지금 1-3-3 확인", systemImage: "play.fill") { showQuickReview = true }
-            } footer: { Text("학습 중인 카드에서 원하는 단어만 1-3-3 풀에 담을 수 있어요.") }
+            }
             Section {
                 Toggle("1-3-3 알림 켜기", isOn: Binding(
                     get: { settings.enabled },
@@ -97,9 +84,7 @@ struct MicroReviewSettingsView: View {
                     ForEach((settings.startHour + 1)..<25, id: \.self) { hour in Text(String(format: "%02d:00", hour)).tag(hour) }
                 }
                 Toggle("주말에도 알림", isOn: binding(\.includesWeekends))
-            } header: { Text("알림 설정") } footer: {
-                Text("알림은 소리 없이 표시됩니다. 알림을 탭하면 1-3-3 학습이 열려요. 진동과 표시 방식은 iPhone 알림 설정 및 집중 모드에 따릅니다.")
-            }
+            } header: { Text("알림 설정") }
             Section("알림 테스트") {
                 Button("5초 후 테스트 알림", systemImage: "bell") {
                     Task { testScheduled = await store.sendMicroTestNotification() }
@@ -108,10 +93,6 @@ struct MicroReviewSettingsView: View {
                     Text("5초 뒤 소리 없는 알림이 표시됩니다.")
                         .font(.footnote).foregroundStyle(.secondary)
                 }
-            }
-            Section("iOS 27 단축어 연결") {
-                Text("단축어 앱에서 자동화 → 알림 수신 → 앱 voca-ios → 제목에 ‘1-3-3’ 포함 → ‘1-3-3 학습 시작’ 동작을 선택하세요.")
-                    .font(.footnote).foregroundStyle(.secondary)
             }
         }
         .navigationTitle("1-3-3 알림")

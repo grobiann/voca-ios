@@ -130,6 +130,22 @@ public struct Archive: Codable, Sendable {
         reviewDepthStacks![depth - 1].prepare(poolSize: poolSize)
         return true
     }
+    @discardableResult public mutating func moveToReviewDepth(_ word: Word, from sourceDepth: Int, poolSize: Int = Stack.poolLimit) -> Bool {
+        let destinationDepth = sourceDepth + 1
+        guard sourceDepth >= 1, destinationDepth <= configuredReviewDepthCount,
+              reviewDepthStacks?.indices.contains(sourceDepth - 1) == true,
+              reviewDepthStacks![sourceDepth - 1].words.contains(where: { $0.id == word.id }) else { return false }
+        prepareReviewDepths()
+        if let existing = reviewDepthStacks![destinationDepth - 1].words.firstIndex(where: { $0.id == word.id }) {
+            reviewDepthStacks![destinationDepth - 1].words[existing] = word
+        } else {
+            reviewDepthStacks![destinationDepth - 1].words.append(word)
+        }
+        reviewDepthStacks![destinationDepth - 1].prepare(poolSize: poolSize)
+        reviewDepthStacks![sourceDepth - 1].words.removeAll { $0.id == word.id }
+        reviewDepthStacks![sourceDepth - 1].prepare(poolSize: poolSize)
+        return true
+    }
     @discardableResult public mutating func removeLegacyExamples() -> Bool {
         var changed = false
         func clear(_ word: inout Word) {

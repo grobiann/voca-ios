@@ -108,6 +108,19 @@ import AlarmKit
         if added { save() }
         return added
     }
+    @discardableResult func moveToReviewDepth(_ word: Word, from sourceDepth: Int) -> Bool {
+        let moved = archive.moveToReviewDepth(word, from: sourceDepth, poolSize: poolSize)
+        if moved { save() }
+        return moved
+    }
+    func restoreReviewDepths(source: Stack?, sourceDepth: Int?, destination: Stack, destinationDepth: Int) {
+        guard archive.reviewDepthStacks?.indices.contains(destinationDepth - 1) == true else { return }
+        archive.reviewDepthStacks![destinationDepth - 1] = destination
+        if let source, let sourceDepth, archive.reviewDepthStacks!.indices.contains(sourceDepth - 1) {
+            archive.reviewDepthStacks![sourceDepth - 1] = source
+        }
+        save()
+    }
     func removeReviewDepthWord(_ wordID: UUID, at depth: Int) {
         guard (1...reviewDepthCount).contains(depth), archive.reviewDepthStacks?.indices.contains(depth - 1) == true else { return }
         archive.reviewDepthStacks![depth - 1].words.removeAll { $0.id == wordID }

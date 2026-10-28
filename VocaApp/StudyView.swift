@@ -13,7 +13,7 @@ struct StudyView: View {
     @State private var draggingHorizontally = false
     @State private var exiting = false
     @State private var undo: Stack?
-    @State private var undoPromotion: (depth: Int, wordID: UUID)?
+    @State private var undoPromotion: (depth: Int, previousTarget: Stack)?
     @State private var advanceTask: Task<Void, Never>?
     @State private var reporting = false
     @State private var deletingWord: Word?
@@ -45,8 +45,15 @@ struct StudyView: View {
                     Spacer()
                     Button {
                         if let undo {
-                            if let undoPromotion { store.removeReviewDepthWord(undoPromotion.wordID, at: undoPromotion.depth) }
-                            stack = undo; persist(stack); self.undo = nil; undoPromotion = nil; revealed = false; offset = .zero
+                            if let undoPromotion {
+                                store.restoreReviewDepths(source: reviewDepth == nil ? nil : undo,
+                                                          sourceDepth: reviewDepth,
+                                                          destination: undoPromotion.previousTarget,
+                                                          destinationDepth: undoPromotion.depth)
+                            }
+                            stack = undo
+                            if undoPromotion == nil { persist(stack) }
+                            self.undo = nil; undoPromotion = nil; revealed = false; offset = .zero
                         }
                     } label: { Image(systemName: "arrow.uturn.backward").frame(width: 44, height: 44) }.disabled(undo == nil || exiting).accessibilityLabel("이전 응답 취소")
                 }
@@ -97,7 +104,7 @@ struct StudyView: View {
                         Button {
                             answer(true, width: geometry.size.width, promoteTo: nextReviewDepth)
                         } label: {
-                            Label(store.reviewDepthStack(at: nextReviewDepth)?.words.contains(where: { $0.id == word.id }) == true
+                            Label(store.reviewDepthStack(at: nextReviewDepth)?.words.contains(where: { $0.id == word.id }) == true && reviewDepth == nil
                                   ? "알았어요 · \(nextReviewDepth)단계에 담김" : "알았어요 · \(nextReviewDepth)단계에 담기",
                                   systemImage: "arrow.up.forward.square")
                                 .font(.subheadline.weight(.semibold)).frame(maxWidth: .infinity).padding(.vertical, 10)
@@ -274,8 +281,21 @@ struct StudyView: View {
             do { try await Task.sleep(for: .milliseconds(reduceMotion ? 100 : 240)) } catch { return }
             undo = stack
             undoPromotion = nil
-            if let depth, let promotedWord, store.addToReviewDepth(promotedWord, at: depth) {
-                undoPromotion = (depth, promotedWord.id)
+            if let depth, let promotedWord, let previousTarget = store.reviewDepthStack(at: depth) {
+                let promoted = if let reviewDepth {
+                    store.moveToReviewDepth(promotedWord, from: reviewDepth)
+                } else {
+                    store.addToReviewDepth(promotedWord, at: depth)
+                }
+                if promoted {
+                    undoPromotion = (depth, previousTarget)
+                    if let reviewDepth, let updated = store.reviewDepthStack(at: reviewDepth) {
+                        stack = updated
+                        var transaction = Transaction(); transaction.disablesAnimations = true
+                        withTransaction(transaction) { revealed = false; offset = .zero; exiting = false }
+                        return
+                    }
+                }
             }
             stack.answer(known: known, poolSize: store.poolSize); persist(stack)
             var transaction = Transaction(); transaction.disablesAnimations = true

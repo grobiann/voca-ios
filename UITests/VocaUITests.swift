@@ -13,12 +13,18 @@ import XCTest
         promote.tap()
         XCTAssertTrue(app.staticTexts["1 / 8 완료"].waitForExistence(timeout: 5))
         app.buttons["학습 닫기"].tap()
-        app.staticTexts["단계별 단어"].tap()
+        app.buttons["단계별 단어풀"].tap()
         XCTAssertTrue(app.staticTexts["1개 단어 · 0% 완료"].waitForExistence(timeout: 5))
         app.staticTexts["1단계"].tap()
         app.buttons["이 단계 학습 시작"].tap()
         XCTAssertTrue(app.buttons["학습 닫기"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["0 / 2 완료"].exists)
+        let stageCard = app.descendants(matching: .any)["studyCard"].firstMatch
+        stageCard.tap()
+        app.buttons["알았어요 · 2단계에 담기"].tap()
+        XCTAssertTrue(app.staticTexts["스택에 카드가 없어요"].waitForExistence(timeout: 5))
+        app.buttons["학습 마치기"].tap()
+        XCTAssertTrue(app.staticTexts["단어 0개"].waitForExistence(timeout: 5))
     }
     func testGroupedLibraryCanEnrollWeekdays() {
         let app = XCUIApplication()
@@ -252,7 +258,7 @@ import XCTest
         XCTAssertTrue(app.buttons["학습 이어가기"].firstMatch.exists)
         screenshot("08-Stack-Path")
         app.tabBars.buttons["계정"].tap()
-        XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", "양방향 정답")).firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["앞면에 히라가나 표시"].waitForExistence(timeout: 5))
         screenshot("05-Account")
     }
     func testCompletionAndResume() {
