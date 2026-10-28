@@ -40,6 +40,44 @@ struct LearnView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 14) {
+                    HStack(alignment: .center, spacing: 16) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("조금씩,\n내 말이 되는 시간.")
+                                .font(.system(size: 27, weight: .bold, design: .rounded))
+                                .fixedSize(horizontal: false, vertical: true)
+                            Text("오늘도 한 장부터 시작해 볼까요?")
+                                .font(.caption).foregroundStyle(.secondary)
+                            HStack(alignment: .firstTextBaseline, spacing: 5) {
+                                Text("\(store.archive.stacks.reduce(0) { $0 + $1.words.count })")
+                                    .font(.system(size: 30, weight: .light, design: .rounded))
+                                Text("내가 모은 단어").font(.caption).foregroundStyle(.secondary)
+                            }.padding(.top, 5)
+                        }
+                        Spacer(minLength: 0)
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 17)
+                                .fill(Palette.accent.opacity(0.12))
+                                .frame(width: 76, height: 102)
+                                .rotationEffect(.degrees(-12)).offset(x: -12, y: -3)
+                            RoundedRectangle(cornerRadius: 17)
+                                .fill(.background)
+                                .overlay(RoundedRectangle(cornerRadius: 17).stroke(Palette.accent.opacity(0.18), lineWidth: 1))
+                                .frame(width: 76, height: 102)
+                                .rotationEffect(.degrees(-3)).offset(x: -5, y: 0)
+                            RoundedRectangle(cornerRadius: 17)
+                                .fill(Palette.accent)
+                                .frame(width: 76, height: 102)
+                                .rotationEffect(.degrees(7))
+                            Text("あ")
+                                .font(.system(size: 48, weight: .medium, design: .rounded))
+                                .foregroundStyle(.white)
+                                .rotationEffect(.degrees(7))
+                        }
+                        .frame(width: 100, height: 116)
+                        .accessibilityHidden(true)
+                    }
+                    .padding(20)
+                    .background(.background, in: RoundedRectangle(cornerRadius: 24))
                     Button { studying = next } label: {
                         Label("학습 시작", systemImage: "play.fill")
                     }
