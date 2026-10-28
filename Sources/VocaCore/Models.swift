@@ -103,6 +103,9 @@ public struct Library: Identifiable, Codable, Equatable, Sendable {
 }
 public struct Archive: Codable, Sendable {
     public var studyPoolSize: Int?
+    public var reviewDepthCount: Int?
+    public var reviewDepthStacks: [Stack]?
+    public var microSessionCardCount: Int?
     public var showReadingOnFront: Bool?
     public var wordReports: [WordReport]?
     public var microReviewSettings: MicroReviewSettings?
@@ -113,6 +116,20 @@ public struct Archive: Codable, Sendable {
     public init(stacks: [Stack] = [], libraries: [Library] = [], server: [Library] = []) {
         self.stacks = stacks; self.libraries = libraries; self.server = server
     }
+    public var configuredReviewDepthCount: Int { min(5, max(3, reviewDepthCount ?? 3)) }
+    public mutating func prepareReviewDepths() {
+        var depths = reviewDepthStacks ?? []
+        while depths.count < 5 { depths.append(Stack(title: "\(depths.count + 1)단계 단어")) }
+        reviewDepthStacks = depths
+    }
+    @discardableResult public mutating func addToReviewDepth(_ word: Word, at depth: Int, poolSize: Int = Stack.poolLimit) -> Bool {
+        guard (1...configuredReviewDepthCount).contains(depth) else { return false }
+        prepareReviewDepths()
+        guard !reviewDepthStacks![depth - 1].words.contains(where: { $0.id == word.id }) else { return false }
+        reviewDepthStacks![depth - 1].words.append(word)
+        reviewDepthStacks![depth - 1].prepare(poolSize: poolSize)
+        return true
+    }
     @discardableResult public mutating func removeLegacyExamples() -> Bool {
         var changed = false
         func clear(_ word: inout Word) {
@@ -122,6 +139,11 @@ public struct Archive: Codable, Sendable {
         }
         for stackIndex in stacks.indices {
             for wordIndex in stacks[stackIndex].words.indices { clear(&stacks[stackIndex].words[wordIndex]) }
+        }
+        if reviewDepthStacks != nil {
+            for stackIndex in reviewDepthStacks!.indices {
+                for wordIndex in reviewDepthStacks![stackIndex].words.indices { clear(&reviewDepthStacks![stackIndex].words[wordIndex]) }
+            }
         }
         for libraryIndex in libraries.indices {
             for stackIndex in libraries[libraryIndex].stacks.indices {
@@ -155,6 +177,13 @@ public struct Archive: Codable, Sendable {
             guard let wordIndex = stacks[stackIndex].words.firstIndex(where: { $0.id == word.id }) else { continue }
             stacks[stackIndex].words[wordIndex].korean = correction
             updatedMyCard = true
+        }
+        if reviewDepthStacks != nil {
+            for stackIndex in reviewDepthStacks!.indices {
+                guard let wordIndex = reviewDepthStacks![stackIndex].words.firstIndex(where: { $0.id == word.id }) else { continue }
+                reviewDepthStacks![stackIndex].words[wordIndex].korean = correction
+                updatedMyCard = true
+            }
         }
         if var entries = microReviewEntries {
             for index in entries.indices where entries[index].word.id == word.id {

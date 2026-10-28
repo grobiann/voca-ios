@@ -1,5 +1,25 @@
 import XCTest
 @MainActor final class VocaUITests: XCTestCase {
+    func testReviewDepthPromotionAndIndependentStudy() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
+        app.launch()
+        app.buttons["학습 시작"].tap()
+        let card = app.descendants(matching: .any)["studyCard"].firstMatch
+        XCTAssertTrue(card.waitForExistence(timeout: 5))
+        card.tap()
+        let promote = app.buttons["알았어요 · 1단계에 담기"]
+        XCTAssertTrue(promote.isEnabled)
+        promote.tap()
+        XCTAssertTrue(app.staticTexts["1 / 8 완료"].waitForExistence(timeout: 5))
+        app.buttons["학습 닫기"].tap()
+        app.staticTexts["단계별 단어"].tap()
+        XCTAssertTrue(app.staticTexts["1개 단어 · 0% 완료"].waitForExistence(timeout: 5))
+        app.staticTexts["1단계"].tap()
+        app.buttons["이 단계 학습 시작"].tap()
+        XCTAssertTrue(app.buttons["학습 닫기"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["0 / 2 완료"].exists)
+    }
     func testGroupedLibraryCanEnrollWeekdays() {
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting"]

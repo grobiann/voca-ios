@@ -15,6 +15,9 @@ struct AccountView: View {
                 }
                 Section("학습 설정") {
                     Stepper("학습 풀 크기: \(store.poolSize)개", value: $store.poolSize, in: 1...100)
+                    Stepper("단계별 단어: \(store.reviewDepthCount)단계", value: $store.reviewDepthCount, in: store.highestUsedReviewDepth...5)
+                    Text("학습 중 다음 단계에 담은 단어를 독립적으로 다시 학습합니다. 단어가 있는 단계는 설정을 줄여도 유지됩니다.")
+                        .font(.caption).foregroundStyle(.secondary)
                     Text("기본 20개 · 1~100개 중 선택할 수 있어요. 모르는 카드는 풀 안에서 반복하고, 같은 단어의 반대 방향은 간격을 두고 보여 줍니다.").font(.caption).foregroundStyle(.secondary)
                     Toggle("앞면에 히라가나 표시", isOn: $store.showReadingOnFront)
                     Text("끄면 일반 학습과 1-3-3 카드 앞면에서 읽는 법을 숨깁니다. 뒷면에는 항상 표시합니다.")
@@ -64,6 +67,9 @@ struct MicroReviewSettingsView: View {
     var body: some View {
         List {
             Section {
+                Stepper("한 번에 학습할 카드: \(store.microSessionCardCount)개", value: Binding(
+                    get: { store.microSessionCardCount }, set: { store.microSessionCardCount = $0 }
+                ), in: 1...10)
                 NavigationLink {
                     MicroReviewPoolView()
                 } label: {
@@ -281,7 +287,7 @@ struct MicroReviewSessionView: View {
         }.onAppear {
             guard !started else { return }
             started = true
-            sessionTotal = min(2, store.activeMicroCount)
+            sessionTotal = min(store.microSessionCardCount, store.activeMicroCount)
             advance()
         }.onDisappear { closeTask?.cancel(); advanceTask?.cancel() }
     }

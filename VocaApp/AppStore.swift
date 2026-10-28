@@ -22,6 +22,18 @@ import AlarmKit
         }
     }
     var microEntries: [MicroReviewEntry] { archive.microReviewEntries ?? [] }
+    var microSessionCardCount: Int {
+        get { min(10, max(1, archive.microSessionCardCount ?? 2)) }
+        set { archive.microSessionCardCount = min(10, max(1, newValue)); save() }
+    }
+    var reviewDepthCount: Int {
+        get { archive.configuredReviewDepthCount }
+        set { archive.reviewDepthCount = min(5, max(highestUsedReviewDepth, max(3, newValue))); save() }
+    }
+    var highestUsedReviewDepth: Int {
+        max(3, (archive.reviewDepthStacks ?? []).enumerated().filter { !$0.element.words.isEmpty }.map { $0.offset + 1 }.max() ?? 3)
+    }
+    var reviewDepthStacks: [Stack] { Array((archive.reviewDepthStacks ?? []).prefix(reviewDepthCount)) }
     var activeMicroCount: Int { microEntries.filter { $0.status == .active }.count }
     var completedMicroCount: Int { microEntries.filter { $0.status == .completed }.count }
     var poolSize: Int {
@@ -29,6 +41,9 @@ import AlarmKit
         set {
             archive.studyPoolSize = min(100, max(1, newValue))
             for i in archive.stacks.indices { archive.stacks[i].prepare(poolSize: poolSize) }
+            if archive.reviewDepthStacks != nil {
+                for i in archive.reviewDepthStacks!.indices { archive.reviewDepthStacks![i].prepare(poolSize: poolSize) }
+            }
             save()
         }
     }
@@ -57,10 +72,12 @@ import AlarmKit
             self.error = "저장된 데이터를 읽지 못했습니다. 원본 파일은 유지됩니다. 앱을 다시 실행해 주세요. \(error.localizedDescription)"
         }
         haptics = UserDefaults.standard.object(forKey: "haptics") as? Bool ?? true
+        let needsReviewDepths = archive.reviewDepthStacks == nil || (archive.reviewDepthStacks?.count ?? 0) < 5
+        archive.prepareReviewDepths()
         let removedExamples = archive.removeLegacyExamples()
         let needsGroupedLibrary = !archive.server.contains { $0.id == GroupedExpressions.libraryID }
         if needsGroupedLibrary { archive.server.append(GroupedExpressions.library) }
-        if removedExamples || needsGroupedLibrary { save() }
+        if removedExamples || needsGroupedLibrary || needsReviewDepths { save() }
         if archive.microReviewSettings?.usesSystemAlarm == true {
             archive.microReviewSettings?.usesSystemAlarm = false
             needsNotificationPermissionAfterMigration = archive.microReviewSettings?.enabled == true
@@ -75,6 +92,34 @@ import AlarmKit
     func update(_ stack: Stack) {
         guard let i = archive.stacks.firstIndex(where: { $0.id == stack.id }) else { return }
         archive.stacks[i] = stack; save()
+    }
+    func reviewDepthStack(at depth: Int) -> Stack? {
+        guard (1...reviewDepthCount).contains(depth), let depths = archive.reviewDepthStacks, depths.indices.contains(depth - 1) else { return nil }
+        return depths[depth - 1]
+    }
+    func updateReviewDepthStack(_ stack: Stack, at depth: Int) {
+        guard (1...reviewDepthCount).contains(depth), archive.reviewDepthStacks?.indices.contains(depth - 1) == true,
+              archive.reviewDepthStacks![depth - 1].id == stack.id else { return }
+        archive.reviewDepthStacks![depth - 1] = stack
+        save()
+    }
+    @discardableResult func addToReviewDepth(_ word: Word, at depth: Int) -> Bool {
+        let added = archive.addToReviewDepth(word, at: depth, poolSize: poolSize)
+        if added { save() }
+        return added
+    }
+    func removeReviewDepthWord(_ wordID: UUID, at depth: Int) {
+        guard (1...reviewDepthCount).contains(depth), archive.reviewDepthStacks?.indices.contains(depth - 1) == true else { return }
+        archive.reviewDepthStacks![depth - 1].words.removeAll { $0.id == wordID }
+        archive.reviewDepthStacks![depth - 1].prepare(poolSize: poolSize)
+        save()
+    }
+    func restartReviewDepth(at depth: Int) -> Bool {
+        guard (1...reviewDepthCount).contains(depth), archive.reviewDepthStacks?.indices.contains(depth - 1) == true,
+              !archive.reviewDepthStacks![depth - 1].words.isEmpty else { return false }
+        archive.reviewDepthStacks![depth - 1].reset(poolSize: poolSize)
+        save()
+        return true
     }
     @discardableResult
     func restartStack(_ stackID: UUID) -> Bool {

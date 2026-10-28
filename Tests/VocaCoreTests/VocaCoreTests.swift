@@ -62,6 +62,35 @@ final class VocaCoreTests: XCTestCase {
         XCTAssertFalse(stack.allItems.contains { $0.wordID == removedID })
         XCTAssertFalse(stack.isComplete)
     }
+    func testReviewDepthsAreIndependentDeduplicatedAndPersisted() throws {
+        var archive = Archive.sample
+        let word = archive.stacks[0].words[0]
+        XCTAssertEqual(archive.configuredReviewDepthCount, 3)
+        XCTAssertTrue(archive.addToReviewDepth(word, at: 1))
+        XCTAssertFalse(archive.addToReviewDepth(word, at: 1))
+        XCTAssertTrue(archive.addToReviewDepth(word, at: 2))
+        XCTAssertFalse(archive.addToReviewDepth(word, at: 4))
+        archive.reviewDepthStacks![0].words.removeAll()
+        archive.reviewDepthStacks![0].prepare()
+        XCTAssertEqual(archive.stacks[0].words.count, 4)
+        XCTAssertEqual(archive.reviewDepthStacks![1].words, [word])
+        archive.reviewDepthCount = 5
+        XCTAssertTrue(archive.addToReviewDepth(word, at: 5))
+        let restored = try JSONDecoder().decode(Archive.self, from: JSONEncoder().encode(archive))
+        XCTAssertEqual(restored.reviewDepthStacks![1].words, [word])
+        XCTAssertEqual(restored.reviewDepthStacks![4].words, [word])
+        XCTAssertEqual(restored.configuredReviewDepthCount, 5)
+    }
+    func testDepthCorrectionAndLegacyCardCountSetting() throws {
+        var archive = Archive.sample
+        let stack = archive.stacks[0]
+        let word = stack.words[0]
+        XCTAssertTrue(archive.addToReviewDepth(word, at: 1))
+        archive.recordMeaningCorrection(library: nil, stack: stack, word: word, correctedKorean: "수정된 뜻")
+        XCTAssertEqual(archive.reviewDepthStacks![0].words[0].korean, "수정된 뜻")
+        let old = try JSONDecoder().decode(Archive.self, from: Data("{\"stacks\":[],\"libraries\":[],\"server\":[]}".utf8))
+        XCTAssertNil(old.microSessionCardCount)
+    }
     func testMicroReviewThreeSuccessesAndStop() throws {
         let word = Archive.sample.stacks[0].words[0]
         var entry = MicroReviewEntry(word: word, sourceTitle: "인사")
