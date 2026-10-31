@@ -4,17 +4,16 @@ import AppIntents
 import AlarmKit
 
 extension Notification.Name {
-    static let finishMicroReview = Notification.Name("voca.finishMicroReview")
-    static let openMicroReview = Notification.Name("voca.openMicroReview")
+    static let openReminderApp = Notification.Name("voca.openReminderApp")
 }
 
 final class VocaNotificationDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
-    static var pendingMicroReview = false
+    static var pendingReminderApp = false
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         UNUserNotificationCenter.current().delegate = self
         VocaShortcuts.updateAppShortcutParameters()
         #if DEBUG
-        if ProcessInfo.processInfo.arguments.contains("--uitesting-notification-open") { Self.pendingMicroReview = true }
+        if ProcessInfo.processInfo.arguments.contains("--uitesting-notification-open") { Self.pendingReminderApp = true }
         #endif
         return true
     }
@@ -22,12 +21,12 @@ final class VocaNotificationDelegate: NSObject, UIApplicationDelegate, UNUserNot
     // delegate bridge may resume its completion on a background executor.
     nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse,
                                            withCompletionHandler completionHandler: @escaping @Sendable () -> Void) {
-        let opensReview = response.notification.request.content.userInfo["vocaMicroReview"] as? Bool == true
+        let opensApp = response.notification.request.content.userInfo["vocaOpenApp"] as? Bool == true
         Task { @MainActor in
             defer { completionHandler() }
-            guard opensReview else { return }
-            Self.pendingMicroReview = true
-            NotificationCenter.default.post(name: .openMicroReview, object: nil)
+            guard opensApp else { return }
+            Self.pendingReminderApp = true
+            NotificationCenter.default.post(name: .openReminderApp, object: nil)
         }
     }
     nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification,
@@ -43,10 +42,9 @@ final class VocaNotificationDelegate: NSObject, UIApplicationDelegate, UNUserNot
     @UIApplicationDelegateAdaptor(VocaNotificationDelegate.self) private var notificationDelegate
     @Environment(\.scenePhase) private var scenePhase
     @State private var store = AppStore()
-    @State private var showMicroReview = false
     @State private var rootReady = false
     @State private var selectedTab = 0
-    @State private var reviewRouteTask: Task<Void, Never>?
+    @State private var reminderRouteTask: Task<Void, Never>?
     var body: some Scene {
         WindowGroup {
             TabView(selection: $selectedTab) {
@@ -55,25 +53,19 @@ final class VocaNotificationDelegate: NSObject, UIApplicationDelegate, UNUserNot
                 AccountView().tabItem { Label("계정", systemImage: "person.crop.circle") }.tag(2)
             }
             .tint(Palette.accent).environment(store)
-            .fullScreenCover(isPresented: $showMicroReview) { MicroReviewSessionView().environment(store) }
-            .onReceive(NotificationCenter.default.publisher(for: .openMicroReview)) { _ in
-                presentPendingMicroReviewIfReady()
-            }
-            .onReceive(NotificationCenter.default.publisher(for: .finishMicroReview)) { _ in
-                selectedTab = 0
-            }
+            .onReceive(NotificationCenter.default.publisher(for: .openReminderApp)) { _ in openAppFromReminder() }
             .onAppear {
                 rootReady = true
                 Task { try? await UNUserNotificationCenter.current().setBadgeCount(0) }
                 store.scheduleMicroNotifications()
                 Task { await store.requestMigratedNotificationPermissionIfNeeded() }
-                presentPendingMicroReviewIfReady()
+                openAppFromReminder()
             }
             .onChange(of: scenePhase) { _, phase in
                 if phase == .active {
                     store.scheduleMicroNotifications()
                     Task { try? await UNUserNotificationCenter.current().setBadgeCount(0) }
-                    presentPendingMicroReviewIfReady()
+                    openAppFromReminder()
                 }
             }
             .alert("확인이 필요해요", isPresented: Binding(get: { store.error != nil }, set: { if !$0 { store.error = nil } })) {
@@ -81,18 +73,17 @@ final class VocaNotificationDelegate: NSObject, UIApplicationDelegate, UNUserNot
             } message: { Text(store.error ?? "") }
         }
     }
-    private func presentPendingMicroReviewIfReady() {
-        guard rootReady, VocaNotificationDelegate.pendingMicroReview else { return }
-        if showMicroReview { VocaNotificationDelegate.pendingMicroReview = false; return }
-        guard reviewRouteTask == nil else { return }
-        reviewRouteTask = Task { @MainActor in
-            defer { reviewRouteTask = nil }
+    private func openAppFromReminder() {
+        guard rootReady, VocaNotificationDelegate.pendingReminderApp else { return }
+        guard reminderRouteTask == nil else { return }
+        reminderRouteTask = Task { @MainActor in
+            defer { reminderRouteTask = nil }
             // App Intents may arrive during the foreground transition, before
             // UIApplication and SwiftUI agree that the scene is active.
             for _ in 0..<40 {
                 if UIApplication.shared.applicationState == .active {
-                    VocaNotificationDelegate.pendingMicroReview = false
-                    showMicroReview = true
+                    VocaNotificationDelegate.pendingReminderApp = false
+                    selectedTab = 0
                     return
                 }
                 do { try await Task.sleep(for: .milliseconds(50)) } catch { return }
@@ -129,8 +120,8 @@ struct EmptyState: View {
 }
 
 public struct OpenMicroReviewIntent: LiveActivityIntent {
-    public static let title: LocalizedStringResource = "1-3-3 학습 시작"
-    public static let description = IntentDescription("voca-ios를 열고 1-3-3 단어 확인을 바로 시작합니다.")
+    public static let title: LocalizedStringResource = "단어 확인 열기"
+    public static let description = IntentDescription("voca-ios의 학습 화면을 엽니다.")
     public static let openAppWhenRun = true
 
     @Parameter(title: "알람 ID") public var alarmID: String?
@@ -140,8 +131,8 @@ public struct OpenMicroReviewIntent: LiveActivityIntent {
         if #available(iOS 26.0, *), let alarmID, let id = UUID(uuidString: alarmID) {
             try? AlarmManager.shared.stop(id: id)
         }
-        VocaNotificationDelegate.pendingMicroReview = true
-        NotificationCenter.default.post(name: .openMicroReview, object: nil)
+        VocaNotificationDelegate.pendingReminderApp = true
+        NotificationCenter.default.post(name: .openReminderApp, object: nil)
         return .result()
     }
 }
@@ -149,7 +140,7 @@ public struct OpenMicroReviewIntent: LiveActivityIntent {
 struct VocaShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(intent: OpenMicroReviewIntent(),
-                    phrases: ["\(.applicationName)에서 단어 확인", "\(.applicationName)에서 1-3-3 시작"],
-                    shortTitle: "1-3-3 학습 시작", systemImageName: "rectangle.on.rectangle.angled")
+                    phrases: ["\(.applicationName)에서 단어 확인", "\(.applicationName) 열기"],
+                    shortTitle: "단어 확인 열기", systemImageName: "rectangle.on.rectangle.angled")
     }
 }

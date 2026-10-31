@@ -232,7 +232,22 @@ struct ReviewDepthListView: View {
                     }
                 }
             } footer: {
-                Text("학습 중 ‘알았어요 · 다음 단계에 담기’를 누른 단어만 모입니다. 각 단계는 내 스택 및 라이브러리와 별도로 저장됩니다.")
+                Text("학습 모드에서 단계별 확인에 담은 단어가 시작 단계에 모입니다. 양방향으로 맞히면 다음 단계로 이동합니다.")
+            }
+            Section("단계별 학습 완료 · \(store.completedReviewWords.count)개") {
+                if store.completedReviewWords.isEmpty {
+                    Text("마지막 단계까지 익힌 단어가 이곳에 보관됩니다.").foregroundStyle(.secondary)
+                }
+                ForEach(store.completedReviewWords) { word in
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(word.japanese).font(.headline).textSelection(.enabled)
+                        Text(word.korean).font(.caption).foregroundStyle(.secondary)
+                    }.swipeActions {
+                        Button("삭제", systemImage: "trash", role: .destructive) {
+                            store.removeCompletedReviewWord(word.id)
+                        }
+                    }
+                }
             }
         }.navigationTitle("단계별 단어")
     }
@@ -241,7 +256,6 @@ struct ReviewDepthDetailView: View {
     @Environment(AppStore.self) private var store
     let depth: Int
     @State private var studying = false
-    @State private var restarting = false
     @State private var deletingWord: Word?
     private var stack: Stack? { store.reviewDepthStack(at: depth) }
     var body: some View {
@@ -252,9 +266,8 @@ struct ReviewDepthDetailView: View {
                         Text("\(stack.mastered.count) / \(stack.words.count * 2) 방향 완료")
                             .font(.subheadline).foregroundStyle(.secondary)
                         ProgressView(value: stack.progress).tint(Palette.accent)
-                        Button(stack.isComplete ? "이 단계 다시 학습" : "이 단계 학습 시작") {
-                            if stack.isComplete { restarting = true } else { studying = true }
-                        }.buttonStyle(PrimaryButton()).disabled(stack.words.isEmpty)
+                        Button("이 단계 학습 시작") { studying = true }
+                            .buttonStyle(PrimaryButton()).disabled(stack.words.isEmpty)
                     }.padding(.vertical, 8)
                 }
                 Section("단어 \(stack.words.count)개") {
@@ -276,9 +289,6 @@ struct ReviewDepthDetailView: View {
         .navigationTitle("\(depth)단계 단어")
         .fullScreenCover(isPresented: $studying) {
             if let stack { StudyView(stackID: stack.id, reviewDepth: depth) }
-        }
-        .confirmationDialog("이 단계의 학습 기록을 초기화할까요?", isPresented: $restarting, titleVisibility: .visible) {
-            Button("다시 학습하기") { if store.restartReviewDepth(at: depth) { studying = true } }
         }
         .confirmationDialog("이 단어를 \(depth)단계에서 제거할까요?", isPresented: Binding(
             get: { deletingWord != nil }, set: { if !$0 { deletingWord = nil } }

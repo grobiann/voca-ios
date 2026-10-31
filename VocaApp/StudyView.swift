@@ -6,25 +6,32 @@ struct StudyView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let stackID: UUID
-    var reviewDepth: Int? = nil
+    private let initialReviewDepth: Int?
+    @State private var activeReviewDepth: Int?
+    @State private var activeStackID: UUID
     @State private var stack = Stack(title: "")
+    @State private var stageTotal = 0
+    @State private var stageCompleted = 0
     @State private var revealed = false
     @State private var offset: CGSize = .zero
     @State private var draggingHorizontally = false
     @State private var exiting = false
     @State private var undo: Stack?
     @State private var undoPromotion: (depth: Int, previousTarget: Stack)?
+    @State private var undoAdvance: ReviewDepthAdvanceSnapshot?
     @State private var advanceTask: Task<Void, Never>?
     @State private var reporting = false
     @State private var deletingWord: Word?
     private var item: ReviewItem? { stack.queue.first }
     private var word: Word? { stack.words.first { $0.id == item?.wordID } }
-    private var nextReviewDepth: Int? {
-        let next = (reviewDepth ?? 0) + 1
-        return next <= store.reviewDepthCount ? next : nil
+    init(stackID: UUID, reviewDepth: Int? = nil) {
+        self.stackID = stackID
+        self.initialReviewDepth = reviewDepth
+        _activeReviewDepth = State(initialValue: reviewDepth)
+        _activeStackID = State(initialValue: stackID)
     }
     private func persist(_ updated: Stack) {
-        if let reviewDepth { store.updateReviewDepthStack(updated, at: reviewDepth) }
+        if let activeReviewDepth { store.updateReviewDepthStack(updated, at: activeReviewDepth) }
         else { store.update(updated) }
     }
     private var sourceLibrary: Library? {
@@ -39,25 +46,32 @@ struct StudyView: View {
                     Button { dismiss() } label: { Image(systemName: "xmark").font(.headline).frame(width: 44, height: 44).background(.background, in: Circle()) }.accessibilityLabel("학습 닫기")
                     Spacer()
                     VStack(spacing: 4) {
-                        Text(stack.title).font(.subheadline.bold()).lineLimit(1)
-                        Text("\(stack.mastered.count) / \(stack.words.count * 2) 완료").font(.caption).foregroundStyle(.secondary)
+                        Text(activeReviewDepth.map { "\($0)단계" } ?? stack.title).font(.subheadline.bold()).lineLimit(1)
+                        Text(activeReviewDepth.map { _ in "이번 단계 \(stageCompleted)/\(stageTotal)개 완료" } ?? "\(stack.mastered.count) / \(stack.words.count * 2) 완료")
+                            .font(.caption).foregroundStyle(.secondary)
                     }
                     Spacer()
                     Button {
                         if let undo {
-                            if let undoPromotion {
-                                store.restoreReviewDepths(source: reviewDepth == nil ? nil : undo,
-                                                          sourceDepth: reviewDepth,
+                            if let undoAdvance {
+                                store.undoReviewDepthAdvance(undoAdvance, restore: undo)
+                                activeReviewDepth = undoAdvance.sourceDepth
+                                activeStackID = undo.id
+                            } else if let undoPromotion {
+                                store.restoreReviewDepths(source: nil,
+                                                          sourceDepth: nil,
                                                           destination: undoPromotion.previousTarget,
                                                           destinationDepth: undoPromotion.depth)
+                                persist(undo)
+                            } else {
+                                persist(undo)
                             }
                             stack = undo
-                            if undoPromotion == nil { persist(stack) }
-                            self.undo = nil; undoPromotion = nil; revealed = false; offset = .zero
+                            self.undo = nil; undoPromotion = nil; undoAdvance = nil; revealed = false; offset = .zero
                         }
                     } label: { Image(systemName: "arrow.uturn.backward").frame(width: 44, height: 44) }.disabled(undo == nil || exiting).accessibilityLabel("이전 응답 취소")
                 }
-                ProgressView(value: stack.progress).tint(Palette.accent)
+                    ProgressView(value: activeReviewDepth.map { _ in stageTotal == 0 ? 0 : Double(stageCompleted) / Double(stageTotal) } ?? stack.progress).tint(Palette.accent)
                 if let word, let item {
                     HStack {
                         Text(item.direction.label).font(.caption.weight(.semibold))
@@ -100,37 +114,28 @@ struct StudyView: View {
                         responseButton("다시 볼게요", icon: "arrow.left", known: false, width: geometry.size.width)
                         responseButton("알았어요", icon: "arrow.right", known: true, width: geometry.size.width)
                     }.disabled(!revealed || exiting).opacity(revealed ? 1 : 0.35)
-                    if let nextReviewDepth {
-                        Button {
-                            answer(true, width: geometry.size.width, promoteTo: nextReviewDepth)
-                        } label: {
-                            Label(store.reviewDepthStack(at: nextReviewDepth)?.words.contains(where: { $0.id == word.id }) == true && reviewDepth == nil
-                                  ? "알았어요 · \(nextReviewDepth)단계에 담김" : "알았어요 · \(nextReviewDepth)단계에 담기",
-                                  systemImage: "arrow.up.forward.square")
-                                .font(.subheadline.weight(.semibold)).frame(maxWidth: .infinity).padding(.vertical, 10)
+                    Menu {
+                        if activeReviewDepth == nil {
+                            Button("단계별 확인에 담기", systemImage: "square.stack.3d.up") {
+                                answer(true, width: geometry.size.width, promoteTo: 1)
+                            }
                         }
-                        .buttonStyle(.borderedProminent).tint(Palette.accent)
-                        .disabled(!revealed || exiting)
-                        .opacity(revealed ? 1 : 0.35)
+                        Button("오류 제보", systemImage: "flag") { reporting = true }
+                        Button("세트에서 제거", systemImage: "trash", role: .destructive) { deletingWord = word }
+                    } label: {
+                        Label("관리", systemImage: "ellipsis.circle")
+                            .font(.caption.weight(.medium)).padding(.horizontal, 14).padding(.vertical, 6)
                     }
-                    VStack(spacing: 6) {
-                        Button {
-                            store.addMicroWord(word, sourceTitle: stack.title)
-                        } label: {
-                            Label(store.microEntry(for: word)?.status == .active ? "1-3-3 풀에 담김" : "1-3-3에 담기",
-                                  systemImage: store.microEntry(for: word)?.status == .active ? "checkmark.circle.fill" : "bell.badge")
-                        }
-                        .disabled(store.microEntry(for: word)?.status == .active || exiting)
-                        HStack(spacing: 8) {
-                            Button("오류 제보", systemImage: "flag") { reporting = true }
-                                .disabled(exiting)
-                            Button("세트에서 제거", systemImage: "trash", role: .destructive) { deletingWord = word }
-                                .disabled(exiting)
-                        }
-                    }
-                    .buttonStyle(.bordered).font(.caption)
+                    .disabled(exiting)
                     Text(revealed ? "모르면 왼쪽, 알면 오른쪽으로 밀어 주세요" : "카드를 누르면 뜻을 확인할 수 있어요")
                         .font(.caption).foregroundStyle(.secondary)
+                } else if stack.words.isEmpty && activeReviewDepth != nil {
+                    Spacer()
+                    Image(systemName: "checkmark.seal.fill").font(.system(size: 76)).foregroundStyle(Palette.accent)
+                    Text("단계별 학습을 마쳤어요").font(.title.bold())
+                    Text("완료한 단어는 별도 목록에 보관됩니다.").foregroundStyle(.secondary).multilineTextAlignment(.center)
+                    Spacer()
+                    Button("학습 마치기") { dismiss() }.buttonStyle(PrimaryButton())
                 } else if stack.words.isEmpty {
                     Spacer()
                     Image(systemName: "rectangle.stack.badge.minus").font(.system(size: 64)).foregroundStyle(Palette.accent)
@@ -148,12 +153,15 @@ struct StudyView: View {
                 }
             }.padding(24).frame(maxWidth: 650).frame(maxWidth: .infinity).background(Palette.canvas)
         }.onAppear {
-            if let saved = reviewDepth.flatMap({ store.reviewDepthStack(at: $0) }) ?? store.archive.stacks.first(where: { $0.id == stackID }) {
+            activeReviewDepth = initialReviewDepth
+            activeStackID = stackID
+            if let saved = initialReviewDepth.flatMap({ store.reviewDepthStack(at: $0) }) ?? store.archive.stacks.first(where: { $0.id == stackID }) {
                 stack = saved; stack.prepare(poolSize: store.poolSize); persist(stack)
+                if initialReviewDepth != nil { stageTotal = saved.words.count }
             }
         }.onDisappear { advanceTask?.cancel() }
         .sheet(isPresented: $reporting, onDismiss: {
-            if let updated = reviewDepth.flatMap({ store.reviewDepthStack(at: $0) }) ?? store.archive.stacks.first(where: { $0.id == stackID }) { stack = updated }
+            if let updated = activeReviewDepth.flatMap({ store.reviewDepthStack(at: $0) }) ?? store.archive.stacks.first(where: { $0.id == activeStackID }) { stack = updated }
         }) {
             NavigationStack {
                 WordReportComposer(library: sourceLibrary, stacks: [stack], initialWordID: word?.id)
@@ -270,9 +278,9 @@ struct StudyView: View {
                 .background((known ? Palette.accent : Palette.orange).opacity(0.09), in: RoundedRectangle(cornerRadius: 18))
         }
     }
-    private func answer(_ known: Bool, width: CGFloat, promoteTo depth: Int? = nil) {
+    private func answer(_ known: Bool, width: CGFloat, promoteTo promotionDepth: Int? = nil) {
         guard revealed && !exiting else { return }
-        let promotedWord = depth == nil ? nil : word
+        let answeredWord = word
         exiting = true; store.feedback(.medium)
         withAnimation(reduceMotion ? .linear(duration: 0.1) : .easeIn(duration: 0.23)) {
             offset = CGSize(width: (known ? 1 : -1) * (width + 180), height: 40)
@@ -281,33 +289,62 @@ struct StudyView: View {
             do { try await Task.sleep(for: .milliseconds(reduceMotion ? 100 : 240)) } catch { return }
             undo = stack
             undoPromotion = nil
-            if let depth, let promotedWord, let previousTarget = store.reviewDepthStack(at: depth) {
-                let promoted = if let reviewDepth {
-                    store.moveToReviewDepth(promotedWord, from: reviewDepth)
-                } else {
-                    store.addToReviewDepth(promotedWord, at: depth)
-                }
-                if promoted {
-                    undoPromotion = (depth, previousTarget)
-                    if let reviewDepth, let updated = store.reviewDepthStack(at: reviewDepth) {
-                        stack = updated
-                        var transaction = Transaction(); transaction.disablesAnimations = true
-                        withTransaction(transaction) { revealed = false; offset = .zero; exiting = false }
-                        return
+            undoAdvance = nil
+            if let activeReviewDepth, known, let answeredWord {
+                var updated = stack
+                updated.answer(known: true, poolSize: store.poolSize)
+                let directions = Direction.allCases.map { ReviewItem(wordID: answeredWord.id, direction: $0) }
+                if directions.allSatisfy({ updated.mastered.contains($0) }),
+                   let snapshot = store.advanceReviewDepthWord(answeredWord, updatedSource: updated, from: activeReviewDepth) {
+                    undoAdvance = snapshot
+                    stageCompleted += 1
+                    stack = store.reviewDepthStack(at: activeReviewDepth) ?? updated
+                    if activeReviewDepth < store.reviewDepthCount,
+                       let next = store.reviewDepthStack(at: activeReviewDepth + 1),
+                       next.words.contains(where: { $0.id == answeredWord.id }) {
+                        self.activeReviewDepth = activeReviewDepth + 1
+                        activeStackID = next.id
+                        stack = next
+                        stageTotal = next.words.count
+                        stageCompleted = 0
+                    } else if stack.words.isEmpty {
+                        advanceToNextStageIfAvailable()
                     }
+                } else {
+                    stack = updated
+                    persist(updated)
                 }
+            } else {
+                if known, let depth = promotionDepth, let answeredWord, let previousTarget = store.reviewDepthStack(at: depth),
+                   store.addToReviewDepth(answeredWord, at: depth) {
+                    undoPromotion = (depth, previousTarget)
+                }
+                stack.answer(known: known, poolSize: store.poolSize)
+                persist(stack)
             }
-            stack.answer(known: known, poolSize: store.poolSize); persist(stack)
             var transaction = Transaction(); transaction.disablesAnimations = true
             withTransaction(transaction) { revealed = false; offset = .zero; exiting = false }
+        }
+    }
+    private func advanceToNextStageIfAvailable() {
+        guard let activeReviewDepth else { return }
+        guard activeReviewDepth < store.reviewDepthCount else { return }
+        for depth in (activeReviewDepth + 1)...store.reviewDepthCount {
+            guard let next = store.reviewDepthStack(at: depth), !next.words.isEmpty else { continue }
+            self.activeReviewDepth = depth
+            activeStackID = next.id
+            stack = next
+            stageTotal = next.words.count
+            stageCompleted = 0
+            return
         }
     }
     private func removeCurrentWord(_ wordID: UUID) {
         guard !exiting, stack.words.contains(where: { $0.id == wordID }) else { deletingWord = nil; return }
         advanceTask?.cancel()
-        if let reviewDepth { store.removeReviewDepthWord(wordID, at: reviewDepth) }
-        else { store.removeWord(wordID, from: stackID) }
-        if let updated = reviewDepth.flatMap({ store.reviewDepthStack(at: $0) }) ?? store.archive.stacks.first(where: { $0.id == stackID }) { stack = updated }
+        if let activeReviewDepth { store.removeReviewDepthWord(wordID, at: activeReviewDepth) }
+        else { store.removeWord(wordID, from: activeStackID) }
+        if let updated = activeReviewDepth.flatMap({ store.reviewDepthStack(at: $0) }) ?? store.archive.stacks.first(where: { $0.id == activeStackID }) { stack = updated }
         undo = nil
         undoPromotion = nil
         revealed = false

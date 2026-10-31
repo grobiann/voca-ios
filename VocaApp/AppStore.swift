@@ -4,6 +4,13 @@ import AVFoundation
 import UserNotifications
 import AlarmKit
 
+struct ReviewDepthAdvanceSnapshot {
+    let sourceDepth: Int
+    let previousDestination: Stack?
+    let destinationDepth: Int?
+    let previousCompleted: [Word]
+}
+
 @MainActor @Observable final class AppStore {
     var archive: Archive
     var error: String?
@@ -34,6 +41,7 @@ import AlarmKit
         max(3, (archive.reviewDepthStacks ?? []).enumerated().filter { !$0.element.words.isEmpty }.map { $0.offset + 1 }.max() ?? 3)
     }
     var reviewDepthStacks: [Stack] { Array((archive.reviewDepthStacks ?? []).prefix(reviewDepthCount)) }
+    var completedReviewWords: [Word] { archive.completedReviewWords ?? [] }
     var activeMicroCount: Int { microEntries.filter { $0.status == .active }.count }
     var completedMicroCount: Int { microEntries.filter { $0.status == .completed }.count }
     var poolSize: Int {
@@ -112,6 +120,31 @@ import AlarmKit
         let moved = archive.moveToReviewDepth(word, from: sourceDepth, poolSize: poolSize)
         if moved { save() }
         return moved
+    }
+    func advanceReviewDepthWord(_ word: Word, updatedSource: Stack, from sourceDepth: Int) -> ReviewDepthAdvanceSnapshot? {
+        guard archive.reviewDepthStacks?.indices.contains(sourceDepth - 1) == true else { return nil }
+        let destinationDepth = sourceDepth < reviewDepthCount ? sourceDepth + 1 : nil
+        let previousDestination = destinationDepth.flatMap { reviewDepthStack(at: $0) }
+        let previousCompleted = archive.completedReviewWords ?? []
+        archive.reviewDepthStacks![sourceDepth - 1] = updatedSource
+        guard archive.advanceReviewDepthWord(word, from: sourceDepth, poolSize: poolSize) else { return nil }
+        save()
+        return ReviewDepthAdvanceSnapshot(sourceDepth: sourceDepth, previousDestination: previousDestination,
+                                          destinationDepth: destinationDepth, previousCompleted: previousCompleted)
+    }
+    func undoReviewDepthAdvance(_ snapshot: ReviewDepthAdvanceSnapshot, restore source: Stack) {
+        guard archive.reviewDepthStacks?.indices.contains(snapshot.sourceDepth - 1) == true else { return }
+        archive.reviewDepthStacks![snapshot.sourceDepth - 1] = source
+        if let destination = snapshot.previousDestination, let depth = snapshot.destinationDepth,
+           archive.reviewDepthStacks!.indices.contains(depth - 1) {
+            archive.reviewDepthStacks![depth - 1] = destination
+        }
+        archive.completedReviewWords = snapshot.previousCompleted
+        save()
+    }
+    func removeCompletedReviewWord(_ wordID: UUID) {
+        archive.completedReviewWords?.removeAll { $0.id == wordID }
+        save()
     }
     func restoreReviewDepths(source: Stack?, sourceDepth: Int?, destination: Stack, destinationDepth: Int) {
         guard archive.reviewDepthStacks?.indices.contains(destinationDepth - 1) == true else { return }
@@ -212,7 +245,7 @@ import AlarmKit
                 error = "알림이 허용되지 않았습니다. iPhone 설정에서 voca-ios 알림을 허용해 주세요."
                 return false
             }
-            try await MicroNotificationScheduler.scheduleTest(entries: microEntries.filter { $0.status == .active })
+            try await MicroNotificationScheduler.scheduleTest()
             return true
         } catch {
             self.error = "테스트 알림을 예약하지 못했습니다: \(error.localizedDescription)"
@@ -271,16 +304,15 @@ import AlarmKit
         let previous = reminderTask
         previous?.cancel()
         let settings = microSettings
-        let entries = microEntries.filter { $0.status == .active }
         reminderTask = Task {
             _ = await previous?.result
             if #available(iOS 26.0, *) {
                 do { try MicroAlarmCleanup.cancelOldAlarms() }
                 catch { self.error = "이전 시스템 알람을 취소하지 못했습니다: \(error.localizedDescription)" }
             }
-            do { try await MicroNotificationScheduler.synchronize(settings: settings, entries: entries) }
+            do { try await MicroNotificationScheduler.synchronize(settings: settings) }
             catch is CancellationError { }
-            catch { self.error = "1-3-3 알림을 예약하지 못했습니다: \(error.localizedDescription)" }
+            catch { self.error = "단어 확인 알림을 예약하지 못했습니다: \(error.localizedDescription)" }
         }
     }
     func feedback(_ style: UIImpactFeedbackGenerator.FeedbackStyle = .light) {
@@ -291,32 +323,26 @@ import AlarmKit
 @MainActor private enum MicroNotificationScheduler {
     static let prefix = "voca.micro."
     static let testIdentifier = "voca.test.micro"
-    static func content(entries: [MicroReviewEntry], index: Int) -> UNMutableNotificationContent {
+    static func content() -> UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
-        if entries.isEmpty {
-            content.title = "1-3-3 풀이 비었어요"
-            content.body = "학습 중인 카드에서 단어를 담아 보세요."
-        } else {
-            let entry = entries[index % entries.count]
-            content.title = "1-3-3 · \(entry.successCount)/3 확인"
-            content.body = entry.word.japanese
-        }
-        content.userInfo = ["vocaMicroReview": true]
+        content.title = "단어 확인 시간"
+        content.body = "잠깐 일본어를 만나 보세요. 탭하면 voca-ios가 열립니다."
+        content.userInfo = ["vocaOpenApp": true]
         content.interruptionLevel = .timeSensitive
         content.relevanceScore = 1
         return content
     }
-    static func scheduleTest(entries: [MicroReviewEntry]) async throws {
+    static func scheduleTest() async throws {
         let center = UNUserNotificationCenter.current()
         center.removePendingNotificationRequests(withIdentifiers: [testIdentifier])
         let request = UNNotificationRequest(
             identifier: testIdentifier,
-            content: content(entries: entries, index: 0),
+            content: content(),
             trigger: UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
         )
         try await center.add(request)
     }
-    static func synchronize(settings: MicroReviewSettings, entries: [MicroReviewEntry]) async throws {
+    static func synchronize(settings: MicroReviewSettings) async throws {
         let center = UNUserNotificationCenter.current()
         let existing = await center.pendingNotificationRequests()
         try Task.checkCancellation()
@@ -328,7 +354,7 @@ import AlarmKit
         let slotsPerDay = Int(ceil(Double((settings.endHour - settings.startHour) * 60) / Double(settings.intervalMinutes)))
         let repeating = slotsPerDay * (settings.includesWeekends ? 1 : 5) <= 60
         var usedSlots = Set<String>()
-        for (index, date) in dates.enumerated() {
+        for date in dates {
             try Task.checkCancellation()
             let fields: Set<Calendar.Component> = repeating
                 ? (settings.includesWeekends ? [.hour, .minute] : [.weekday, .hour, .minute])
@@ -338,7 +364,7 @@ import AlarmKit
                 ? "\(parts.hour ?? 0):\(parts.minute ?? 0)"
                 : "\(parts.weekday ?? 0):\(parts.hour ?? 0):\(parts.minute ?? 0)"
             if repeating && !usedSlots.insert(slotKey).inserted { continue }
-            let content = content(entries: entries, index: index)
+            let content = content()
             let trigger = UNCalendarNotificationTrigger(dateMatching: parts, repeats: repeating)
             let request = UNNotificationRequest(identifier: prefix + String(Int(date.timeIntervalSince1970)), content: content, trigger: trigger)
             try await center.add(request)

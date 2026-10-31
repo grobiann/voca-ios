@@ -105,6 +105,7 @@ public struct Archive: Codable, Sendable {
     public var studyPoolSize: Int?
     public var reviewDepthCount: Int?
     public var reviewDepthStacks: [Stack]?
+    public var completedReviewWords: [Word]?
     public var microSessionCardCount: Int?
     public var showReadingOnFront: Bool?
     public var wordReports: [WordReport]?
@@ -146,6 +147,29 @@ public struct Archive: Codable, Sendable {
         reviewDepthStacks![sourceDepth - 1].prepare(poolSize: poolSize)
         return true
     }
+    @discardableResult public mutating func advanceReviewDepthWord(_ word: Word, from sourceDepth: Int, poolSize: Int = Stack.poolLimit) -> Bool {
+        guard sourceDepth >= 1, sourceDepth <= configuredReviewDepthCount,
+              reviewDepthStacks?.indices.contains(sourceDepth - 1) == true,
+              reviewDepthStacks![sourceDepth - 1].words.contains(where: { $0.id == word.id }) else { return false }
+        if sourceDepth < configuredReviewDepthCount {
+            prepareReviewDepths()
+            let next = sourceDepth
+            if let existing = reviewDepthStacks![next].words.firstIndex(where: { $0.id == word.id }) {
+                reviewDepthStacks![next].words[existing] = word
+            } else {
+                reviewDepthStacks![next].words.append(word)
+            }
+            reviewDepthStacks![next].prepare(poolSize: poolSize)
+        } else {
+            var completed = completedReviewWords ?? []
+            if let existing = completed.firstIndex(where: { $0.id == word.id }) { completed[existing] = word }
+            else { completed.append(word) }
+            completedReviewWords = completed
+        }
+        reviewDepthStacks![sourceDepth - 1].words.removeAll { $0.id == word.id }
+        reviewDepthStacks![sourceDepth - 1].prepare(poolSize: poolSize)
+        return true
+    }
     @discardableResult public mutating func removeLegacyExamples() -> Bool {
         var changed = false
         func clear(_ word: inout Word) {
@@ -160,6 +184,9 @@ public struct Archive: Codable, Sendable {
             for stackIndex in reviewDepthStacks!.indices {
                 for wordIndex in reviewDepthStacks![stackIndex].words.indices { clear(&reviewDepthStacks![stackIndex].words[wordIndex]) }
             }
+        }
+        if completedReviewWords != nil {
+            for index in completedReviewWords!.indices { clear(&completedReviewWords![index]) }
         }
         for libraryIndex in libraries.indices {
             for stackIndex in libraries[libraryIndex].stacks.indices {
@@ -198,6 +225,12 @@ public struct Archive: Codable, Sendable {
             for stackIndex in reviewDepthStacks!.indices {
                 guard let wordIndex = reviewDepthStacks![stackIndex].words.firstIndex(where: { $0.id == word.id }) else { continue }
                 reviewDepthStacks![stackIndex].words[wordIndex].korean = correction
+                updatedMyCard = true
+            }
+        }
+        if completedReviewWords != nil {
+            for index in completedReviewWords!.indices where completedReviewWords![index].id == word.id {
+                completedReviewWords![index].korean = correction
                 updatedMyCard = true
             }
         }

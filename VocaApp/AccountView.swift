@@ -19,16 +19,10 @@ struct AccountView: View {
                     Toggle("앞면에 히라가나 표시", isOn: $store.showReadingOnFront)
                     Toggle("카드 햅틱 피드백", isOn: $store.haptics).onChange(of: store.haptics) { _, value in UserDefaults.standard.set(value, forKey: "haptics") }
                 }
-                Section("1-3-3 알림") {
-                    NavigationLink {
-                        MicroReviewSettingsView()
-                    } label: {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("1-3-3 알림")
-                            Text("풀 \(store.activeMicroCount)개 · 완료 \(store.completedMicroCount)개")
-                                .font(.caption).foregroundStyle(.secondary)
-                        }
-                    }.accessibilityIdentifier("microReviewSettings")
+                Section("알림") {
+                    NavigationLink("단어 확인 알림") {
+                        WordReminderSettingsView()
+                    }.accessibilityIdentifier("wordReminderSettings")
                 }
                 Section("앱 정보") {
                     NavigationLink("단어 오류 제보함") { WordReportList() }
@@ -39,9 +33,8 @@ struct AccountView: View {
     }
 }
 
-struct MicroReviewSettingsView: View {
+struct WordReminderSettingsView: View {
     @Environment(AppStore.self) private var store
-    @State private var showQuickReview = false
     @State private var testScheduled = false
     private var settings: MicroReviewSettings { store.microSettings }
     private func binding<Value>(_ keyPath: WritableKeyPath<MicroReviewSettings, Value>) -> Binding<Value> {
@@ -54,23 +47,7 @@ struct MicroReviewSettingsView: View {
     var body: some View {
         List {
             Section {
-                Stepper("한 번에 학습할 카드: \(store.microSessionCardCount)개", value: Binding(
-                    get: { store.microSessionCardCount }, set: { store.microSessionCardCount = $0 }
-                ), in: 1...10)
-                NavigationLink {
-                    MicroReviewPoolView()
-                } label: {
-                    HStack {
-                        Label("현재 풀", systemImage: "folder")
-                        Spacer()
-                        Text("\(store.activeMicroCount)개").bold().foregroundStyle(.secondary)
-                    }
-                }
-                .accessibilityIdentifier("microReviewPool")
-                Button("지금 1-3-3 확인", systemImage: "play.fill") { showQuickReview = true }
-            }
-            Section {
-                Toggle("1-3-3 알림 켜기", isOn: Binding(
+                Toggle("단어 확인 알림 켜기", isOn: Binding(
                     get: { settings.enabled },
                     set: { enabled in Task { await store.setMicroEnabled(enabled) } }
                 ))
@@ -85,326 +62,17 @@ struct MicroReviewSettingsView: View {
                 }
                 Toggle("주말에도 알림", isOn: binding(\.includesWeekends))
             } header: { Text("알림 설정") }
-            Section("알림 테스트") {
-                Button("5초 후 테스트 알림", systemImage: "bell") {
+            Section("테스트") {
+                Button("5초 후 알림 테스트", systemImage: "bell") {
                     Task { testScheduled = await store.sendMicroTestNotification() }
                 }
                 if testScheduled {
-                    Text("5초 뒤 소리 없는 알림이 표시됩니다.")
+                    Text("5초 뒤 단어 확인 알림을 받습니다.")
                         .font(.footnote).foregroundStyle(.secondary)
                 }
             }
         }
-        .navigationTitle("1-3-3 알림")
-        .fullScreenCover(isPresented: $showQuickReview) { MicroReviewSessionView() }
-    }
-}
-
-struct MicroReviewPoolView: View {
-    @Environment(AppStore.self) private var store
-    private var active: [MicroReviewEntry] { store.microEntries.filter { $0.status == .active } }
-    private var completed: [MicroReviewEntry] { store.microEntries.filter { $0.status == .completed } }
-    private var stopped: [MicroReviewEntry] { store.microEntries.filter { $0.status == .stopped } }
-    var body: some View {
-        List {
-            Section("1-3-3 풀 · \(active.count)개") {
-                if active.isEmpty { Text("아직 담은 단어가 없어요.").foregroundStyle(.secondary) }
-                ForEach(active) { entry in
-                    microRow(entry) {
-                        Button("더 이상 알리지 않기", systemImage: "bell.slash", role: .destructive) { store.stopMicro(entry.id) }
-                    }
-                }
-            }
-            Section("학습완료단어목록 · \(completed.count)개") {
-                if completed.isEmpty { Text("세 번 확인하면 이곳에 모여요.").foregroundStyle(.secondary) }
-                ForEach(completed) { entry in
-                    microRow(entry) {
-                        Button("다시 1-3-3에 담기", systemImage: "arrow.counterclockwise") { store.restartMicro(entry.id) }
-                    }
-                }
-            }
-            if !stopped.isEmpty {
-                Section("그만 보기 · \(stopped.count)개") {
-                    ForEach(stopped) { entry in
-                        microRow(entry) {
-                            Button("다시 알리기", systemImage: "bell") { store.restartMicro(entry.id) }
-                            Button("목록에서 삭제", systemImage: "trash", role: .destructive) { store.removeMicro(entry.id) }
-                        }
-                    }
-                }
-            }
-        }
-        .navigationTitle("현재 풀")
-    }
-    private func microRow<Actions: View>(_ entry: MicroReviewEntry, @ViewBuilder actions: () -> Actions) -> some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 5) {
-                Text(entry.word.japanese).font(.headline).textSelection(.enabled)
-                Text("\(entry.word.korean) · \(entry.successCount)/3 완료")
-                    .font(.caption).foregroundStyle(.secondary)
-            }
-            Spacer()
-            Menu { actions() } label: { Image(systemName: "ellipsis.circle").frame(width: 44, height: 44) }
-                .accessibilityLabel("\(entry.word.japanese) 관리")
-        }
-    }
-}
-
-struct MicroReviewSessionView: View {
-    @Environment(AppStore.self) private var store
-    @Environment(\.dismiss) private var dismiss
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var currentID: UUID?
-    @State private var seenIDs = Set<UUID>()
-    @State private var revealed = false
-    @State private var handled = 0
-    @State private var sessionTotal = 0
-    @State private var continuing = false
-    @State private var started = false
-    @State private var offset: CGSize = .zero
-    @State private var draggingHorizontally = false
-    @State private var exiting = false
-    @State private var advanceTask: Task<Void, Never>?
-    @State private var closeTask: Task<Void, Never>?
-    @State private var completionDeadline: Date?
-    private var current: MicroReviewEntry? { store.microEntries.first { $0.id == currentID && $0.status == .active } }
-    private var hasMoreWords: Bool { store.microEntries.contains { $0.status == .active && !seenIDs.contains($0.id) } }
-    var body: some View {
-        GeometryReader { geometry in
-            VStack(spacing: 20) {
-                HStack {
-                    Button { dismiss() } label: {
-                        Image(systemName: "xmark").font(.headline).frame(width: 44, height: 44).background(.background, in: Circle())
-                    }.accessibilityLabel("닫기")
-                    Spacer()
-                    Text("1-3-3 알림").font(.subheadline.bold())
-                    Spacer()
-                    Color.clear.frame(width: 44, height: 44).accessibilityHidden(true)
-                }
-                ProgressView(value: Double(handled), total: Double(max(sessionTotal, 1))).tint(Palette.accent)
-                HStack {
-                    Text("이번 카드 \(current == nil ? handled : handled + 1) / \(sessionTotal)")
-                        .accessibilityIdentifier("microSessionProgress")
-                    Spacer()
-                    Text("전체 풀 \(store.activeMicroCount)개")
-                }.font(.caption).foregroundStyle(.secondary)
-                if let current {
-                    ZStack {
-                        ForEach(0..<2) { index in
-                            RoundedRectangle(cornerRadius: 30).fill(Color(uiColor: .secondarySystemGroupedBackground))
-                                .overlay(RoundedRectangle(cornerRadius: 30).stroke(.primary.opacity(0.05)))
-                                .rotationEffect(.degrees(index == 0 ? -3 : 3)).padding(.horizontal, 8).offset(y: 8)
-                                .accessibilityHidden(true)
-                        }
-                        card(current)
-                            .overlay(alignment: .top) {
-                                HStack {
-                                    stamp("알았어요", color: Palette.accent, angle: -12)
-                                        .opacity(revealed ? Double(min(max(offset.width, 0) / 90, 1)) : 0)
-                                    Spacer()
-                                    stamp("다시 볼게요", color: Palette.orange, angle: 12)
-                                        .opacity(revealed ? Double(min(max(-offset.width, 0) / 90, 1)) : 0)
-                                }.padding(.horizontal, 24).padding(.top, 92).allowsHitTesting(false)
-                                    .accessibilityHidden(true)
-                            }
-                            .offset(offset).rotationEffect(.degrees(reduceMotion ? 0 : Double(offset.width / 22)))
-                            .simultaneousGesture(revealed ? swipeGesture(width: geometry.size.width) : nil)
-                    }.padding(.vertical, 8)
-                    HStack(spacing: 14) {
-                        responseButton("다시 볼게요", known: false, width: geometry.size.width)
-                        responseButton("알았어요", known: true, width: geometry.size.width)
-                    }.disabled(!revealed || exiting).opacity(revealed ? 1 : 0.35)
-                    Button("이 단어 그만 보기", role: .destructive) { stopCurrent() }
-                        .font(.subheadline).buttonStyle(.bordered).disabled(exiting)
-                    Text(revealed ? "모르면 왼쪽, 알면 오른쪽으로 밀어 주세요" : "카드를 누르면 뜻을 확인할 수 있어요")
-                        .font(.caption).foregroundStyle(.secondary)
-                } else {
-                    if handled > 0 {
-                        Button { finishReview() } label: {
-                            VStack(spacing: 18) {
-                                Spacer()
-                                Image(systemName: "checkmark.seal.fill")
-                                    .font(.system(size: 48)).foregroundStyle(Palette.accent)
-                                Text("이번 확인을 마쳤어요").font(.subheadline).foregroundStyle(.secondary)
-                                Text("터치하여 학습 화면으로").font(.title2.bold()).foregroundStyle(.primary)
-                                Spacer()
-                            }
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .contentShape(Rectangle())
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityIdentifier("microFinishReview")
-                        if hasMoreWords {
-                            Button("조금 더 학습하기") {
-                                closeTask?.cancel()
-                                completionDeadline = nil
-                                continuing = true
-                                sessionTotal = handled + store.microEntries.filter { $0.status == .active && !seenIDs.contains($0.id) }.count
-                                advance()
-                            }
-                            .font(.subheadline).foregroundStyle(.secondary)
-                            .padding(.vertical, 12)
-                        }
-                        HStack {
-                            Spacer()
-                            if let completionDeadline {
-                                TimelineView(.periodic(from: .now, by: 1)) { context in
-                                    Text("\(max(0, Int(ceil(completionDeadline.timeIntervalSince(context.date)))))초 후 마침")
-                                        .font(.caption2).monospacedDigit().foregroundStyle(.tertiary)
-                                }
-                            }
-                        }
-                    } else {
-                        Spacer()
-                        Image(systemName: "tray").font(.system(size: 56)).foregroundStyle(Palette.accent)
-                        Text("1-3-3 풀이 비었어요").font(.title2.bold())
-                        Text("학습 중인 카드에서 ‘1-3-3에 담기’를 누르면 다음 알림부터 만날 수 있어요.")
-                            .multilineTextAlignment(.center).foregroundStyle(.secondary)
-                        Button("학습 화면으로 돌아가기") { dismiss() }.buttonStyle(PrimaryButton())
-                        Spacer()
-                    }
-                }
-            }.padding(24).frame(maxWidth: 650).frame(maxWidth: .infinity).background(Palette.canvas)
-        }.onAppear {
-            guard !started else { return }
-            started = true
-            sessionTotal = min(store.microSessionCardCount, store.activeMicroCount)
-            advance()
-        }.onDisappear { closeTask?.cancel(); advanceTask?.cancel() }
-    }
-    private func card(_ entry: MicroReviewEntry) -> some View {
-        VStack(spacing: 22) {
-            HStack {
-                Text(revealed ? "ANSWER" : "THINK IN JAPANESE")
-                    .font(.system(size: 10, weight: .bold, design: .monospaced)).tracking(2).foregroundStyle(.secondary)
-                Spacer()
-            }.frame(height: 44)
-            ViewThatFits(in: .vertical) {
-                face(entry.word, scale: 1)
-                face(entry.word, scale: 0.8)
-                face(entry.word, scale: 0.6)
-            }.frame(maxWidth: .infinity, maxHeight: .infinity).clipped()
-            HStack {
-                Spacer()
-                Text("이 단어 학습 완료 \(entry.successCount)/3회")
-                    .font(.caption2).foregroundStyle(.secondary)
-            }
-        }.padding(28).frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 30))
-            .overlay(RoundedRectangle(cornerRadius: 30).stroke(.primary.opacity(0.06)))
-            .shadow(color: .black.opacity(0.06), radius: 20, y: 10)
-            .contentShape(RoundedRectangle(cornerRadius: 30))
-            .accessibilityIdentifier("microReviewCard")
-            .onTapGesture { reveal() }
-            .accessibilityAction(named: "정답 보기") { reveal() }
-    }
-    private func face(_ word: Word, scale: CGFloat) -> some View {
-        VStack(spacing: 20 * scale) {
-            Text(word.japanese)
-                .font(.system(size: (revealed ? 24 : 38) * scale, weight: revealed ? .medium : .semibold, design: .rounded))
-                .foregroundStyle(revealed ? .secondary : .primary)
-                .fixedSize(horizontal: false, vertical: true)
-            if (revealed || store.showReadingOnFront), let reading = word.reading, !reading.isEmpty {
-                Text(reading).font(.system(size: 17 * scale)).foregroundStyle(.secondary)
-                    .accessibilityIdentifier("microReading")
-            }
-            if revealed {
-                Rectangle().fill(Palette.accent.opacity(0.15)).frame(width: 36, height: 3)
-                Text(word.korean).font(.system(size: 34 * scale, weight: .semibold, design: .rounded))
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-        }.multilineTextAlignment(.center).frame(maxWidth: .infinity).padding(.vertical, 8)
-    }
-    private func reveal() {
-        guard !revealed && !exiting else { return }
-        revealed = true
-    }
-    private func swipeGesture(width: CGFloat) -> some Gesture {
-        DragGesture(minimumDistance: 14)
-            .onChanged { value in
-                guard revealed && !exiting else { return }
-                if !draggingHorizontally {
-                    guard abs(value.translation.width) > abs(value.translation.height) else { return }
-                    draggingHorizontally = true
-                }
-                offset = CGSize(width: value.translation.width, height: value.translation.height * 0.15)
-            }
-            .onEnded { value in
-                guard revealed && !exiting else { return }
-                defer { draggingHorizontally = false }
-                let translation = value.translation.width
-                let predicted = value.predictedEndTranslation.width
-                let flick = abs(translation) > 35 && abs(predicted) > 220 && translation.sign == predicted.sign
-                if draggingHorizontally && (abs(translation) > min(110, width * 0.27) || flick) {
-                    answer(translation > 0, width: width)
-                } else { withAnimation(.spring(response: 0.38, dampingFraction: 0.72)) { offset = .zero } }
-            }
-    }
-    private func stamp(_ title: String, color: Color, angle: Double) -> some View {
-        Text(title).font(.title2.bold()).foregroundStyle(color).padding(12)
-            .overlay(RoundedRectangle(cornerRadius: 12).stroke(color, lineWidth: 3)).rotationEffect(.degrees(angle))
-    }
-    private func responseButton(_ title: String, known: Bool, width: CGFloat) -> some View {
-        Button { answer(known, width: width) } label: {
-            Label(title, systemImage: known ? "arrow.right" : "arrow.left")
-                .font(.subheadline.bold()).frame(maxWidth: .infinity).padding(.vertical, 18)
-                .foregroundStyle(known ? Palette.accent : Palette.orange)
-                .background((known ? Palette.accent : Palette.orange).opacity(0.09), in: RoundedRectangle(cornerRadius: 18))
-        }
-    }
-    private func answer(_ known: Bool, width: CGFloat) {
-        guard revealed && !exiting, let currentID else { return }
-        exiting = true
-        store.feedback(.medium)
-        withAnimation(reduceMotion ? .linear(duration: 0.1) : .easeIn(duration: 0.23)) {
-            offset = CGSize(width: (known ? 1 : -1) * (width + 180), height: 40)
-        }
-        advanceTask = Task { @MainActor in
-            do { try await Task.sleep(for: .milliseconds(reduceMotion ? 100 : 240)) } catch { return }
-            store.answerMicro(currentID, known: known)
-            finishCard(currentID)
-        }
-    }
-    private func stopCurrent() {
-        guard !exiting, let currentID else { return }
-        store.stopMicro(currentID)
-        seenIDs.insert(currentID)
-        revealed = false
-        offset = .zero
-        draggingHorizontally = false
-        let remaining = store.microEntries.filter { $0.status == .active && !seenIDs.contains($0.id) }.count
-        sessionTotal = min(sessionTotal, handled + remaining)
-        advance()
-    }
-    private func finishCard(_ id: UUID) {
-        var transaction = Transaction()
-        transaction.disablesAnimations = true
-        withTransaction(transaction) {
-            seenIDs.insert(id)
-            handled += 1
-            revealed = false
-            offset = .zero
-            exiting = false
-            draggingHorizontally = false
-            advance()
-        }
-    }
-    private func finishReview() {
-        closeTask?.cancel()
-        completionDeadline = nil
-        dismiss()
-        NotificationCenter.default.post(name: .finishMicroReview, object: nil)
-    }
-    private func advance() {
-        currentID = handled >= sessionTotal && !continuing ? nil : store.nextMicroEntry(excluding: seenIDs)?.id
-        if currentID == nil && handled > 0 {
-            closeTask?.cancel()
-            completionDeadline = Date().addingTimeInterval(30)
-            closeTask = Task { @MainActor in
-                do { try await Task.sleep(for: .seconds(30)) } catch { return }
-                if !Task.isCancelled { finishReview() }
-            }
-        }
+        .navigationTitle("단어 확인 알림")
     }
 }
 
