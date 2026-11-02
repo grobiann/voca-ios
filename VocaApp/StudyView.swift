@@ -10,8 +10,6 @@ struct StudyView: View {
     @State private var activeReviewDepth: Int?
     @State private var activeStackID: UUID
     @State private var stack = Stack(title: "")
-    @State private var stageTotal = 0
-    @State private var stageCompleted = 0
     @State private var revealed = false
     @State private var offset: CGSize = .zero
     @State private var draggingHorizontally = false
@@ -47,7 +45,7 @@ struct StudyView: View {
                     Spacer()
                     VStack(spacing: 4) {
                         Text(activeReviewDepth.map { "\($0)단계" } ?? stack.title).font(.subheadline.bold()).lineLimit(1)
-                        Text(activeReviewDepth.map { _ in "이번 단계 \(stageCompleted)/\(stageTotal)개 완료" } ?? "\(stack.mastered.count) / \(stack.words.count * 2) 완료")
+                        Text(activeReviewDepth.map { _ in "단계별 단어 \(stack.words.count)개" } ?? "\(stack.mastered.count) / \(stack.words.count * 2) 완료")
                             .font(.caption).foregroundStyle(.secondary)
                     }
                     Spacer()
@@ -71,11 +69,15 @@ struct StudyView: View {
                         }
                     } label: { Image(systemName: "arrow.uturn.backward").frame(width: 44, height: 44) }.disabled(undo == nil || exiting).accessibilityLabel("이전 응답 취소")
                 }
-                    ProgressView(value: activeReviewDepth.map { _ in stageTotal == 0 ? 0 : Double(stageCompleted) / Double(stageTotal) } ?? stack.progress).tint(Palette.accent)
+                if activeReviewDepth == nil { ProgressView(value: stack.progress).tint(Palette.accent) }
                 if let word, let item {
                     HStack {
                         Text(item.direction.label).font(.caption.weight(.semibold))
-                        Spacer(); Text("학습 풀 \(stack.queue.count)/\(store.poolSize) · 남은 \(stack.remainingCount)").font(.caption)
+                        Spacer()
+                        Text(activeReviewDepth == nil
+                             ? "학습 풀 \(stack.queue.count)/\(store.poolSize) · 남은 \(stack.remainingCount)"
+                             : "학습 풀 \(stack.queue.count)/\(store.poolSize) · 남은 \(stack.words.count)")
+                            .font(.caption)
                     }.foregroundStyle(.secondary)
                     ZStack {
                         ForEach(0..<2) { index in
@@ -142,7 +144,7 @@ struct StudyView: View {
                     Text(revealed
                          ? (activeReviewDepth == nil
                             ? "모르면 왼쪽, 알면 오른쪽으로 밀어 주세요"
-                            : "모르면 왼쪽, 알면 오른쪽 · 양방향 완료 시 다음 단계로 이동")
+                            : "모르면 왼쪽, 알면 오른쪽 · 맞히면 다음 단계로 이동")
                          : "카드를 누르면 뜻을 확인할 수 있어요")
                         .font(.caption).foregroundStyle(.secondary)
                 } else if stack.words.isEmpty && activeReviewDepth != nil {
@@ -172,8 +174,10 @@ struct StudyView: View {
             activeReviewDepth = initialReviewDepth
             activeStackID = stackID
             if let saved = initialReviewDepth.flatMap({ store.reviewDepthStack(at: $0) }) ?? store.archive.stacks.first(where: { $0.id == stackID }) {
-                stack = saved; stack.prepare(poolSize: store.poolSize); persist(stack)
-                if initialReviewDepth != nil { stageTotal = saved.words.count }
+                stack = saved
+                if initialReviewDepth != nil { stack.prepareReviewDepth(poolSize: store.poolSize) }
+                else { stack.prepare(poolSize: store.poolSize) }
+                persist(stack)
             }
         }.onDisappear { advanceTask?.cancel() }
         .sheet(isPresented: $reporting, onDismiss: {
@@ -306,23 +310,26 @@ struct StudyView: View {
             undo = stack
             undoPromotion = nil
             undoAdvance = nil
-            if let activeReviewDepth, known, let answeredWord {
+            if let activeReviewDepth, let answeredWord {
                 var updated = stack
-                updated.answer(known: true, poolSize: store.poolSize)
-                let directions = Direction.allCases.map { ReviewItem(wordID: answeredWord.id, direction: $0) }
-                if directions.allSatisfy({ updated.mastered.contains($0) }),
+                updated.answer(known: known, poolSize: store.poolSize)
+                updated.prepareReviewDepth(poolSize: store.poolSize)
+                let japaneseToKorean = ReviewItem(wordID: answeredWord.id, direction: .japaneseToKorean)
+                if known, updated.mastered.contains(japaneseToKorean),
                    let snapshot = store.advanceReviewDepthWord(answeredWord, updatedSource: updated, from: activeReviewDepth) {
                     undoAdvance = snapshot
-                    stageCompleted += 1
-                    stack = store.reviewDepthStack(at: activeReviewDepth) ?? updated
+                    var remaining = store.reviewDepthStack(at: activeReviewDepth) ?? updated
+                    remaining.prepareReviewDepth(poolSize: store.poolSize)
+                    store.updateReviewDepthStack(remaining, at: activeReviewDepth)
+                    stack = remaining
                     if activeReviewDepth < store.reviewDepthCount,
-                       let next = store.reviewDepthStack(at: activeReviewDepth + 1),
+                       var next = store.reviewDepthStack(at: activeReviewDepth + 1),
                        next.words.contains(where: { $0.id == answeredWord.id }) {
+                        next.prepareReviewDepth(poolSize: store.poolSize)
+                        store.updateReviewDepthStack(next, at: activeReviewDepth + 1)
                         self.activeReviewDepth = activeReviewDepth + 1
                         activeStackID = next.id
                         stack = next
-                        stageTotal = next.words.count
-                        stageCompleted = 0
                     } else if stack.words.isEmpty {
                         advanceToNextStageIfAvailable()
                     }
@@ -346,12 +353,12 @@ struct StudyView: View {
         guard let activeReviewDepth else { return }
         guard activeReviewDepth < store.reviewDepthCount else { return }
         for depth in (activeReviewDepth + 1)...store.reviewDepthCount {
-            guard let next = store.reviewDepthStack(at: depth), !next.words.isEmpty else { continue }
+            guard var next = store.reviewDepthStack(at: depth), !next.words.isEmpty else { continue }
+            next.prepareReviewDepth(poolSize: store.poolSize)
+            store.updateReviewDepthStack(next, at: depth)
             self.activeReviewDepth = depth
             activeStackID = next.id
             stack = next
-            stageTotal = next.words.count
-            stageCompleted = 0
             return
         }
     }

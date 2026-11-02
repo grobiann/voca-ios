@@ -225,14 +225,14 @@ struct ReviewDepthListView: View {
                         NavigationLink { ReviewDepthDetailView(depth: depth) } label: {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text("\(depth)단계").font(.headline)
-                                Text("\(stack.words.count)개 단어 · \(stack.isComplete ? "학습 완료" : "\(Int(stack.progress * 100))% 완료")")
+                                Text(stack.words.isEmpty ? "학습 완료" : "\(stack.words.count)개 단어 · 일본어 → 한국어")
                                     .font(.caption).foregroundStyle(.secondary)
                             }.padding(.vertical, 4)
                         }
                     }
                 }
             } footer: {
-                Text("학습 모드에서 단계별 확인에 담은 단어가 시작 단계에 모입니다. 양방향으로 맞히면 다음 단계로 이동합니다.")
+                Text("학습 모드에서 담은 단어가 시작 단계에 모입니다. 일본어를 보고 한국어 뜻을 맞히면 다음 단계로 이동합니다.")
             }
             Section("단계별 학습 완료 · \(store.completedReviewWords.count)개") {
                 if store.completedReviewWords.isEmpty {
@@ -263,9 +263,8 @@ struct ReviewDepthDetailView: View {
             if let stack {
                 Section {
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("\(stack.mastered.count) / \(stack.words.count * 2) 방향 완료")
+                        Text("일본어를 보고 한국어 뜻을 맞히면 다음 단계로 이동합니다.")
                             .font(.subheadline).foregroundStyle(.secondary)
-                        ProgressView(value: stack.progress).tint(Palette.accent)
                         Button("이 단계 학습 시작") { studying = true }
                             .buttonStyle(PrimaryButton()).disabled(stack.words.isEmpty)
                     }.padding(.vertical, 8)

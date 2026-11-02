@@ -54,6 +54,31 @@ public struct Stack: Identifiable, Codable, Equatable, Sendable {
         if recentWordIDs == nil { recentWordIDs = [] }
         refill(poolSize: max(1, poolSize))
     }
+    public mutating func prepareReviewDepth(poolSize: Int = Self.poolLimit) {
+        let valid = Set(words.map { ReviewItem(wordID: $0.id, direction: .japaneseToKorean) })
+        mastered.formIntersection(valid)
+        var seen = Set<UUID>()
+        queue = Array(queue.filter {
+            valid.contains($0) && !mastered.contains($0) && seen.insert($0.wordID).inserted
+        }.prefix(max(1, poolSize)))
+        if hasShuffledQueue != true { queue.shuffle(); hasShuffledQueue = true }
+        if recentWordIDs == nil { recentWordIDs = [] }
+        refillReviewDepth(poolSize: max(1, poolSize))
+    }
+    private mutating func refillReviewDepth(poolSize: Int) {
+        var active = Set(queue.map(\.wordID))
+        let recent = recentWordIDs ?? []
+        while queue.count < poolSize {
+            let candidates = words
+                .map { ReviewItem(wordID: $0.id, direction: .japaneseToKorean) }
+                .filter { !mastered.contains($0) && !active.contains($0.wordID) }
+            guard !candidates.isEmpty else { break }
+            let oldest = candidates.map { recent.firstIndex(of: $0.wordID) ?? -1 }.min() ?? -1
+            guard let next = candidates.filter({ (recent.firstIndex(of: $0.wordID) ?? -1) == oldest }).randomElement() else { break }
+            active.insert(next.wordID)
+            queue.insert(next, at: Int.random(in: min(3, queue.count)...queue.count))
+        }
+    }
     private mutating func refill(poolSize: Int) {
         var activeWords = Set(queue.map(\.wordID))
         let recent = recentWordIDs ?? []
