@@ -114,20 +114,36 @@ struct StudyView: View {
                         responseButton("다시 볼게요", icon: "arrow.left", known: false, width: geometry.size.width)
                         responseButton("알았어요", icon: "arrow.right", known: true, width: geometry.size.width)
                     }.disabled(!revealed || exiting).opacity(revealed ? 1 : 0.35)
-                    Menu {
+                    HStack(spacing: 10) {
                         if activeReviewDepth == nil {
-                            Button("단계별 확인에 담기", systemImage: "square.stack.3d.up") {
+                            Button {
                                 answer(true, width: geometry.size.width, promoteTo: 1)
+                            } label: {
+                                Label("단계별 학습에 담기", systemImage: "square.stack.3d.up")
+                                    .font(.subheadline.weight(.semibold))
+                                    .frame(maxWidth: .infinity).padding(.vertical, 12)
+                                    .background(Palette.accent.opacity(0.10), in: RoundedRectangle(cornerRadius: 14))
+                                    .foregroundStyle(Palette.accent)
                             }
+                            .disabled(!revealed || exiting)
+                            .opacity(revealed ? 1 : 0.55)
+                            .accessibilityIdentifier("addToReviewDepth")
                         }
+                        Menu {
                         Button("오류 제보", systemImage: "flag") { reporting = true }
                         Button("세트에서 제거", systemImage: "trash", role: .destructive) { deletingWord = word }
                     } label: {
-                        Label("관리", systemImage: "ellipsis.circle")
-                            .font(.caption.weight(.medium)).padding(.horizontal, 14).padding(.vertical, 6)
+                            Image(systemName: "ellipsis.circle")
+                                .font(.title3).frame(width: 48, height: 44)
                     }
                     .disabled(exiting)
-                    Text(revealed ? "모르면 왼쪽, 알면 오른쪽으로 밀어 주세요" : "카드를 누르면 뜻을 확인할 수 있어요")
+                    .accessibilityLabel("카드 관리")
+                    }
+                    Text(revealed
+                         ? (activeReviewDepth == nil
+                            ? "모르면 왼쪽, 알면 오른쪽으로 밀어 주세요"
+                            : "모르면 왼쪽, 알면 오른쪽 · 양방향 완료 시 다음 단계로 이동")
+                         : "카드를 누르면 뜻을 확인할 수 있어요")
                         .font(.caption).foregroundStyle(.secondary)
                 } else if stack.words.isEmpty && activeReviewDepth != nil {
                     Spacer()
