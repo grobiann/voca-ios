@@ -241,10 +241,19 @@ struct SearchProvider: Identifiable, Codable {
     }
     func search(_ text: String, using provider: SearchProvider) {
         let template = provider.template.trimmingCharacters(in: .whitespacesAndNewlines)
-        let allowed = CharacterSet.alphanumerics.union(CharacterSet(charactersIn: "-._~"))
+        let marker = "VOCASERCHPLACEHOLDER"
         guard template.contains("{query}"),
-              let encoded = text.addingPercentEncoding(withAllowedCharacters: allowed),
-              let url = URL(string: template.replacingOccurrences(of: "{query}", with: encoded)),
+              var components = URLComponents(string: template.replacingOccurrences(of: "{query}", with: marker)),
+              let queryItems = components.queryItems,
+              queryItems.contains(where: { ($0.name + ($0.value ?? "")).contains(marker) }) else {
+            error = "검색 주소에 {query}가 있는지 확인해 주세요. 계정의 검색 버튼 설정에서 수정할 수 있습니다."
+            return
+        }
+        components.queryItems = queryItems.map { item in
+            URLQueryItem(name: item.name.replacingOccurrences(of: marker, with: text),
+                         value: item.value?.replacingOccurrences(of: marker, with: text))
+        }
+        guard let url = components.url,
               url.scheme == "https", let host = url.host, !host.isEmpty,
               url.user == nil, url.password == nil else {
             error = "검색 주소는 https://로 시작하고 검색어 자리인 {query}를 포함해야 합니다. 계정의 검색 설정에서 확인해 주세요."

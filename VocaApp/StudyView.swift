@@ -217,17 +217,20 @@ struct StudyView: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(showingAnswer ? "ANSWER" : "THINK IN \(japaneseFirst ? "JAPANESE" : "KOREAN")")
                     .font(.system(size: 10, weight: .bold, design: .monospaced)).tracking(2).foregroundStyle(.secondary)
-                HStack(spacing: 8) {
-                    Spacer()
-                    if japaneseFirst || showingAnswer {
-                        CopyJapaneseButton(text: word.japanese).id(word.id)
-                        Button { store.speak(word.japanese) } label: {
-                            Image(systemName: "speaker.wave.2").font(.title3).frame(width: 44, height: 44)
-                        }.accessibilityLabel("일본어 발음 듣기")
-                    }
-                }.frame(height: 44)
                 if japaneseFirst || showingAnswer {
-                    SearchButtons(text: word.japanese)
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 68, maximum: 92), spacing: 8)], alignment: .trailing, spacing: 4) {
+                        Button { UIPasteboard.general.string = word.japanese } label: {
+                            cardActionLabel("복사", icon: "doc.on.doc")
+                        }.buttonStyle(.borderless).accessibilityLabel("일본어 복사")
+                        ForEach(store.searchProviders.filter(\.enabled)) { provider in
+                            Button { store.search(word.japanese, using: provider) } label: {
+                                cardActionLabel(provider.name.isEmpty ? "검색" : provider.name, icon: "magnifyingglass")
+                            }.buttonStyle(.borderless).accessibilityLabel("\(word.japanese) \(provider.name) 검색")
+                        }
+                        Button { store.speak(word.japanese) } label: {
+                            cardActionLabel("듣기", icon: "speaker.wave.2")
+                        }.buttonStyle(.borderless).accessibilityLabel("일본어 발음 듣기")
+                    }.frame(maxWidth: .infinity, minHeight: 52, alignment: .trailing)
                 }
             }
             ViewThatFits(in: .vertical) {
@@ -241,6 +244,15 @@ struct StudyView: View {
             Label(showingAnswer ? "기억을 확인해 보세요" : "탭해서 뒤집기", systemImage: showingAnswer ? "sparkle" : "hand.tap")
                 .font(.caption).foregroundStyle(.tertiary)
         }.padding(28).frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    private func cardActionLabel(_ title: String, icon: String) -> some View {
+        VStack(spacing: 3) {
+            Image(systemName: icon).font(.system(size: 17, weight: .medium))
+            Text(title).font(.system(size: 9, weight: .medium)).lineLimit(1).minimumScaleFactor(0.75)
+        }
+        .foregroundStyle(Palette.accent)
+        .frame(maxWidth: .infinity, minHeight: 48)
+        .background(Palette.accent.opacity(0.07), in: RoundedRectangle(cornerRadius: 12))
     }
     private func cardFace(_ word: Word, japaneseFirst: Bool, showingAnswer: Bool, scale: CGFloat, compact: Bool = false) -> some View {
         VStack(spacing: compact ? 10 : 20 * scale) {
