@@ -19,6 +19,9 @@ struct AccountView: View {
                     Toggle("앞면에 히라가나 표시", isOn: $store.showReadingOnFront)
                     Toggle("카드 햅틱 피드백", isOn: $store.haptics).onChange(of: store.haptics) { _, value in UserDefaults.standard.set(value, forKey: "haptics") }
                 }
+                Section("검색") {
+                    NavigationLink("한자 검색 사이트") { KanjiSearchSettingsView() }
+                }
                 Section("알림") {
                     NavigationLink("단어 확인 알림") {
                         WordReminderSettingsView()
@@ -30,6 +33,24 @@ struct AccountView: View {
                 }
             }.navigationTitle("계정")
         }
+    }
+}
+
+struct KanjiSearchSettingsView: View {
+    @Environment(AppStore.self) private var store
+    var body: some View {
+        @Bindable var store = store
+        Form {
+            Section {
+                TextField("https://nihongokanji.com/?s={query}", text: $store.kanjiSearchTemplate, axis: .vertical)
+                    .textInputAutocapitalization(.never).autocorrectionDisabled().keyboardType(.URL)
+                Button("일본어 한자 공부방으로 초기화") {
+                    store.kanjiSearchTemplate = AppStore.defaultKanjiSearchTemplate
+                }
+            } header: { Text("추가 검색 버튼의 주소") }
+              footer: { Text("검색어가 들어갈 자리에 {query}를 넣어 주세요. 카드의 책 아이콘으로 검색합니다.") }
+            Button("時間으로 검색 확인") { store.searchKanjiSite("時間") }
+        }.navigationTitle("한자 검색 사이트")
     }
 }
 

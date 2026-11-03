@@ -14,6 +14,10 @@ struct ReviewDepthAdvanceSnapshot {
 @MainActor @Observable final class AppStore {
     var archive: Archive
     var error: String?
+    static let defaultKanjiSearchTemplate = "https://nihongokanji.com/?s={query}"
+    var kanjiSearchTemplate = UserDefaults.standard.string(forKey: "kanjiSearchTemplate") ?? AppStore.defaultKanjiSearchTemplate {
+        didSet { UserDefaults.standard.set(kanjiSearchTemplate, forKey: "kanjiSearchTemplate") }
+    }
     var haptics = true
     private let location: URL
     private var storageReadable = true
@@ -219,8 +223,24 @@ struct ReviewDepthAdvanceSnapshot {
     func searchJapanese(_ text: String) {
         var components = URLComponents(string: "https://www.google.com/search")!
         components.queryItems = [URLQueryItem(name: "q", value: text + " 한자 해석")]
-        guard let webURL = components.url,
-              var chrome = URLComponents(url: webURL, resolvingAgainstBaseURL: false) else { return }
+        guard let webURL = components.url else { return }
+        openSearchURL(webURL)
+    }
+    func searchKanjiSite(_ text: String) {
+        let template = kanjiSearchTemplate.trimmingCharacters(in: .whitespacesAndNewlines)
+        let allowed = CharacterSet.alphanumerics.union(CharacterSet(charactersIn: "-._~"))
+        guard template.contains("{query}"),
+              let encoded = text.addingPercentEncoding(withAllowedCharacters: allowed),
+              let url = URL(string: template.replacingOccurrences(of: "{query}", with: encoded)),
+              url.scheme == "https", let host = url.host, !host.isEmpty,
+              url.user == nil, url.password == nil else {
+            error = "검색 주소는 https://로 시작하고 검색어 자리인 {query}를 포함해야 합니다. 계정의 검색 설정에서 확인해 주세요."
+            return
+        }
+        openSearchURL(url)
+    }
+    private func openSearchURL(_ webURL: URL) {
+        guard var chrome = URLComponents(url: webURL, resolvingAgainstBaseURL: false) else { return }
         chrome.scheme = "googlechromes"
         guard let chromeURL = chrome.url else { return }
         UIApplication.shared.open(chromeURL, options: [:]) { opened in

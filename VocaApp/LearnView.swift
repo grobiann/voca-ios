@@ -25,6 +25,16 @@ struct SearchJapaneseButton: View {
     }
 }
 
+struct SearchKanjiSiteButton: View {
+    @Environment(AppStore.self) private var store
+    let text: String
+    var body: some View {
+        Button { store.searchKanjiSite(text) } label: {
+            Image(systemName: "book.closed").frame(width: 44, height: 44)
+        }.buttonStyle(.borderless).accessibilityLabel("\(text) 지정 사이트 한자 검색")
+    }
+}
+
 struct LearnView: View {
     @Environment(AppStore.self) private var store
     @State private var studying: Stack?

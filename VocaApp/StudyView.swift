@@ -214,15 +214,20 @@ struct StudyView: View {
     }
     private func cardSurface(_ word: Word, japaneseFirst: Bool, showingAnswer: Bool) -> some View {
         VStack(spacing: 22) {
-            HStack {
+            VStack(alignment: .leading, spacing: 2) {
                 Text(showingAnswer ? "ANSWER" : "THINK IN \(japaneseFirst ? "JAPANESE" : "KOREAN")")
                     .font(.system(size: 10, weight: .bold, design: .monospaced)).tracking(2).foregroundStyle(.secondary)
-                Spacer()
-                if japaneseFirst || showingAnswer {
-                    CopyJapaneseButton(text: word.japanese).id(word.id)
-                    SearchJapaneseButton(text: word.japanese)
-                    Button { store.speak(word.japanese) } label: { Image(systemName: "speaker.wave.2").font(.title3).frame(width: 44, height: 44) }.accessibilityLabel("일본어 발음 듣기")
-                }
+                HStack(spacing: 8) {
+                    Spacer()
+                    if japaneseFirst || showingAnswer {
+                        CopyJapaneseButton(text: word.japanese).id(word.id)
+                        SearchJapaneseButton(text: word.japanese)
+                        SearchKanjiSiteButton(text: word.japanese)
+                        Button { store.speak(word.japanese) } label: {
+                            Image(systemName: "speaker.wave.2").font(.title3).frame(width: 44, height: 44)
+                        }.accessibilityLabel("일본어 발음 듣기")
+                    }
+                }.frame(height: 44)
             }
             ViewThatFits(in: .vertical) {
                 cardFace(word, japaneseFirst: japaneseFirst, showingAnswer: showingAnswer, scale: 1)
