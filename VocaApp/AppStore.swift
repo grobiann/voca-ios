@@ -11,12 +11,31 @@ struct ReviewDepthAdvanceSnapshot {
     let previousCompleted: [Word]
 }
 
+struct SearchProvider: Identifiable, Codable {
+    var id = UUID()
+    var name: String
+    var template: String
+    var enabled = true
+
+    static func load() -> [SearchProvider] {
+        if let data = UserDefaults.standard.data(forKey: "searchProviders"),
+           let saved = try? JSONDecoder().decode([SearchProvider].self, from: data) { return saved }
+        return [
+            SearchProvider(name: "Google", template: "https://www.google.com/search?q={query}%20한자%20해석"),
+            SearchProvider(name: "한자 공부방", template: UserDefaults.standard.string(forKey: "kanjiSearchTemplate") ?? "https://nihongokanji.com/?s={query}")
+        ]
+    }
+}
+
 @MainActor @Observable final class AppStore {
     var archive: Archive
     var error: String?
-    static let defaultKanjiSearchTemplate = "https://nihongokanji.com/?s={query}"
-    var kanjiSearchTemplate = UserDefaults.standard.string(forKey: "kanjiSearchTemplate") ?? AppStore.defaultKanjiSearchTemplate {
-        didSet { UserDefaults.standard.set(kanjiSearchTemplate, forKey: "kanjiSearchTemplate") }
+    var searchProviders = SearchProvider.load() {
+        didSet {
+            if let data = try? JSONEncoder().encode(searchProviders) {
+                UserDefaults.standard.set(data, forKey: "searchProviders")
+            }
+        }
     }
     var haptics = true
     private let location: URL
@@ -220,14 +239,8 @@ struct ReviewDepthAdvanceSnapshot {
         utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP"); utterance.rate = 0.43
         speaker.speak(utterance)
     }
-    func searchJapanese(_ text: String) {
-        var components = URLComponents(string: "https://www.google.com/search")!
-        components.queryItems = [URLQueryItem(name: "q", value: text + " 한자 해석")]
-        guard let webURL = components.url else { return }
-        openSearchURL(webURL)
-    }
-    func searchKanjiSite(_ text: String) {
-        let template = kanjiSearchTemplate.trimmingCharacters(in: .whitespacesAndNewlines)
+    func search(_ text: String, using provider: SearchProvider) {
+        let template = provider.template.trimmingCharacters(in: .whitespacesAndNewlines)
         let allowed = CharacterSet.alphanumerics.union(CharacterSet(charactersIn: "-._~"))
         guard template.contains("{query}"),
               let encoded = text.addingPercentEncoding(withAllowedCharacters: allowed),

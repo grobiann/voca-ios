@@ -221,13 +221,14 @@ struct StudyView: View {
                     Spacer()
                     if japaneseFirst || showingAnswer {
                         CopyJapaneseButton(text: word.japanese).id(word.id)
-                        SearchJapaneseButton(text: word.japanese)
-                        SearchKanjiSiteButton(text: word.japanese)
                         Button { store.speak(word.japanese) } label: {
                             Image(systemName: "speaker.wave.2").font(.title3).frame(width: 44, height: 44)
                         }.accessibilityLabel("일본어 발음 듣기")
                     }
                 }.frame(height: 44)
+                if japaneseFirst || showingAnswer {
+                    SearchButtons(text: word.japanese)
+                }
             }
             ViewThatFits(in: .vertical) {
                 cardFace(word, japaneseFirst: japaneseFirst, showingAnswer: showingAnswer, scale: 1)

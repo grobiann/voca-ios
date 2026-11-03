@@ -170,7 +170,7 @@ struct LibraryStackEditor: View {
                         Text(word.japanese).font(.headline).textSelection(.enabled)
                         Spacer()
                         CopyJapaneseButton(text: word.japanese)
-                        SearchJapaneseButton(text: word.japanese)
+                        SearchButtons(text: word.japanese)
                     }
                     Text(word.korean)
                 }

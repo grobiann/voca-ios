@@ -20,7 +20,7 @@ struct AccountView: View {
                     Toggle("카드 햅틱 피드백", isOn: $store.haptics).onChange(of: store.haptics) { _, value in UserDefaults.standard.set(value, forKey: "haptics") }
                 }
                 Section("검색") {
-                    NavigationLink("한자 검색 사이트") { KanjiSearchSettingsView() }
+                    NavigationLink("검색 버튼 설정") { SearchSettingsView() }
                 }
                 Section("알림") {
                     NavigationLink("단어 확인 알림") {
@@ -36,21 +36,33 @@ struct AccountView: View {
     }
 }
 
-struct KanjiSearchSettingsView: View {
+struct SearchSettingsView: View {
     @Environment(AppStore.self) private var store
     var body: some View {
         @Bindable var store = store
-        Form {
+        List {
             Section {
-                TextField("https://nihongokanji.com/?s={query}", text: $store.kanjiSearchTemplate, axis: .vertical)
-                    .textInputAutocapitalization(.never).autocorrectionDisabled().keyboardType(.URL)
-                Button("일본어 한자 공부방으로 초기화") {
-                    store.kanjiSearchTemplate = AppStore.defaultKanjiSearchTemplate
+                ForEach($store.searchProviders) { $provider in
+                    VStack(alignment: .leading, spacing: 10) {
+                        Toggle("검색 버튼 표시", isOn: $provider.enabled)
+                        TextField("버튼 이름", text: $provider.name)
+                        TextField("https://example.com/search?q={query}", text: $provider.template, axis: .vertical)
+                            .textInputAutocapitalization(.never).autocorrectionDisabled().keyboardType(.URL)
+                            .font(.footnote)
+                        Button("時間으로 검색 확인") { store.search("時間", using: provider) }
+                            .buttonStyle(.borderless).font(.caption)
+                    }.padding(.vertical, 6)
                 }
-            } header: { Text("추가 검색 버튼의 주소") }
-              footer: { Text("검색어가 들어갈 자리에 {query}를 넣어 주세요. 카드의 책 아이콘으로 검색합니다.") }
-            Button("時間으로 검색 확인") { store.searchKanjiSite("時間") }
-        }.navigationTitle("한자 검색 사이트")
+                .onDelete { store.searchProviders.remove(atOffsets: $0) }
+                .onMove { store.searchProviders.move(fromOffsets: $0, toOffset: $1) }
+            } footer: {
+                Text("검색어 위치에 {query}를 넣어 주세요. 켜진 항목만 목록 순서대로 카드에 표시됩니다. 왼쪽으로 밀어 삭제하거나 편집에서 순서를 바꿀 수 있습니다.")
+            }
+            Button("검색 사이트 추가", systemImage: "plus") {
+                store.searchProviders.append(SearchProvider(name: "", template: "", enabled: false))
+            }
+        }.navigationTitle("검색 버튼 설정")
+            .toolbar { EditButton() }
     }
 }
 

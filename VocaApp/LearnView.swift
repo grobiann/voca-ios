@@ -15,23 +15,23 @@ struct CopyJapaneseButton: View {
     }
 }
 
-struct SearchJapaneseButton: View {
+struct SearchButtons: View {
     @Environment(AppStore.self) private var store
     let text: String
     var body: some View {
-        Button { store.searchJapanese(text) } label: {
-            Image(systemName: "magnifyingglass").frame(width: 44, height: 44)
-        }.buttonStyle(.borderless).accessibilityLabel("\(text) 구글 검색")
-    }
-}
-
-struct SearchKanjiSiteButton: View {
-    @Environment(AppStore.self) private var store
-    let text: String
-    var body: some View {
-        Button { store.searchKanjiSite(text) } label: {
-            Image(systemName: "book.closed").frame(width: 44, height: 44)
-        }.buttonStyle(.borderless).accessibilityLabel("\(text) 지정 사이트 한자 검색")
+        let enabled = store.searchProviders.filter(\.enabled)
+        if !enabled.isEmpty {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 76), spacing: 6)], spacing: 4) {
+                ForEach(enabled) { provider in
+                    Button { store.search(text, using: provider) } label: {
+                        Label(provider.name.isEmpty ? "검색" : provider.name, systemImage: "magnifyingglass")
+                            .font(.caption).lineLimit(1)
+                            .frame(maxWidth: .infinity, minHeight: 44)
+                    }.buttonStyle(.borderless)
+                        .accessibilityLabel("\(text) \(provider.name) 검색")
+                }
+            }
+        }
     }
 }
 
@@ -359,7 +359,7 @@ struct StackDetailView: View {
                                     Text(word.japanese).font(.headline).textSelection(.enabled)
                                     Spacer()
                                     CopyJapaneseButton(text: word.japanese)
-                                    SearchJapaneseButton(text: word.japanese)
+                                    SearchButtons(text: word.japanese)
                                     Button(role: .destructive) { deletingWord = word } label: {
                                         Image(systemName: "trash").frame(width: 44, height: 44)
                                     }.buttonStyle(.borderless).accessibilityLabel("\(word.japanese) 카드 삭제")
