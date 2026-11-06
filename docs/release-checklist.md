@@ -1,6 +1,6 @@
 # 첫 공개 출시 점검표
 
-2026-11-07 저장소 및 App Store Connect 기준. 1.0(2) 업로드 후 처리·심사 제출을 확인 중이다.
+2026-11-07 저장소 및 App Store Connect 기준. 1.0(2)가 심사 대기 중이다. 승인 후 수동 출시한다.
 
 ## 구현 및 정리
 
@@ -40,7 +40,7 @@
 - [x] 공개 앱 이름, 부제, 설명, 키워드, 카테고리, 가격 및 출시 국가 초안 작성.
 - [x] Apple Developer Program/계약, App Store Connect 앱 레코드 및 Bundle ID 확인.
 - [x] 실기기용 Release 무서명 Archive 생성 및 개인정보 매니페스트 포함 확인.
-- [x] 배포 서명 Archive → App Store Connect 업로드. 1.0(1)은 TestFlight 처리 완료, 1.0(2)은 업로드 완료 후 처리 확인 중.
+- [x] 배포 서명 Archive → App Store Connect 업로드. 1.0(2)은 검증·심사 제출 완료.
 - [x] 버전 1.0 / 빌드 2로 증가.
 - [x] 앱 아이콘 1024×1024, 알파 없음. iPhone 현재 UI 캡처 6장 및 iPad 가로 캡처 1장 준비(docs/release/screenshots).
 - [x] 최신 Release 빌드의 iPhone 6.9인치·iPad 13인치 스크린샷 후보 촬영. 알파 없는 JPG와 규격 확인. 제출 전 내용 최종 확인.
@@ -48,7 +48,8 @@
 - [x] 심사 연락처, 공개 지원 URL 및 개인정보 URL 등록. 로그인 없이 학습 가능하다는 심사 메모 작성.
 - [ ] 데이터 출처·CC BY-SA 변경 고지 및 재배포 조건 유지.
 - [ ] EU 배포 시 해당되는 trader 정보/지역 의무 확인. 유료일 경우 세금·은행·계약 설정 확인.
-- [ ] TestFlight 실기기 검증 후 사람의 최종 제출/출시 승인.
+- [x] App Store 심사 제출: `4b302660-6f09-4e74-a9d5-749bd23a79c1` (2026-11-07 02:14 KST).
+- [ ] Apple 승인 후 사용자가 App Store Connect의 수동 출시 버튼을 누른다. 실기기 TestFlight 검증은 별도 권장 품질 점검.
 
 ## 기준 문서
 
