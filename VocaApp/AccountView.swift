@@ -1,6 +1,5 @@
 import SwiftUI
 import VocaCore
-import UserNotifications
 struct AccountView: View {
     @Environment(AppStore.self) private var store
     var body: some View {
@@ -13,99 +12,75 @@ struct AccountView: View {
                         VStack(alignment: .leading, spacing: 6) { Text("나만의 단어 생활").font(.title3.bold()); Text("이 기기에서 학습 중").font(.subheadline).foregroundStyle(.secondary) }
                     }.padding(.vertical, 16)
                 }
-                Section("학습 설정") {
-                    Stepper("학습 풀 크기: \(store.poolSize)개", value: $store.poolSize, in: 1...100)
-                    Stepper("단계별 단어: \(store.reviewDepthCount)단계", value: $store.reviewDepthCount, in: store.highestUsedReviewDepth...5)
-                    Toggle("앞면에 히라가나 표시", isOn: $store.showReadingOnFront)
-                    Toggle("카드 햅틱 피드백", isOn: $store.haptics).onChange(of: store.haptics) { _, value in UserDefaults.standard.set(value, forKey: "haptics") }
-                }
-                Section("검색") {
+                Section {
+                    NavigationLink("학습 설정") { StudySettingsView() }
+                    NavigationLink("Google Sheets 목록") { SheetLinksView() }
                     NavigationLink("검색 버튼 설정") { SearchSettingsView() }
-                }
-                Section("알림") {
-                    NavigationLink("단어 확인 알림") {
-                        WordReminderSettingsView()
-                    }.accessibilityIdentifier("wordReminderSettings")
-                }
-                Section("앱 정보") {
                     NavigationLink("단어 오류 제보함") { WordReportList() }
-                    LabeledContent("voca-ios", value: "1.0")
+                    NavigationLink("개인정보 처리방침") { PrivacyPolicyView() }
+                    NavigationLink("데이터 출처와 라이선스") { DataLicenseView() }
+                    LabeledContent("버전", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0")
                 }
-            }.navigationTitle("계정")
+            }.navigationTitle("설정")
         }
     }
 }
 
 struct SearchSettingsView: View {
     @Environment(AppStore.self) private var store
+    private func binding<Value>(for provider: SearchProvider, keyPath: WritableKeyPath<SearchProvider, Value>) -> Binding<Value> {
+        Binding(
+            get: { store.searchProviders.first(where: { $0.id == provider.id })?[keyPath: keyPath] ?? provider[keyPath: keyPath] },
+            set: { value in
+                guard let index = store.searchProviders.firstIndex(where: { $0.id == provider.id }) else { return }
+                store.searchProviders[index][keyPath: keyPath] = value
+            }
+        )
+    }
     var body: some View {
-        @Bindable var store = store
         List {
             Section {
-                ForEach($store.searchProviders) { $provider in
+                ForEach(store.searchProviders) { provider in
                     VStack(alignment: .leading, spacing: 10) {
-                        Toggle("검색 버튼 표시", isOn: $provider.enabled)
-                        TextField("버튼 이름", text: $provider.name)
-                        TextField("https://example.com/search?q={query}", text: $provider.template, axis: .vertical)
+                        HStack {
+                            Toggle("검색 버튼 표시", isOn: binding(for: provider, keyPath: \.enabled))
+                            Spacer()
+                            if !["Google", "한자 공부방"].contains(provider.name) {
+                                Button(role: .destructive) {
+                                    withAnimation {
+                                        store.searchProviders.removeAll { $0.id == provider.id }
+                                    }
+                                } label: {
+                                    Label("삭제", systemImage: "trash")
+                                        .labelStyle(.iconOnly)
+                                        .frame(width: 40, height: 40)
+                                }
+                                .buttonStyle(.borderless)
+                                .accessibilityLabel("\(provider.name.isEmpty ? "이 검색 사이트" : provider.name) 삭제")
+                            }
+                        }
+                        TextField("버튼 이름", text: binding(for: provider, keyPath: \.name))
+                        TextField("https://example.com/search?q={query}", text: binding(for: provider, keyPath: \.template), axis: .vertical)
                             .textInputAutocapitalization(.never).autocorrectionDisabled().keyboardType(.URL)
                             .font(.footnote)
-                        Button("時間으로 검색 확인") { store.search("時間", using: provider) }
+                        Button("時間으로 검색 확인") {
+                            if let current = store.searchProviders.first(where: { $0.id == provider.id }) {
+                                store.search("時間", using: current)
+                            }
+                        }
                             .buttonStyle(.borderless).font(.caption)
                     }.padding(.vertical, 6)
                 }
                 .onDelete { store.searchProviders.remove(atOffsets: $0) }
                 .onMove { store.searchProviders.move(fromOffsets: $0, toOffset: $1) }
             } footer: {
-                Text("검색어 위치에 {query}를 넣어 주세요. 켜진 항목만 목록 순서대로 카드에 표시됩니다. 왼쪽으로 밀어 삭제하거나 편집에서 순서를 바꿀 수 있습니다.")
+                Text("검색어 위치에 {query}를 넣어 주세요. 켜진 항목만 목록 순서대로 카드에 표시됩니다. 추가한 사이트는 휴지통 버튼으로 삭제하고, 편집에서 순서를 바꿀 수 있습니다.")
             }
             Button("검색 사이트 추가", systemImage: "plus") {
                 store.searchProviders.append(SearchProvider(name: "", template: "", enabled: false))
             }
         }.navigationTitle("검색 버튼 설정")
             .toolbar { EditButton() }
-    }
-}
-
-struct WordReminderSettingsView: View {
-    @Environment(AppStore.self) private var store
-    @State private var testScheduled = false
-    private var settings: MicroReviewSettings { store.microSettings }
-    private func binding<Value>(_ keyPath: WritableKeyPath<MicroReviewSettings, Value>) -> Binding<Value> {
-        Binding(get: { store.microSettings[keyPath: keyPath] }, set: { value in
-            var updated = store.microSettings
-            updated[keyPath: keyPath] = value
-            store.microSettings = updated
-        })
-    }
-    var body: some View {
-        List {
-            Section {
-                Toggle("단어 확인 알림 켜기", isOn: Binding(
-                    get: { settings.enabled },
-                    set: { enabled in Task { await store.setMicroEnabled(enabled) } }
-                ))
-                Picker("알림 간격", selection: binding(\.intervalMinutes)) {
-                    ForEach([30, 60, 90, 120, 180], id: \.self) { minutes in Text("\(minutes)분").tag(minutes) }
-                }
-                Picker("시작 시간", selection: binding(\.startHour)) {
-                    ForEach(0..<settings.endHour, id: \.self) { hour in Text(String(format: "%02d:00", hour)).tag(hour) }
-                }
-                Picker("종료 시간", selection: binding(\.endHour)) {
-                    ForEach((settings.startHour + 1)..<25, id: \.self) { hour in Text(String(format: "%02d:00", hour)).tag(hour) }
-                }
-                Toggle("주말에도 알림", isOn: binding(\.includesWeekends))
-            } header: { Text("알림 설정") }
-            Section("테스트") {
-                Button("5초 후 알림 테스트", systemImage: "bell") {
-                    Task { testScheduled = await store.sendMicroTestNotification() }
-                }
-                if testScheduled {
-                    Text("5초 뒤 단어 확인 알림을 받습니다.")
-                        .font(.footnote).foregroundStyle(.secondary)
-                }
-            }
-        }
-        .navigationTitle("단어 확인 알림")
     }
 }
 
@@ -199,4 +174,172 @@ struct WordReportComposer: View {
             }
         }
     }
+}
+
+struct PrivacyPolicyView: View {
+    var body: some View {
+        List {
+            Section("기기에 저장하는 정보") {
+                Text("단어, 라이브러리, 학습 진행, 반복 학습 목록, 오류 제보와 검색 설정은 이 기기에 저장됩니다. 로그인, 광고, 추적 및 개발자 서버로의 자동 전송 기능은 없습니다.")
+            }
+            Section("외부 서비스") {
+                Text("Google Sheets 가져오기를 실행하면 Google에 접속해 공개된 시트를 읽습니다. 공개 공유한 시트는 링크를 아는 다른 사람도 볼 수 있으므로 개인정보를 넣지 마세요.")
+                Text("검색 버튼을 누르면 일본어 단어가 선택한 검색 사이트로 전달되고 외부 브라우저가 열립니다. 해당 서비스의 개인정보 처리방침이 적용됩니다.")
+                Text("오류 제보는 자동으로 전송되지 않습니다. 공유를 선택하면 선택한 앱과 수신자에게 제보 내용이 전달됩니다.")
+            }
+            Section("보관과 삭제") {
+                Text("앱 안에서 스택과 라이브러리를 삭제할 수 있습니다. 기기에 저장된 전체 데이터를 지우려면 iPhone 설정에서 앱을 삭제하세요. 앱 정리하기는 데이터 삭제와 다릅니다.")
+                Text("앱 자체의 기기 간 동기화는 없습니다. iCloud 또는 기기 백업에 포함되는 데이터는 사용자의 Apple 백업 설정에 따릅니다. 외부로 공유한 사본은 해당 서비스에서 별도로 삭제해야 합니다.")
+            }
+            Section("권한") {
+                Text("알림, 알람, 카메라, 마이크, 사진 및 연락처 권한을 요청하지 않습니다. 파일 가져오기는 사용자가 파일 선택기에서 선택한 파일만 읽습니다.")
+            }
+            Section("운영자 및 문의") {
+                Text("CardVoca · 장진석")
+                Link("grobiann0@gmail.com", destination: URL(string: "mailto:grobiann0@gmail.com")!)
+                Text("이메일 문의의 주소와 내용은 답변 목적으로 처리하고, 처리 후 불필요한 정보는 삭제합니다. 법령상 보관 의무가 있으면 해당 기간 동안 보관합니다. 개인정보 열람·정정·삭제도 이메일로 요청할 수 있습니다.")
+                Text("시행일: 2026년 11월 4일")
+            }
+        }.navigationTitle("개인정보 처리방침")
+    }
+}
+
+struct DataLicenseView: View {
+    var body: some View {
+        List {
+            Section("JLPT 단어장") {
+                Text("OpenJLPT의 공개 어휘 목록을 바탕으로 합니다. 원본 출처는 Jonathan Waller의 JLPT 목록과 JMdict/EDRDG입니다. JLPT 공식 전체 출제 어휘 목록이 아닙니다.")
+                Text("한국어 뜻은 자동번역 후 일부 교정되었으며 전체 전문 검수는 하지 않았습니다. 한국어 번역, 스택 분할, 카드 식별자 추가 및 예문 제거가 적용된 파생 데이터입니다.")
+                Link("OpenJLPT 출처 고지", destination: URL(string: "https://github.com/evanclan/OpenJLPT/blob/main/NOTICE.md")!)
+                Link("CC BY-SA 4.0 라이선스", destination: URL(string: "https://creativecommons.org/licenses/by-sa/4.0/")!)
+                Text("이 파생 단어 데이터는 CC BY-SA 4.0으로 제공됩니다. 재배포 시 출처와 변경 내역을 표시하고 같은 라이선스를 적용해야 합니다. 이 데이터 라이선스는 앱 코드 전체에 적용되는 것은 아닙니다.")
+            }
+            Section("직접 가져온 단어장") {
+                Text("사용자는 공유 또는 배포 권한이 있는 파일과 시트만 이용해 주세요. 가져온 콘텐츠의 권리는 각 원저작자에게 있습니다.")
+            }
+        }.navigationTitle("데이터 출처와 라이선스")
+    }
+}
+
+struct StudySettingsView: View {
+    @Environment(AppStore.self) private var store
+    @State private var showingWaitOptions = false
+    private let waitOptions: [(Int, String)] = [(0,"재학습시"),(10,"10분"),(30,"30분"),(60,"1시간"),(120,"2시간"),(180,"3시간"),(240,"4시간"),(360,"6시간"),(720,"12시간"),(1440,"1일"),(2880,"2일"),(4320,"3일"),(10080,"1주일")]
+    var body: some View {
+        @Bindable var store = store
+        Form {
+            Section {
+                Toggle("히라가나·가타카나 모드", isOn: $store.kanaStudyMode)
+                Toggle("앞면에 히라가나 표시", isOn: $store.showReadingOnFront)
+                    .disabled(store.kanaStudyMode)
+                Toggle("단방향 학습 (일본어 → 한국어)", isOn: $store.oneWayStudy)
+                    Stepper("학습 풀 크기: \(store.poolSize)개", value: $store.poolSize, in: 1...100)
+                    Stepper("반복 학습 단계: \(store.reviewDepthCount)단계", value: $store.reviewDepthCount, in: store.highestUsedReviewDepth...20)
+                    Button { showingWaitOptions = true } label: {
+                        HStack {
+                            Text("반복학습 단계업 대기시간")
+                            Spacer()
+                            Text(waitOptions.first(where: { $0.0 == store.reviewWaitMinutes })?.1 ?? "1일")
+                                .foregroundStyle(.secondary)
+                            Image(systemName: "chevron.right").font(.caption).foregroundStyle(.tertiary)
+                        }
+                        .foregroundStyle(.primary)
+                    }.buttonStyle(.plain)
+                    HStack(spacing: 6) {
+                        Text("카드 햅틱 피드백")
+                        InfoButton("카드를 넘기거나 답을 선택할 때 아이폰이 짧게 진동해 동작을 알려주는 기능입니다.")
+                        Spacer(minLength: 0)
+                        Toggle("카드 햅틱 피드백", isOn: $store.haptics)
+                            .labelsHidden()
+                            .onChange(of: store.haptics) { _, value in UserDefaults.standard.set(value, forKey: "haptics") }
+                    }
+            }
+        }.navigationTitle("학습 설정")
+            .sheet(isPresented: $showingWaitOptions) {
+                NavigationStack {
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+                        ForEach(waitOptions, id: \.0) { option in
+                            Button {
+                                store.reviewWaitMinutes = option.0
+                                showingWaitOptions = false
+                            } label: {
+                                HStack {
+                                    Text(option.1)
+                                    Spacer(minLength: 4)
+                                    if store.reviewWaitMinutes == option.0 { Image(systemName: "checkmark") }
+                                }
+                                .font(.subheadline.weight(.semibold))
+                                .padding(.horizontal, 14)
+                                .frame(maxWidth: .infinity, minHeight: 48)
+                                .background(store.reviewWaitMinutes == option.0 ? Palette.accent.opacity(0.14) : Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
+                            }.buttonStyle(.plain)
+                        }
+                    }
+                    .padding(20)
+                    .frame(maxHeight: .infinity, alignment: .top)
+                    .background(Palette.canvas)
+                    .navigationTitle("단계업 대기시간")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar { ToolbarItem(placement: .confirmationAction) { Button("닫기") { showingWaitOptions = false } } }
+                }
+                .presentationDetents([.height(530), .large])
+            }
+    }
+}
+
+private struct InfoButton: View {
+    let message: String
+    @State private var showing = false
+    init(_ message: String) { self.message = message }
+    var body: some View {
+        Button { showing = true } label: {
+            Image(systemName: "questionmark.circle")
+                .font(.subheadline)
+                .frame(width: 24, height: 44)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("카드 햅틱 피드백 설명")
+        .alert("카드 햅틱 피드백", isPresented: $showing) {
+            Button("확인", role: .cancel) { }
+        } message: { Text(message) }
+    }
+}
+
+struct SheetLinksView: View {
+    @Environment(AppStore.self) private var store
+    @State private var adding = false
+    var body: some View {
+        List {
+
+            Section("내가 등록한 Google Sheets") {
+                ForEach(store.sheetLinks, id: \.self) { link in
+                    HStack {
+                        Text(link).font(.caption).textSelection(.enabled)
+                        Spacer()
+                        if let requestURL = publicationRequestURL(for: link) {
+                            Link(destination: requestURL) {
+                                Label("공개 등록 요청", systemImage: "square.and.arrow.up")
+                                    .labelStyle(.iconOnly).frame(width: 44, height: 44)
+                            }.accessibilityLabel("이 시트 공개 등록 요청")
+                        }
+                    }.swipeActions { Button("제거", role: .destructive) { store.removeSheetLink(link) } }
+                }
+                Button("Google Sheets 추가", systemImage: "plus") { adding = true }
+            }
+            Section {
+                Text("등록 요청은 Google 계정당 한 번 제출할 수 있습니다. 운영자가 내용을 확인한 뒤 공개 목록에 추가합니다.")
+                    .font(.caption).foregroundStyle(.secondary)
+            }
+        }.navigationTitle("Google Sheets 목록")
+            .sheet(isPresented: $adding) { SheetImportView() }
+    }
+    private func publicationRequestURL(for link: String) -> URL? {
+        guard var components = URLComponents(string: "https://docs.google.com/forms/d/e/1FAIpQLScBdgPR8fvde4wA2Lnmz8KMz48-KzmLAW0TR6n8Fva9Co20Cg/viewform") else { return nil }
+        components.queryItems = [
+            URLQueryItem(name: "usp", value: "pp_url"),
+            URLQueryItem(name: "entry.805694570", value: link)
+        ]
+        return components.url
+    }
+
 }

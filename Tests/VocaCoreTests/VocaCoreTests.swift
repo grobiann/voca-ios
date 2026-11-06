@@ -1,20 +1,58 @@
 import XCTest
 @testable import VocaCore
 final class VocaCoreTests: XCTestCase {
-    func testLegacyMicroSettingsAndHalfHourlySchedule() throws {
-        let legacy = Data(#"{"enabled":true,"intervalMinutes":60,"startHour":10,"endHour":20,"includesWeekends":true}"#.utf8)
-        var settings = try JSONDecoder().decode(MicroReviewSettings.self, from: legacy)
-        XCTAssertNil(settings.usesSystemAlarm)
-        settings.intervalMinutes = 30
+    func testOneWayAndSentenceCards() throws {
+        var stack = Stack(title: "단어", words: [Word(japanese: "猫", korean: "고양이", example: "")])
+        stack.oneWay = true
+        stack.prepare()
+        XCTAssertEqual(stack.allItems.count, 1)
+        stack.answer(known: true)
+        XCTAssertTrue(stack.isComplete)
+
+        let csv = "stack,card_id,ja-JP,reading,ko-KR,type\n인사,hello_1,こんにちは。,-,안녕하세요.,sentence\n"
+        let deck = try LibraryImporter.read(Data(csv.utf8), filename: "문장.csv", namespace: "test")
+        var sentence = deck.stacks[0]
+        sentence.prepare()
+        XCTAssertTrue(sentence.words[0].isSentence == true)
+        XCTAssertEqual(sentence.allItems.map(\.direction), [.japaneseToKorean])
+        let mixed = csv + "인사,hello_2,ありがとう,-,고마워요,word\n"
+        XCTAssertThrowsError(try LibraryImporter.read(Data(mixed.utf8), filename: "혼합.csv", namespace: "test"))
+    }
+    func testReviewWaitUsesSharedClockBoundaries() {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(secondsFromGMT: 0)!
-        let start = calendar.date(from: DateComponents(year: 2026, month: 10, day: 23, hour: 9))!
-        let dates = settings.upcomingDates(after: start, limit: 20, calendar: calendar)
-        XCTAssertEqual(dates.count, 20)
-        XCTAssertEqual(calendar.component(.hour, from: dates.first!), 10)
-        XCTAssertEqual(calendar.component(.hour, from: dates.last!), 19)
-        XCTAssertEqual(calendar.component(.minute, from: dates.last!), 30)
-        for pair in zip(dates, dates.dropFirst()) { XCTAssertEqual(pair.1.timeIntervalSince(pair.0), 1800) }
+        let first = calendar.date(from: DateComponents(year: 2026, month: 11, day: 6, hour: 10, minute: 1))!
+        let second = calendar.date(from: DateComponents(year: 2026, month: 11, day: 6, hour: 10, minute: 29))!
+        XCTAssertEqual(Archive.nextReviewBoundary(after: first, minutes: 30, calendar: calendar),
+                       Archive.nextReviewBoundary(after: second, minutes: 30, calendar: calendar))
+        let dayA = calendar.date(from: DateComponents(year: 2026, month: 11, day: 6, hour: 10))!
+        let boundary = Archive.nextReviewBoundary(after: dayA, minutes: 2880, calendar: calendar)
+        let preceding = calendar.date(byAdding: .day, value: -1, to: boundary)!
+        let earlier = calendar.date(byAdding: .day, value: -2, to: boundary)!
+        XCTAssertEqual(Archive.nextReviewBoundary(after: preceding, minutes: 2880, calendar: calendar), boundary)
+        XCTAssertEqual(Archive.nextReviewBoundary(after: earlier, minutes: 2880, calendar: calendar), boundary)
+    }
+    func testReviewSessionExcludesWaitingCard() {
+        var archive = Archive()
+        let word = Word(japanese: "水", korean: "물", example: "")
+        archive.reviewDepthCount = 3
+        XCTAssertTrue(archive.addToReviewDepth(word, at: 1))
+        archive.reviewReadyAt = [word.id: Date(timeIntervalSince1970: 2_000)]
+        XCTAssertTrue(archive.reviewSession(now: Date(timeIntervalSince1970: 1_000)).words.isEmpty)
+        XCTAssertEqual(archive.reviewSession(now: Date(timeIntervalSince1970: 3_000)).words.count, 1)
+    }
+    func testLegacyReminderSaveRemainsReadableWithoutReminderBehavior() throws {
+        var original = Archive.sample
+        original.stacks[0].prepare()
+        original.stacks[0].answer(known: true)
+        original.microReviewEntries = [MicroReviewEntry(word: original.stacks[0].words[0], sourceTitle: "이전 알림 풀")]
+        original.microReviewSettings = MicroReviewSettings()
+        original.microReviewSettings?.enabled = true
+        original.microReviewSettings?.usesSystemAlarm = true
+        let restored = try JSONDecoder().decode(Archive.self, from: JSONEncoder().encode(original))
+        XCTAssertEqual(restored.stacks[0].mastered, original.stacks[0].mastered)
+        XCTAssertEqual(restored.microReviewEntries, original.microReviewEntries)
+        XCTAssertEqual(restored.libraries, original.libraries)
     }
     func testBothDirectionsAndRetry() {
         var stack = Archive.sample.stacks[0]; stack.prepare()
@@ -62,27 +100,69 @@ final class VocaCoreTests: XCTestCase {
         XCTAssertFalse(stack.allItems.contains { $0.wordID == removedID })
         XCTAssertFalse(stack.isComplete)
     }
-    func testReviewDepthsAreIndependentDeduplicatedAndPersisted() throws {
+    func testReviewWordHasExactlyOneDepthAcrossPersistence() throws {
         var archive = Archive.sample
         let word = archive.stacks[0].words[0]
-        XCTAssertEqual(archive.configuredReviewDepthCount, 3)
         XCTAssertTrue(archive.addToReviewDepth(word, at: 1))
-        XCTAssertFalse(archive.addToReviewDepth(word, at: 1))
-        XCTAssertTrue(archive.addToReviewDepth(word, at: 2))
-        XCTAssertFalse(archive.addToReviewDepth(word, at: 4))
-        archive.reviewDepthStacks![0].words.removeAll()
-        archive.reviewDepthStacks![0].prepare()
-        XCTAssertEqual(archive.stacks[0].words.count, 4)
-        XCTAssertEqual(archive.reviewDepthStacks![1].words, [word])
-        archive.reviewDepthCount = 5
-        XCTAssertTrue(archive.addToReviewDepth(word, at: 5))
+        XCTAssertFalse(archive.addToReviewDepth(word, at: 2))
+        XCTAssertTrue(archive.advanceReviewDepthWord(word, from: 1))
+        archive.reviewDepthCount = 10
         let restored = try JSONDecoder().decode(Archive.self, from: JSONEncoder().encode(archive))
-        XCTAssertEqual(restored.reviewDepthStacks![1].words, [word])
-        XCTAssertEqual(restored.reviewDepthStacks![4].words, [word])
-        XCTAssertEqual(restored.configuredReviewDepthCount, 5)
+        XCTAssertEqual(restored.reviewDepth(of: word.id), 2)
+        XCTAssertEqual(restored.reviewDepthStacks!.flatMap(\.words).filter { $0.id == word.id }.count, 1)
+        XCTAssertEqual(restored.configuredReviewDepthCount, 10)
+    }
+    func testMixedDepthFlowDoesNotRepeatPromotedWords() {
+        var archive = Archive.sample
+        let words = archive.stacks[0].words
+        for (index, word) in words.enumerated() { _ = archive.addToReviewDepth(word, at: index % 3 + 1) }
+        var session = archive.reviewSession(poolSize: 2)
+        XCTAssertEqual(Set(session.words.map(\.id)), Set(words.map(\.id)))
+        let original = Set(session.words.map(\.id))
+        session.answerReviewSession(known: false, poolSize: 2)
+        XCTAssertEqual(Set(session.words.map(\.id)), original)
+        var answered = Set<UUID>()
+        while let item = session.queue.first {
+            XCTAssertTrue(answered.insert(item.wordID).inserted)
+            let word = session.words.first { $0.id == item.wordID }!
+            _ = archive.advanceReviewDepthWord(word, from: archive.reviewDepth(of: word.id)!)
+            session.answerReviewSession(known: true, poolSize: 2)
+        }
+        XCTAssertEqual(answered, original)
+        XCTAssertTrue(session.words.isEmpty)
+        XCTAssertTrue(archive.reviewSession().words.isEmpty)
+        let nextDay = Calendar.current.date(byAdding: .day, value: 2, to: Date())!
+        XCTAssertFalse(archive.reviewSession(now: nextDay).words.isEmpty)
+    }
+    func testLegacyDuplicateMigrationAndTwentyStages() {
+        var archive = Archive.sample
+        let word = archive.stacks[0].words[0]
+        archive.prepareReviewDepths()
+        archive.reviewDepthStacks![0].words = [word]
+        archive.reviewDepthStacks![2].words = [word]
+        archive.prepareReviewDepths()
+        XCTAssertEqual(archive.reviewDepth(of: word.id), 3)
+        XCTAssertTrue(archive.reviewDepthStacks![0].words.isEmpty)
+        archive.reviewDepthCount = 20
+        for depth in 3...20 { XCTAssertTrue(archive.advanceReviewDepthWord(word, from: depth)) }
+        XCTAssertNil(archive.reviewDepth(of: word.id))
+        XCTAssertEqual(archive.completedReviewWords, [word])
+        XCTAssertTrue(archive.reviewSession().words.isEmpty)
+        XCTAssertEqual(archive.configuredReviewDepthCount, 20)
+    }
+    func testKanaNormalization() {
+        var word = Word(japanese: "カメラ", korean: "카메라", example: "")
+        for reading in [nil, "", "  ", " - ", "—", "－"] as [String?] {
+            word.reading = reading
+            XCTAssertNil(word.normalizedReading)
+            XCTAssertEqual(word.kanaText, "カメラ")
+        }
+        word.japanese = "時間"; word.reading = " じかん "
+        XCTAssertEqual(word.kanaText, "じかん")
     }
     func testMovingReviewWordRemovesOnlyPreviousDepthAndPrunesQueue() {
         var archive = Archive.sample
+        archive.reviewDepthCount = 3
         let word = archive.stacks[0].words[0]
         XCTAssertTrue(archive.addToReviewDepth(word, at: 1))
         XCTAssertTrue(archive.moveToReviewDepth(word, from: 1))
@@ -105,47 +185,6 @@ final class VocaCoreTests: XCTestCase {
         XCTAssertEqual(archive.reviewDepthStacks![0].words[0].korean, "수정된 뜻")
         let old = try JSONDecoder().decode(Archive.self, from: Data("{\"stacks\":[],\"libraries\":[],\"server\":[]}".utf8))
         XCTAssertNil(old.microSessionCardCount)
-    }
-    func testMicroReviewThreeSuccessesAndStop() throws {
-        let word = Archive.sample.stacks[0].words[0]
-        var entry = MicroReviewEntry(word: word, sourceTitle: "인사")
-        entry.answer(known: true)
-        entry.answer(known: false)
-        XCTAssertEqual(entry.successCount, 1)
-        entry.answer(known: true)
-        XCTAssertEqual(entry.status, .active)
-        entry.answer(known: true)
-        XCTAssertEqual(entry.successCount, 3)
-        XCTAssertEqual(entry.status, .completed)
-        entry.answer(known: true)
-        XCTAssertEqual(entry.successCount, 3)
-        entry.restart()
-        XCTAssertEqual(entry.successCount, 0)
-        entry.stop()
-        XCTAssertEqual(entry.status, .stopped)
-        let restored = try JSONDecoder().decode(MicroReviewEntry.self, from: JSONEncoder().encode(entry))
-        XCTAssertEqual(restored, entry)
-        let oldArchive = try JSONDecoder().decode(Archive.self, from: Data("{\"stacks\":[],\"libraries\":[],\"server\":[]}".utf8))
-        XCTAssertNil(oldArchive.microReviewSettings)
-        XCTAssertNil(oldArchive.microReviewEntries)
-    }
-    func testMicroReviewScheduleHonorsHoursAndWeekdaysWithoutDailyCap() {
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
-        let monday = calendar.date(from: DateComponents(year: 2026, month: 10, day: 19, hour: 9))!
-        let settings = MicroReviewSettings()
-        let slots = settings.upcomingDates(after: monday, limit: 60, calendar: calendar)
-        XCTAssertEqual(slots.count, 60)
-        XCTAssertEqual(calendar.component(.hour, from: slots[0]), 10)
-        XCTAssertEqual(calendar.component(.hour, from: slots[9]), 19)
-        XCTAssertTrue(slots.allSatisfy { (10..<20).contains(calendar.component(.hour, from: $0)) })
-        XCTAssertTrue(slots.contains { [1, 7].contains(calendar.component(.weekday, from: $0)) })
-        var weekdays = settings; weekdays.includesWeekends = false
-        XCTAssertTrue(weekdays.upcomingDates(after: monday, calendar: calendar).allSatisfy { ![1, 7].contains(calendar.component(.weekday, from: $0)) })
-        var faster = settings; faster.intervalMinutes = 30
-        let fastSlots = faster.upcomingDates(after: monday, limit: 60, calendar: calendar)
-        XCTAssertEqual(calendar.component(.minute, from: fastSlots[1]), 30)
-        XCTAssertEqual(fastSlots.count, 60)
     }
     func testCSVQuotesNewlinesAndGroups() throws {
         let csv = "\u{FEFF}stack,japanese,korean,example\r\n인사,こんにちは,안녕하세요,\"こんにちは、田中さん。\"\r\n카페,注文,\"주문, \"\"부탁해요\"\"\n감사합니다\",\"一つ、お願いします。\"\r\n"

@@ -1,5 +1,52 @@
 import XCTest
 @MainActor final class VocaUITests: XCTestCase {
+    func testStoreScreenshots() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
+        app.launch()
+
+        app.buttons["학습 시작"].tap()
+        let card = app.descendants(matching: .any)["studyCard"].firstMatch
+        XCTAssertTrue(card.waitForExistence(timeout: 5))
+        card.tap()
+        app.buttons["addToReviewDepth"].tap()
+        app.buttons["학습 닫기"].tap()
+        XCTAssertTrue(app.buttons["반복 학습 시작"].isEnabled)
+        screenshot("Store-01-Learn")
+
+        app.buttons["학습 시작"].tap()
+        XCTAssertTrue(card.waitForExistence(timeout: 5))
+        screenshot("Store-02-Card-Front")
+        card.tap()
+        XCTAssertTrue(app.buttons["알았어요"].isEnabled)
+        screenshot("Store-03-Card-Back")
+        app.buttons["학습 닫기"].tap()
+
+        app.buttons["반복 학습 시작"].tap()
+        XCTAssertTrue(card.waitForExistence(timeout: 5))
+        screenshot("Store-04-Review")
+        app.buttons["학습 닫기"].tap()
+
+        selectTab("라이브러리", in: app)
+        app.buttons["둘러보기"].tap()
+        XCTAssertTrue(app.staticTexts["기본 단어장"].waitForExistence(timeout: 10))
+        screenshot("Store-05-Library")
+        app.staticTexts["기본 단어장"].tap()
+        screenshot("Store-06-Decks")
+    }
+    func testStudySettingsWaitOptionsAndHapticsHelp() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
+        app.launch()
+        selectTab("설정", in: app)
+        app.buttons["학습 설정"].tap()
+        XCTAssertTrue(app.staticTexts["반복 학습 단계: 5단계"].waitForExistence(timeout: 5))
+        app.buttons["카드 햅틱 피드백 설명"].tap()
+        XCTAssertTrue(app.alerts["카드 햅틱 피드백"].waitForExistence(timeout: 5))
+        app.alerts.buttons["확인"].tap()
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "반복학습 단계업 대기시간")).firstMatch.tap()
+        XCTAssertTrue(app.buttons["1주일"].waitForExistence(timeout: 5))
+    }
     func testReviewDepthPromotionAndIndependentStudy() {
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting"]
@@ -8,29 +55,69 @@ import XCTest
         let card = app.descendants(matching: .any)["studyCard"].firstMatch
         XCTAssertTrue(card.waitForExistence(timeout: 5))
         card.tap()
-        let promote = app.buttons["알았어요 · 1단계에 담기"]
-        XCTAssertTrue(promote.isEnabled)
-        promote.tap()
+        app.buttons["addToReviewDepth"].tap()
         XCTAssertTrue(app.staticTexts["1 / 8 완료"].waitForExistence(timeout: 5))
         app.buttons["학습 닫기"].tap()
-        app.buttons["단계별 단어풀"].tap()
-        XCTAssertTrue(app.staticTexts["1개 단어 · 0% 완료"].waitForExistence(timeout: 5))
-        app.staticTexts["1단계"].tap()
-        app.buttons["이 단계 학습 시작"].tap()
-        XCTAssertTrue(app.buttons["학습 닫기"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.staticTexts["0 / 2 완료"].exists)
-        let stageCard = app.descendants(matching: .any)["studyCard"].firstMatch
-        stageCard.tap()
-        app.buttons["알았어요 · 2단계에 담기"].tap()
-        XCTAssertTrue(app.staticTexts["스택에 카드가 없어요"].waitForExistence(timeout: 5))
+        app.buttons["반복 학습 시작"].tap()
+        for depth in 1...3 {
+            XCTAssertTrue(app.staticTexts["일본어 → 한국어 · \(depth)단계"].waitForExistence(timeout: 5))
+            card.tap()
+            app.buttons["알았어요"].tap()
+            XCTAssertTrue(app.staticTexts["반복 학습을 마쳤어요"].waitForExistence(timeout: 5))
+            if depth < 3 {
+                app.buttons["학습 마치기"].tap()
+                app.buttons["반복 학습 시작"].tap()
+            }
+        }
+        XCTAssertTrue(app.staticTexts["반복 학습을 마쳤어요"].waitForExistence(timeout: 5))
         app.buttons["학습 마치기"].tap()
-        XCTAssertTrue(app.staticTexts["단어 0개"].waitForExistence(timeout: 5))
+        app.buttons["반복 학습 단어풀"].tap()
+        XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", "반복 학습 완료 · 1개")).firstMatch.waitForExistence(timeout: 5))
+    }
+    func testStudySettingsCanBeOpenedWithoutRestartingCard() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
+        app.launch()
+        app.buttons["학습 시작"].tap()
+        let card = app.descendants(matching: .any)["studyCard"].firstMatch
+        XCTAssertTrue(card.waitForExistence(timeout: 5))
+        card.tap()
+        app.buttons["카드 관리"].tap()
+        app.buttons["학습 설정"].tap()
+        let kana = app.switches["히라가나·가타카나 모드"]
+        XCTAssertTrue(kana.waitForExistence(timeout: 5))
+        kana.coordinate(withNormalizedOffset: CGVector(dx: 0.93, dy: 0.5)).tap()
+        XCTAssertEqual(kana.value as? String, "1")
+        app.buttons["완료"].tap()
+        XCTAssertTrue(app.buttons["알았어요"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["알았어요"].isEnabled)
+        app.buttons["학습 닫기"].tap()
+        selectTab("설정", in: app)
+        app.buttons["학습 설정"].tap()
+        XCTAssertEqual(app.switches["히라가나·가타카나 모드"].value as? String, "1")
+    }
+    func testSettingsSearchDeletionAndPrivacy() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
+        app.launch()
+        selectTab("설정", in: app)
+        XCTAssertFalse(app.buttons["단어 확인 알림"].exists)
+        app.buttons["검색 버튼 설정"].tap()
+        app.buttons["검색 사이트 추가"].tap()
+        let delete = app.buttons["이 검색 사이트 삭제"]
+        if !delete.isHittable { app.swipeUp() }
+        XCTAssertTrue(delete.waitForExistence(timeout: 5))
+        delete.tap()
+        XCTAssertFalse(delete.exists)
+        app.navigationBars.buttons.firstMatch.tap()
+        app.buttons["개인정보 처리방침"].tap()
+        XCTAssertTrue(app.staticTexts["기기에 저장하는 정보"].waitForExistence(timeout: 5))
     }
     func testGroupedLibraryCanEnrollWeekdays() {
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting"]
         app.launch()
-        app.tabBars.buttons["라이브러리"].tap()
+        selectTab("라이브러리", in: app)
         app.buttons["둘러보기"].tap()
         app.staticTexts["묶어서 외우는 일본어"].tap()
         XCTAssertTrue(app.staticTexts["요일"].waitForExistence(timeout: 5))
@@ -38,34 +125,12 @@ import XCTest
         app.buttons["내 스택에 추가"].firstMatch.tap()
         XCTAssertTrue(app.buttons["학습 이어가기"].firstMatch.waitForExistence(timeout: 5))
     }
-    func testFiveSecondNotificationCanBeScheduled() {
-        let app = XCUIApplication()
-        app.launchArguments = ["--uitesting"]
-        app.launch()
-        app.tabBars.buttons["계정"].tap()
-        app.buttons["microReviewSettings"].tap()
-        for _ in 0..<5 where !app.buttons["5초 후 테스트 알림"].isHittable { app.swipeUp() }
-        let testButton = app.buttons["5초 후 테스트 알림"]
-        XCTAssertTrue(testButton.isHittable)
-        testButton.tap()
-        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        let allow = springboard.buttons.matching(NSPredicate(format: "label == 'Allow' OR label == '허용'")).firstMatch
-        if allow.waitForExistence(timeout: 2) { allow.tap() }
-        XCTAssertTrue(app.staticTexts["5초 뒤 소리 없는 알림이 표시됩니다."].waitForExistence(timeout: 5))
-    }
-    func testNotificationColdLaunchOpensQuickReview() {
-        let app = XCUIApplication()
-        app.launchArguments = ["--uitesting", "--uitesting-notification-open"]
-        app.launch()
-        XCTAssertTrue(app.staticTexts["1-3-3 풀이 비었어요"].waitForExistence(timeout: 10))
-        app.buttons["학습 화면으로 돌아가기"].tap()
-        XCTAssertTrue(app.buttons["학습 시작"].waitForExistence(timeout: 5))
-    }
     func testReportCurrentStudyCard() {
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting"]
         app.launch()
         app.buttons["학습 시작"].tap()
+        app.buttons["카드 관리"].tap()
         XCTAssertTrue(app.buttons["오류 제보"].waitForExistence(timeout: 5))
         app.buttons["오류 제보"].tap()
         XCTAssertTrue(app.staticTexts["선택한 카드"].waitForExistence(timeout: 5))
@@ -77,68 +142,25 @@ import XCTest
         app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
         XCTAssertTrue(app.staticTexts["학습 중 수정한 뜻"].waitForExistence(timeout: 5))
         app.buttons["학습 닫기"].tap()
-        app.tabBars.buttons["계정"].tap()
+        selectTab("설정", in: app)
         app.swipeUp()
         app.buttons["단어 오류 제보함"].tap()
         XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", "학습 중 수정한 뜻")).firstMatch.waitForExistence(timeout: 5))
-    }
-    func testMicroReviewCompletesThreeChecks() {
-        let app = XCUIApplication()
-        app.launchArguments = ["--uitesting"]
-        app.launch()
-        app.buttons["학습 시작"].tap()
-        XCTAssertTrue(app.buttons["1-3-3에 담기"].waitForExistence(timeout: 5))
-        app.buttons["1-3-3에 담기"].tap()
-        app.buttons["학습 닫기"].tap()
-        app.tabBars.buttons["계정"].tap()
-        app.buttons["microReviewSettings"].tap()
-        app.buttons["microReviewPool"].tap()
-        XCTAssertTrue(app.staticTexts["1-3-3 풀 · 1개"].waitForExistence(timeout: 5))
-        app.navigationBars.buttons.firstMatch.tap()
-        XCTAssertTrue(app.buttons["지금 1-3-3 확인"].waitForExistence(timeout: 5))
-        for count in 0..<3 {
-            app.buttons["지금 1-3-3 확인"].tap()
-            XCTAssertTrue(app.staticTexts["이 단어 학습 완료 \(count)/3회"].waitForExistence(timeout: 5))
-            XCTAssertTrue(app.staticTexts["이번 카드 1 / 1"].exists)
-            XCTAssertFalse(app.buttons["알았어요"].isEnabled)
-            let card = app.descendants(matching: .any)["microReviewCard"].firstMatch
-            card.tap()
-            XCTAssertTrue(app.buttons["알았어요"].isEnabled)
-            XCTAssertFalse(app.staticTexts["先生、おはようございます。"].exists)
-            if count == 0 {
-                card.swipeLeft()
-                XCTAssertTrue(app.buttons["microFinishReview"].waitForExistence(timeout: 5))
-                XCTAssertTrue(app.staticTexts["26초 후 마침"].waitForExistence(timeout: 6))
-                XCTAssertTrue(app.buttons["학습 시작"].waitForExistence(timeout: 30))
-                app.tabBars.buttons["계정"].tap()
-                app.buttons["지금 1-3-3 확인"].tap()
-                XCTAssertTrue(app.staticTexts["이 단어 학습 완료 0/3회"].waitForExistence(timeout: 5))
-                card.tap()
-            }
-            if count == 1 { card.swipeRight() } else { app.buttons["알았어요"].tap() }
-            XCTAssertTrue(app.buttons["microFinishReview"].waitForExistence(timeout: 5))
-            XCTAssertGreaterThan(app.buttons["microFinishReview"].frame.height, 300)
-            app.buttons["microFinishReview"].tap()
-            XCTAssertTrue(app.buttons["학습 시작"].waitForExistence(timeout: 8))
-            app.tabBars.buttons["계정"].tap()
-        }
-        app.buttons["microReviewPool"].tap()
-        XCTAssertTrue(app.staticTexts["학습완료단어목록 · 1개"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.staticTexts["1-3-3 풀 · 0개"].exists)
     }
     func testRemoveCardsAndStack() {
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting"]
         app.launch()
-        app.tabBars.buttons["학습"].tap()
+        selectTab("학습", in: app)
         app.buttons["학습 시작"].tap()
         let sampleWords = ["おはようございます", "楽しみ", "散歩", "ゆっくり"]
-        XCTAssertTrue(app.buttons["일본어 복사"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["studyCard"].firstMatch.waitForExistence(timeout: 5))
         guard let reviewedWord = sampleWords.first(where: { app.staticTexts[$0].exists }) else { XCTFail("첫 카드가 보이지 않아요"); return }
         app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
         app.buttons["알았어요"].tap()
         XCTAssertTrue(app.staticTexts["1 / 8 완료"].waitForExistence(timeout: 5))
         app.buttons["학습 닫기"].tap()
+        app.buttons["내 스택"].tap()
         app.staticTexts["하루를 시작하는 말"].firstMatch.tap()
         app.buttons["\(reviewedWord) 카드 삭제"].tap()
         app.buttons["카드 삭제"].tap()
@@ -153,7 +175,7 @@ import XCTest
         app.launchArguments = ["--uitesting-resume"]
         app.launch()
         XCTAssertFalse(app.staticTexts["하루를 시작하는 말"].exists)
-        app.tabBars.buttons["라이브러리"].tap()
+        selectTab("라이브러리", in: app)
         app.buttons["둘러보기"].tap()
         app.staticTexts["작은 일본어 생활"].tap()
         XCTAssertTrue(app.staticTexts["하루를 시작하는 말"].waitForExistence(timeout: 5))
@@ -162,7 +184,7 @@ import XCTest
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting"]
         app.launch()
-        app.tabBars.buttons["라이브러리"].tap()
+        selectTab("라이브러리", in: app)
         app.buttons["만들기 또는 가져오기"].tap()
         app.buttons["직접 만들기"].tap()
         let name = app.textFields["라이브러리 이름"]
@@ -177,28 +199,27 @@ import XCTest
         app.terminate()
         app.launchArguments = ["--uitesting-resume"]
         app.launch()
-        app.tabBars.buttons["라이브러리"].tap()
+        selectTab("라이브러리", in: app)
         XCTAssertFalse(app.staticTexts["삭제 테스트"].exists)
-        app.tabBars.buttons["학습"].tap()
+        selectTab("학습", in: app)
+        app.buttons["내 스택"].tap()
         XCTAssertTrue(app.staticTexts["하루를 시작하는 말"].exists)
     }
     func testPoolCopyAndReportPersistence() {
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting"]
         app.launch()
-        app.tabBars.buttons["계정"].tap()
+        selectTab("설정", in: app)
         XCTAssertTrue(app.steppers.firstMatch.waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["학습 풀 크기: 20개"].exists)
         app.steppers.firstMatch.buttons["Increment"].tap()
         XCTAssertTrue(app.staticTexts["학습 풀 크기: 21개"].exists)
-        app.tabBars.buttons["학습"].tap()
+        selectTab("학습", in: app)
         app.buttons["학습 시작"].tap()
-        app.buttons["일본어 복사"].tap()
-        XCTAssertTrue(app.buttons["일본어 복사 완료"].exists)
         XCTAssertFalse(app.buttons["알았어요"].isEnabled)
         XCTAssertTrue(app.staticTexts["학습 풀 4/21 · 남은 8"].exists)
         app.buttons["학습 닫기"].tap()
-        app.tabBars.buttons["라이브러리"].tap()
+        selectTab("라이브러리", in: app)
         app.buttons["둘러보기"].tap()
         app.staticTexts["작은 일본어 생활"].tap()
         app.buttons["라이브러리 오류 제보"].tap()
@@ -211,7 +232,7 @@ import XCTest
         app.terminate()
         app.launchArguments = ["--uitesting-resume"]
         app.launch()
-        app.tabBars.buttons["계정"].tap()
+        selectTab("설정", in: app)
         XCTAssertTrue(app.staticTexts["학습 풀 크기: 21개"].exists)
         app.swipeUp()
         app.buttons["단어 오류 제보함"].tap()
@@ -227,15 +248,21 @@ import XCTest
         screenshot("01-Learn")
         app.buttons["학습 시작"].tap()
         let sampleWords = ["おはようございます", "楽しみ", "散歩", "ゆっくり"]
-        XCTAssertTrue(app.buttons["일본어 복사"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["studyCard"].firstMatch.waitForExistence(timeout: 5))
         guard let firstWord = sampleWords.first(where: { app.staticTexts[$0].isHittable }) else { XCTFail("첫 카드가 보이지 않아요"); return }
-        XCTAssertTrue(app.buttons["\(firstWord) 구글 검색"].exists)
+        XCTAssertTrue(app.buttons["\(firstWord) Google 검색"].exists)
         XCTAssertFalse(app.buttons["알았어요"].isEnabled)
         screenshot("02-Card-Front")
         app.staticTexts[firstWord].tap()
         XCTAssertTrue(app.buttons["알았어요"].isEnabled)
         XCTAssertTrue(app.staticTexts["0 / 8 완료"].exists)
         screenshot("03-Card-Back")
+        if app.windows.firstMatch.frame.width > 600 {
+            XCUIDevice.shared.orientation = .landscapeLeft
+            XCTAssertTrue(app.descendants(matching: .any)["studyCard"].firstMatch.isHittable)
+            screenshot("13-iPad-Landscape")
+        }
+        defer { XCUIDevice.shared.orientation = .portrait }
         let center = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
         center.press(forDuration: 0.1, thenDragTo: app.coordinate(withNormalizedOffset: CGVector(dx: 0.04, dy: 0.52)))
         XCTAssertTrue(app.staticTexts["0 / 8 완료"].waitForExistence(timeout: 5))
@@ -247,7 +274,7 @@ import XCTest
         app.buttons["이전 응답 취소"].tap()
         XCTAssertTrue(app.staticTexts["0 / 8 완료"].exists)
         app.buttons["학습 닫기"].tap()
-        app.tabBars.buttons["라이브러리"].tap()
+        selectTab("라이브러리", in: app)
         app.buttons["둘러보기"].tap()
         XCTAssertTrue(app.staticTexts["작은 일본어 생활"].waitForExistence(timeout: 5))
         screenshot("04-Library")
@@ -257,7 +284,8 @@ import XCTest
         XCTAssertFalse(app.buttons["내 스택에 추가"].exists)
         XCTAssertTrue(app.buttons["학습 이어가기"].firstMatch.exists)
         screenshot("08-Stack-Path")
-        app.tabBars.buttons["계정"].tap()
+        selectTab("설정", in: app)
+        app.buttons["학습 설정"].tap()
         XCTAssertTrue(app.staticTexts["앞면에 히라가나 표시"].waitForExistence(timeout: 5))
         screenshot("05-Account")
     }
@@ -291,7 +319,7 @@ import XCTest
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting"]
         app.launch()
-        app.tabBars.buttons["라이브러리"].tap()
+        selectTab("라이브러리", in: app)
         app.buttons["만들기 또는 가져오기"].tap()
         app.buttons["Google Sheets 링크"].tap()
         app.buttons["공개 단어장 링크 사용"].tap()
@@ -299,7 +327,8 @@ import XCTest
         XCTAssertTrue(app.buttons["가져오기"].waitForExistence(timeout: 30))
         screenshot("09-Sheet-Selection")
         app.buttons["가져오기"].tap()
-        XCTAssertTrue(app.staticTexts["스택 34개   ·   단어 674개"].waitForExistence(timeout: 35))
+        let importedCount = app.staticTexts.matching(NSPredicate(format: "label MATCHES %@", "스택 [1-9][0-9]*개   ·   단어 [1-9][0-9]*개")).firstMatch
+        XCTAssertTrue(importedCount.waitForExistence(timeout: 35))
         app.staticTexts["N5"].tap()
         XCTAssertTrue(app.staticTexts["N5 단어 001"].waitForExistence(timeout: 5))
         app.buttons["내 스택에 추가"].firstMatch.tap()
@@ -307,9 +336,21 @@ import XCTest
         screenshot("10-JLPT-Stack-Path")
         app.buttons["학습 이어가기"].tap()
         app.buttons["학습 시작"].tap()
-        XCTAssertTrue(app.buttons["일본어 복사"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.staticTexts["학습 풀 20/20 · 남은 40"].exists)
+        XCTAssertTrue(app.descendants(matching: .any)["studyCard"].firstMatch.waitForExistence(timeout: 5))
+        let progress = app.staticTexts.matching(NSPredicate(format: "label MATCHES %@", "0 / [1-9][0-9]* 완료")).firstMatch
+        XCTAssertTrue(progress.exists)
+        let total = Int(progress.label.split(separator: " ").dropFirst(2).first ?? "0") ?? 0
+        XCTAssertGreaterThan(total, 0)
+        XCTAssertTrue(app.staticTexts["학습 풀 \(min(20, total / 2))/20 · 남은 \(total)"].exists)
         screenshot("11-JLPT-Study-Pool")
+    }
+    private func selectTab(_ title: String, in app: XCUIApplication) {
+        let phoneTab = app.tabBars.buttons[title]
+        if phoneTab.exists { phoneTab.tap(); return }
+        // iPadOS presents floating tabs as cells, rather than a UITabBar.
+        let tabletTab = app.cells[title]
+        if tabletTab.exists { tabletTab.tap(); return }
+        app.buttons[title].firstMatch.tap()
     }
     private func screenshot(_ name: String) {
         Thread.sleep(forTimeInterval: 0.7)

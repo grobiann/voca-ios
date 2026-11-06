@@ -1,8 +1,5 @@
 import SwiftUI
 import VocaCore
-import AVFoundation
-import UserNotifications
-import AlarmKit
 
 struct ReviewDepthAdvanceSnapshot {
     let sourceDepth: Int
@@ -18,13 +15,33 @@ struct SearchProvider: Identifiable, Codable {
     var enabled = true
 
     static func load() -> [SearchProvider] {
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("--uitesting") {
+            return [SearchProvider(name: "Google", template: "https://www.google.com/search?q={query} 한자 해석"),
+                    SearchProvider(name: "한자 공부방", template: "https://nihongokanji.com/?s={query}")]
+        }
+        #endif
         if let data = UserDefaults.standard.data(forKey: "searchProviders"),
-           let saved = try? JSONDecoder().decode([SearchProvider].self, from: data) { return saved }
+           var saved = try? JSONDecoder().decode([SearchProvider].self, from: data) {
+            if let index = saved.firstIndex(where: { $0.name == "Google" }) {
+                saved[index].template = saved[index].template
+                    .replacingOccurrences(of: "%20한자%20해석", with: " 한자 해석")
+            }
+            return saved
+        }
         return [
-            SearchProvider(name: "Google", template: "https://www.google.com/search?q={query}%20한자%20해석"),
+            SearchProvider(name: "Google", template: "https://www.google.com/search?q={query} 한자 해석"),
             SearchProvider(name: "한자 공부방", template: UserDefaults.standard.string(forKey: "kanjiSearchTemplate") ?? "https://nihongokanji.com/?s={query}")
         ]
     }
+}
+
+struct PublicDirectoryEntry: Identifiable {
+    let name: String
+    let link: String
+    let description: String
+    let nickname: String
+    var id: String { link }
 }
 
 @MainActor @Observable final class AppStore {
@@ -37,36 +54,57 @@ struct SearchProvider: Identifiable, Codable {
             }
         }
     }
+    // Only the directory address is bundled; library URLs come from its public rows.
+    private let directoryURL = "https://docs.google.com/spreadsheets/d/1ffae20f-FFBJCvyIiu49kj1UKz3YuMMQYFYKiJmEbVw/edit?gid=349747093"
+    var publicEntries: [PublicDirectoryEntry] = []
+    var publicDirectoryError: String?
+    var sheetLinks: [String] { archive.sheetLinks ?? [] }
+    func refreshPublicDirectory() async {
+        do {
+            let url = try SheetURL.csvURL(from: directoryURL, sheetName: "공개 목록")
+            var request = URLRequest(url: url); request.timeoutInterval = 30
+            let (data, response) = try await URLSession.shared.data(for: request)
+            guard let http = response as? HTTPURLResponse, http.statusCode == 200,
+                  data.count <= 1_000_000, let raw = String(data: data, encoding: .utf8) else {
+                throw ImportFailure.invalid("공개 목록을 읽을 수 없습니다.")
+            }
+            let rows = try LibraryImporter.parseCSV(raw.replacingOccurrences(of: "\u{FEFF}", with: ""))
+            guard let header = rows.first, header.count >= 5,
+                  header[0] == "라이브러리 그룹 이름", header[1] == "Google Sheets 링크",
+                  header[2] == "상태", header[3] == "설명", header[4] == "닉네임" else {
+                throw ImportFailure.invalid("공개 목록의 열을 확인해 주세요.")
+            }
+            publicEntries = rows.dropFirst().compactMap { row in
+                guard row.count >= 5, row[2].uppercased() == "TRUE", !row[0].isEmpty,
+                      (try? SheetURL.manifestURL(from: row[1])) != nil else { return nil }
+                return PublicDirectoryEntry(name: row[0], link: row[1],
+                                            description: row[3], nickname: row[4])
+            }
+            publicDirectoryError = nil
+        } catch { publicDirectoryError = error.localizedDescription }
+    }
+    func registerSheetLink(_ link: String) {
+        guard let normalized = try? SheetURL.manifestURL(from: link),
+              let components = URLComponents(url: normalized, resolvingAgainstBaseURL: false),
+              let identifier = components.path.split(separator: "/").last else { return }
+        let canonical = "https://docs.google.com/spreadsheets/d/\(identifier)/edit"
+        if !sheetLinks.contains(canonical) { archive.sheetLinks = (archive.sheetLinks ?? []) + [canonical]; save() }
+    }
+    func removeSheetLink(_ link: String) {
+        archive.sheetLinks?.removeAll { $0 == link }; save()
+    }
     var haptics = true
     private let location: URL
     private var storageReadable = true
-    private let speaker = AVSpeechSynthesizer()
-    private var reminderTask: Task<Void, Never>?
-    private var needsNotificationPermissionAfterMigration = false
-    var microSettings: MicroReviewSettings {
-        get { archive.microReviewSettings ?? MicroReviewSettings() }
-        set {
-            archive.microReviewSettings = newValue
-            save()
-            scheduleMicroNotifications()
-        }
-    }
-    var microEntries: [MicroReviewEntry] { archive.microReviewEntries ?? [] }
-    var microSessionCardCount: Int {
-        get { min(10, max(1, archive.microSessionCardCount ?? 2)) }
-        set { archive.microSessionCardCount = min(10, max(1, newValue)); save() }
-    }
     var reviewDepthCount: Int {
         get { archive.configuredReviewDepthCount }
-        set { archive.reviewDepthCount = min(5, max(highestUsedReviewDepth, max(3, newValue))); save() }
+        set { archive.reviewDepthCount = min(20, max(highestUsedReviewDepth, max(3, newValue))); save() }
     }
     var highestUsedReviewDepth: Int {
         max(3, (archive.reviewDepthStacks ?? []).enumerated().filter { !$0.element.words.isEmpty }.map { $0.offset + 1 }.max() ?? 3)
     }
     var reviewDepthStacks: [Stack] { Array((archive.reviewDepthStacks ?? []).prefix(reviewDepthCount)) }
     var completedReviewWords: [Word] { archive.completedReviewWords ?? [] }
-    var activeMicroCount: Int { microEntries.filter { $0.status == .active }.count }
-    var completedMicroCount: Int { microEntries.filter { $0.status == .completed }.count }
     var poolSize: Int {
         get { min(100, max(1, archive.studyPoolSize ?? Stack.poolLimit)) }
         set {
@@ -77,6 +115,18 @@ struct SearchProvider: Identifiable, Codable {
             }
             save()
         }
+    }
+    var oneWayStudy: Bool {
+        get { archive.oneWayStudy ?? false }
+        set { archive.oneWayStudy = newValue; for i in archive.stacks.indices { archive.stacks[i].oneWay = newValue; archive.stacks[i].prepare(poolSize: poolSize) }; save() }
+    }
+    var reviewWaitMinutes: Int {
+        get { archive.reviewWaitMinutes ?? 1440 }
+        set { archive.reviewWaitMinutes = newValue; save() }
+    }
+    var kanaStudyMode: Bool {
+        get { archive.kanaStudyMode ?? false }
+        set { archive.kanaStudyMode = newValue; save() }
     }
     var showReadingOnFront: Bool {
         get { archive.showReadingOnFront ?? true }
@@ -103,17 +153,13 @@ struct SearchProvider: Identifiable, Codable {
             self.error = "저장된 데이터를 읽지 못했습니다. 원본 파일은 유지됩니다. 앱을 다시 실행해 주세요. \(error.localizedDescription)"
         }
         haptics = UserDefaults.standard.object(forKey: "haptics") as? Bool ?? true
-        let needsReviewDepths = archive.reviewDepthStacks == nil || (archive.reviewDepthStacks?.count ?? 0) < 5
+        let needsReviewDepths = archive.reviewDepthStacks == nil || (archive.reviewDepthStacks?.count ?? 0) < 20
         archive.prepareReviewDepths()
         let removedExamples = archive.removeLegacyExamples()
         let needsGroupedLibrary = !archive.server.contains { $0.id == GroupedExpressions.libraryID }
         if needsGroupedLibrary { archive.server.append(GroupedExpressions.library) }
         if removedExamples || needsGroupedLibrary || needsReviewDepths { save() }
-        if archive.microReviewSettings?.usesSystemAlarm == true {
-            archive.microReviewSettings?.usesSystemAlarm = false
-            needsNotificationPermissionAfterMigration = archive.microReviewSettings?.enabled == true
-            save()
-        }
+
     }
     func save() {
         guard storageReadable else { error = "원본 데이터 보호를 위해 저장을 중단했습니다. 앱을 다시 실행해 주세요."; return }
@@ -180,6 +226,7 @@ struct SearchProvider: Identifiable, Codable {
     func removeReviewDepthWord(_ wordID: UUID, at depth: Int) {
         guard (1...reviewDepthCount).contains(depth), archive.reviewDepthStacks?.indices.contains(depth - 1) == true else { return }
         archive.reviewDepthStacks![depth - 1].words.removeAll { $0.id == wordID }
+        archive.reviewReadyAt?.removeValue(forKey: wordID)
         archive.reviewDepthStacks![depth - 1].prepare(poolSize: poolSize)
         save()
     }
@@ -195,6 +242,7 @@ struct SearchProvider: Identifiable, Codable {
         guard let i = archive.stacks.firstIndex(where: { $0.id == stackID }),
               !archive.stacks[i].words.isEmpty else { return false }
         // Reset the local copy so removed cards stay removed and corrections are retained.
+        archive.stacks[i].oneWay = oneWayStudy
         archive.stacks[i].reset(poolSize: poolSize)
         save()
         return true
@@ -225,20 +273,10 @@ struct SearchProvider: Identifiable, Codable {
     func enroll(_ stack: Stack) {
         guard !isEnrolled(stack) else { return }
         var copy = Stack(title: stack.title, words: stack.words, sourceID: stack.id)
+        copy.oneWay = oneWayStudy
         copy.prepare(poolSize: poolSize); archive.stacks.append(copy); save()
     }
     func isEnrolled(_ stack: Stack) -> Bool { archive.stacks.contains { $0.sourceID == stack.id || $0.id == stack.id } }
-    func publish(_ library: Library) {
-        if let i = archive.server.firstIndex(where: { $0.id == library.id }) { archive.server[i] = library }
-        else { archive.server.append(library) }
-        save()
-    }
-    func speak(_ text: String) {
-        speaker.stopSpeaking(at: .immediate)
-        let utterance = AVSpeechUtterance(string: text)
-        utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP"); utterance.rate = 0.43
-        speaker.speak(utterance)
-    }
     func search(_ text: String, using provider: SearchProvider) {
         let template = provider.template.trimmingCharacters(in: .whitespacesAndNewlines)
         let marker = "VOCASERCHPLACEHOLDER"
@@ -246,7 +284,7 @@ struct SearchProvider: Identifiable, Codable {
               var components = URLComponents(string: template.replacingOccurrences(of: "{query}", with: marker)),
               let queryItems = components.queryItems,
               queryItems.contains(where: { ($0.name + ($0.value ?? "")).contains(marker) }) else {
-            error = "검색 주소에 {query}가 있는지 확인해 주세요. 계정의 검색 버튼 설정에서 수정할 수 있습니다."
+            error = "검색 주소에 {query}가 있는지 확인해 주세요. 설정의 검색 버튼 설정에서 수정할 수 있습니다."
             return
         }
         components.queryItems = queryItems.map { item in
@@ -256,7 +294,7 @@ struct SearchProvider: Identifiable, Codable {
         guard let url = components.url,
               url.scheme == "https", let host = url.host, !host.isEmpty,
               url.user == nil, url.password == nil else {
-            error = "검색 주소는 https://로 시작하고 검색어 자리인 {query}를 포함해야 합니다. 계정의 검색 설정에서 확인해 주세요."
+            error = "검색 주소는 https://로 시작하고 검색어 자리인 {query}를 포함해야 합니다. 설정의 검색 설정에서 확인해 주세요."
             return
         }
         openSearchURL(url)
@@ -269,161 +307,7 @@ struct SearchProvider: Identifiable, Codable {
             if !opened { UIApplication.shared.open(webURL) }
         }
     }
-    func setMicroEnabled(_ enabled: Bool) async {
-        if enabled {
-            do {
-                let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert])
-                guard granted else { error = "알림이 허용되지 않았습니다. iPhone 설정에서 voca-ios 알림을 허용해 주세요."; return }
-            } catch { self.error = "알림 권한을 확인하지 못했습니다: \(error.localizedDescription)"; return }
-        }
-        var settings = microSettings
-        settings.enabled = enabled
-        microSettings = settings
-    }
-    func sendMicroTestNotification() async -> Bool {
-        do {
-            let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert])
-            guard granted else {
-                error = "알림이 허용되지 않았습니다. iPhone 설정에서 voca-ios 알림을 허용해 주세요."
-                return false
-            }
-            try await MicroNotificationScheduler.scheduleTest()
-            return true
-        } catch {
-            self.error = "테스트 알림을 예약하지 못했습니다: \(error.localizedDescription)"
-            return false
-        }
-    }
-    func requestMigratedNotificationPermissionIfNeeded() async {
-        guard needsNotificationPermissionAfterMigration else { return }
-        needsNotificationPermissionAfterMigration = false
-        await setMicroEnabled(true)
-    }
-    func addMicroWord(_ word: Word, sourceTitle: String) {
-        var entries = microEntries
-        if let i = entries.firstIndex(where: { $0.word.japanese == word.japanese && $0.word.korean == word.korean }) {
-            if entries[i].status == .active { return }
-            entries[i].word = word
-            entries[i].sourceTitle = sourceTitle
-            entries[i].restart()
-        } else { entries.append(MicroReviewEntry(word: word, sourceTitle: sourceTitle)) }
-        archive.microReviewEntries = entries
-        save(); scheduleMicroNotifications()
-    }
-    func microEntry(for word: Word) -> MicroReviewEntry? {
-        microEntries.first { $0.word.japanese == word.japanese && $0.word.korean == word.korean }
-    }
-    func nextMicroEntry(excluding ids: Set<UUID> = []) -> MicroReviewEntry? {
-        microEntries.filter { $0.status == .active && !ids.contains($0.id) }
-            .shuffled().min { ($0.lastReviewedAt ?? .distantPast) < ($1.lastReviewedAt ?? .distantPast) }
-    }
-    func answerMicro(_ id: UUID, known: Bool) {
-        guard var entries = archive.microReviewEntries,
-              let i = entries.firstIndex(where: { $0.id == id }) else { return }
-        entries[i].answer(known: known)
-        archive.microReviewEntries = entries
-        save(); scheduleMicroNotifications()
-    }
-    func stopMicro(_ id: UUID) {
-        guard var entries = archive.microReviewEntries,
-              let i = entries.firstIndex(where: { $0.id == id }) else { return }
-        entries[i].stop()
-        archive.microReviewEntries = entries
-        save(); scheduleMicroNotifications()
-    }
-    func restartMicro(_ id: UUID) {
-        guard var entries = archive.microReviewEntries,
-              let i = entries.firstIndex(where: { $0.id == id }) else { return }
-        entries[i].restart()
-        archive.microReviewEntries = entries
-        save(); scheduleMicroNotifications()
-    }
-    func removeMicro(_ id: UUID) {
-        archive.microReviewEntries?.removeAll { $0.id == id }
-        save(); scheduleMicroNotifications()
-    }
-    func scheduleMicroNotifications() {
-        let previous = reminderTask
-        previous?.cancel()
-        let settings = microSettings
-        reminderTask = Task {
-            _ = await previous?.result
-            if #available(iOS 26.0, *) {
-                do { try MicroAlarmCleanup.cancelOldAlarms() }
-                catch { self.error = "이전 시스템 알람을 취소하지 못했습니다: \(error.localizedDescription)" }
-            }
-            do { try await MicroNotificationScheduler.synchronize(settings: settings) }
-            catch is CancellationError { }
-            catch { self.error = "단어 확인 알림을 예약하지 못했습니다: \(error.localizedDescription)" }
-        }
-    }
     func feedback(_ style: UIImpactFeedbackGenerator.FeedbackStyle = .light) {
         if haptics { UIImpactFeedbackGenerator(style: style).impactOccurred() }
-    }
-}
-
-@MainActor private enum MicroNotificationScheduler {
-    static let prefix = "voca.micro."
-    static let testIdentifier = "voca.test.micro"
-    static func content() -> UNMutableNotificationContent {
-        let content = UNMutableNotificationContent()
-        content.title = "단어 확인 시간"
-        content.body = "잠깐 일본어를 만나 보세요. 탭하면 voca-ios가 열립니다."
-        content.userInfo = ["vocaOpenApp": true]
-        content.interruptionLevel = .timeSensitive
-        content.relevanceScore = 1
-        return content
-    }
-    static func scheduleTest() async throws {
-        let center = UNUserNotificationCenter.current()
-        center.removePendingNotificationRequests(withIdentifiers: [testIdentifier])
-        let request = UNNotificationRequest(
-            identifier: testIdentifier,
-            content: content(),
-            trigger: UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-        )
-        try await center.add(request)
-    }
-    static func synchronize(settings: MicroReviewSettings) async throws {
-        let center = UNUserNotificationCenter.current()
-        let existing = await center.pendingNotificationRequests()
-        try Task.checkCancellation()
-        center.removePendingNotificationRequests(withIdentifiers: existing.map(\.identifier).filter { $0.hasPrefix(prefix) })
-        guard settings.enabled else { return }
-        let status = await center.notificationSettings().authorizationStatus
-        guard status == .authorized || status == .provisional else { return }
-        let dates = settings.upcomingDates(after: Date())
-        let slotsPerDay = Int(ceil(Double((settings.endHour - settings.startHour) * 60) / Double(settings.intervalMinutes)))
-        let repeating = slotsPerDay * (settings.includesWeekends ? 1 : 5) <= 60
-        var usedSlots = Set<String>()
-        for date in dates {
-            try Task.checkCancellation()
-            let fields: Set<Calendar.Component> = repeating
-                ? (settings.includesWeekends ? [.hour, .minute] : [.weekday, .hour, .minute])
-                : [.year, .month, .day, .hour, .minute]
-            let parts = Calendar.current.dateComponents(fields, from: date)
-            let slotKey = settings.includesWeekends && repeating
-                ? "\(parts.hour ?? 0):\(parts.minute ?? 0)"
-                : "\(parts.weekday ?? 0):\(parts.hour ?? 0):\(parts.minute ?? 0)"
-            if repeating && !usedSlots.insert(slotKey).inserted { continue }
-            let content = content()
-            let trigger = UNCalendarNotificationTrigger(dateMatching: parts, repeats: repeating)
-            let request = UNNotificationRequest(identifier: prefix + String(Int(date.timeIntervalSince1970)), content: content, trigger: trigger)
-            try await center.add(request)
-            if repeating && usedSlots.count == slotsPerDay * (settings.includesWeekends ? 1 : 5) { break }
-        }
-    }
-}
-
-@available(iOS 26.0, *)
-@MainActor private enum MicroAlarmCleanup {
-    private static let prefix = "13300000-0000-4000-8000-"
-    private static let testID = UUID(uuidString: "13300000-0000-4000-9000-000000000000")!
-    static func cancelOldAlarms() throws {
-        let manager = AlarmManager.shared
-        guard manager.authorizationState == .authorized else { return }
-        for alarm in try manager.alarms where alarm.id == testID || alarm.id.uuidString.lowercased().hasPrefix(prefix) {
-            try manager.cancel(id: alarm.id)
-        }
     }
 }

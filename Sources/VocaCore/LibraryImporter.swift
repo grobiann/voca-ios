@@ -29,15 +29,27 @@ public enum LibraryImporter {
             guard let raw = String(data: data, encoding: .utf8) else { throw ImportFailure.invalid("UTF-8로 저장한 CSV 파일을 선택해 주세요.") }
             let rows = try parseCSV(raw.replacingOccurrences(of: "\u{FEFF}", with: ""))
             guard let header = rows.first else { throw ImportFailure.invalid("파일이 비어 있습니다.") }
-            let names = header.map { $0.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() }
-            guard let jp = names.firstIndex(of: "japanese"), let ko = names.firstIndex(of: "korean") else {
-                throw ImportFailure.invalid("CSV 첫 행에는 japanese,korean 열이 필요합니다. stack 열은 선택 사항입니다.")
+            let names = header.map { name in
+                switch name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
+                case "일본어", "japanese", "jp", "jp-jp": return "ja-jp"
+                case "읽는법", "읽는 법": return "reading"
+                case "한글뜻", "한글 뜻", "한국어", "korean", "kr", "kr-kr": return "ko-kr"
+                default: return name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+                }
             }
+            let languageColumns = names.enumerated().filter { _, name in
+                name.range(of: #"^[a-z]{2,3}(-[a-z]{2,4})?$"#, options: .regularExpression) != nil
+            }
+            guard languageColumns.count >= 2 else { throw ImportFailure.invalid("CSV 첫 행에는 ja-JP,ko-KR처럼 언어 코드로 된 열 두 개 이상이 필요합니다.") }
+            let source = languageColumns.first(where: { $0.element.hasPrefix("ja") }) ?? languageColumns[0]
+            let target = languageColumns.first(where: { $0.element.hasPrefix("ko") && $0.offset != source.offset })
+                ?? languageColumns.first(where: { $0.offset != source.offset })!
             guard Set(names).count == names.count else { throw ImportFailure.invalid("CSV 헤더가 중복되어 있습니다.") }
             let stackColumn = names.firstIndex(of: "stack")
             let stackIDColumn = names.firstIndex(of: "stack_id")
             let cardIDColumn = names.firstIndex(of: "card_id")
             let readingColumn = names.firstIndex(of: "reading")
+            let typeColumn = names.firstIndex(of: "type")
             var keys: [String] = []
             var wordKeys = Set<String>()
             var stacks: [Stack] = []
@@ -46,12 +58,18 @@ public enum LibraryImporter {
                 guard row.count == header.count else { throw ImportFailure.invalid("CSV \(index + 2)행의 열 개수를 확인해 주세요.") }
                 let title = stackColumn.map { row[$0] }.flatMap { $0.isEmpty ? nil : $0 } ?? "가져온 카드"
                 let key = stackIDColumn.map { row[$0] } ?? title
-                let wordKey = cardIDColumn.map { row[$0] } ?? "\(row[jp])|\(row[ko])"
+                let wordKey = cardIDColumn.map { row[$0] } ?? "\(row[source.offset])|\(row[target.offset])"
                 guard !key.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
                       !wordKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
                       wordKeys.insert(key + ":" + wordKey).inserted else { throw ImportFailure.invalid("스택/카드 ID가 비어 있거나 카드 ID가 중복됩니다: \(index + 2)행") }
                 let wordID = UUID(uuidString: wordKey) ?? namespace.map { stableID($0 + ":word:" + key + ":" + wordKey) } ?? UUID()
-                var word = Word(id: wordID, japanese: row[jp], korean: row[ko], example: "")
+                var word = Word(id: wordID, japanese: row[source.offset], korean: row[target.offset], example: "")
+                word.sourceLanguageCode = source.element
+                word.targetLanguageCode = target.element
+                word.translations = Dictionary(uniqueKeysWithValues: languageColumns.map { ($0.element, row[$0.offset]) })
+                let kind = typeColumn.map { row[$0].trimmingCharacters(in: .whitespacesAndNewlines).lowercased() } ?? "word"
+                guard ["", "word", "sentence"].contains(kind) else { throw ImportFailure.invalid("\(index + 2)행의 type은 word 또는 sentence여야 합니다.") }
+                word.isSentence = kind == "sentence"
                 word.reading = readingColumn.map { row[$0] }
                 word.source = names.firstIndex(of: "source").map { row[$0] }
                 word.license = names.firstIndex(of: "license").map { row[$0] }
@@ -71,11 +89,14 @@ public enum LibraryImporter {
         }
         for word in result.stacks.flatMap(\.words) {
             guard [word.japanese, word.korean].allSatisfy({ !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }) else {
-                throw ImportFailure.invalid("카드의 일본어와 한국어를 채워 주세요.")
+                throw ImportFailure.invalid("카드의 학습 언어와 뜻 언어를 채워 주세요.")
             }
         }
         guard !result.stacks.flatMap(\.words).contains(where: { $0.korean.hasPrefix("#") || $0.korean.contains("로드 중") || $0.korean.lowercased().contains("loading...") }) else {
             throw ImportFailure.invalid("한국어 번역 셀에 오류가 있습니다. 시트의 계산이 완료된 뒤 다시 가져와 주세요.")
+        }
+        guard Set(result.stacks.flatMap(\.words).map { $0.isSentence == true }).count <= 1 else {
+            throw ImportFailure.invalid("한 덱에는 단어 또는 문장 중 한 종류만 넣어 주세요. type 열을 확인해 주세요.")
         }
         return result
     }

@@ -5,11 +5,23 @@ public struct Word: Identifiable, Codable, Equatable, Sendable {
     public var japanese: String
     public var korean: String
     public var example: String
+    public var normalizedReading: String? {
+        guard let value = reading?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !value.isEmpty, !["-", "—", "–", "－"].contains(value) else { return nil }
+        return value
+    }
+    public var kanaText: String { normalizedReading ?? japanese }
     public var reading: String?
     public var source: String?
     public var license: String?
     public var exampleSource: String?
     public var translationStatus: String?
+    public var isSentence: Bool?
+    public var sourceLanguageCode: String?
+    public var targetLanguageCode: String?
+    public var translations: [String: String]?
+    public var sourceLanguageName: String { Locale(identifier: "ko_KR").localizedString(forLanguageCode: sourceLanguageCode?.split(separator: "-").first.map(String.init) ?? "ja") ?? "일본어" }
+    public var targetLanguageName: String { Locale(identifier: "ko_KR").localizedString(forLanguageCode: targetLanguageCode?.split(separator: "-").first.map(String.init) ?? "ko") ?? "한국어" }
     public init(id: UUID = UUID(), japanese: String, korean: String, example: String) {
         self.id = id; self.japanese = japanese; self.korean = korean; self.example = example
     }
@@ -32,13 +44,16 @@ public struct Stack: Identifiable, Codable, Equatable, Sendable {
     public var sourceID: UUID?
     public var recentWordIDs: [UUID]?
     public var hasShuffledQueue: Bool?
+    public var oneWay: Bool?
     public static let poolLimit = 20
     public var remainingCount: Int { allItems.filter { !mastered.contains($0) }.count }
     public init(id: UUID = UUID(), title: String, words: [Word] = [], sourceID: UUID? = nil) {
         self.id = id; self.title = title; self.words = words; self.mastered = []; self.queue = []; self.sourceID = sourceID
     }
     public var allItems: [ReviewItem] {
-        Direction.allCases.flatMap { direction in words.map { ReviewItem(wordID: $0.id, direction: direction) } }
+        Direction.allCases.flatMap { direction in words.compactMap {
+            direction == .koreanToJapanese && (oneWay == true || $0.isSentence == true) ? nil : ReviewItem(wordID: $0.id, direction: direction)
+        } }
     }
     public var isComplete: Bool { !words.isEmpty && allItems.allSatisfy { mastered.contains($0) } }
     public var progress: Double { allItems.isEmpty ? 0 : Double(allItems.filter { mastered.contains($0) }.count) / Double(allItems.count) }
@@ -64,6 +79,16 @@ public struct Stack: Identifiable, Codable, Equatable, Sendable {
         if hasShuffledQueue != true { queue.shuffle(); hasShuffledQueue = true }
         if recentWordIDs == nil { recentWordIDs = [] }
         refillReviewDepth(poolSize: max(1, poolSize))
+    }
+    public mutating func answerReviewSession(known: Bool, poolSize: Int = Self.poolLimit) {
+        guard let current = queue.first else { return }
+        if known {
+            words.removeAll { $0.id == current.wordID }
+            prepareReviewDepth(poolSize: poolSize)
+        } else {
+            queue.removeFirst()
+            queue.insert(current, at: Int.random(in: min(3, queue.count)...queue.count))
+        }
     }
     private mutating func refillReviewDepth(poolSize: Int) {
         var active = Set(queue.map(\.wordID))
@@ -125,9 +150,15 @@ public struct Library: Identifiable, Codable, Equatable, Sendable {
         self.id = id; self.title = title; self.subtitle = subtitle; self.stacks = stacks
     }
     public var wordCount: Int { stacks.reduce(0) { $0 + $1.words.count } }
+    public var isSentenceDeck: Bool { !stacks.isEmpty && stacks.flatMap(\.words).allSatisfy { $0.isSentence == true } }
 }
 public struct Archive: Codable, Sendable {
+    public var sheetLinks: [String]?
     public var studyPoolSize: Int?
+    public var oneWayStudy: Bool?
+    public var reviewWaitMinutes: Int?
+    public var reviewReadyAt: [UUID: Date]?
+    public var kanaStudyMode: Bool?
     public var reviewDepthCount: Int?
     public var reviewDepthStacks: [Stack]?
     public var completedReviewWords: [Word]?
@@ -142,16 +173,32 @@ public struct Archive: Codable, Sendable {
     public init(stacks: [Stack] = [], libraries: [Library] = [], server: [Library] = []) {
         self.stacks = stacks; self.libraries = libraries; self.server = server
     }
-    public var configuredReviewDepthCount: Int { min(5, max(3, reviewDepthCount ?? 3)) }
+    public func reviewDepth(of id: UUID) -> Int? {
+        reviewDepthStacks?.firstIndex(where: { $0.words.contains(where: { $0.id == id }) }).map { $0 + 1 }
+    }
+    public func reviewSession(poolSize: Int = Stack.poolLimit, now: Date = Date()) -> Stack {
+        var seen = Set<UUID>()
+        let words = (reviewDepthStacks ?? []).prefix(configuredReviewDepthCount).flatMap(\.words).filter {
+            seen.insert($0.id).inserted && (reviewReadyAt?[$0.id] ?? .distantPast) <= now
+        }
+        var session = Stack(title: "반복 학습", words: words)
+        session.prepareReviewDepth(poolSize: poolSize)
+        return session
+    }
+    public var configuredReviewDepthCount: Int { min(20, max(3, reviewDepthCount ?? 5)) }
     public mutating func prepareReviewDepths() {
         var depths = reviewDepthStacks ?? []
-        while depths.count < 5 { depths.append(Stack(title: "\(depths.count + 1)단계 단어")) }
+        while depths.count < 20 { depths.append(Stack(title: "\(depths.count + 1)단계 단어")) }
+        var seen = Set((completedReviewWords ?? []).map(\.id))
+        for index in depths.indices.reversed() {
+            depths[index].words = depths[index].words.filter { seen.insert($0.id).inserted }
+        }
         reviewDepthStacks = depths
     }
     @discardableResult public mutating func addToReviewDepth(_ word: Word, at depth: Int, poolSize: Int = Stack.poolLimit) -> Bool {
         guard (1...configuredReviewDepthCount).contains(depth) else { return false }
         prepareReviewDepths()
-        guard !reviewDepthStacks![depth - 1].words.contains(where: { $0.id == word.id }) else { return false }
+        guard !(reviewDepthStacks ?? []).contains(where: { $0.words.contains(where: { $0.id == word.id }) }), !(completedReviewWords ?? []).contains(where: { $0.id == word.id }) else { return false }
         reviewDepthStacks![depth - 1].words.append(word)
         reviewDepthStacks![depth - 1].prepare(poolSize: poolSize)
         return true
@@ -193,7 +240,30 @@ public struct Archive: Codable, Sendable {
         }
         reviewDepthStacks![sourceDepth - 1].words.removeAll { $0.id == word.id }
         reviewDepthStacks![sourceDepth - 1].prepare(poolSize: poolSize)
+        let minutes = reviewWaitMinutes ?? 1_440
+        if sourceDepth < configuredReviewDepthCount, minutes > 0 {
+            reviewReadyAt = reviewReadyAt ?? [:]
+            reviewReadyAt?[word.id] = Self.nextReviewBoundary(after: Date(), minutes: minutes)
+        } else { reviewReadyAt?.removeValue(forKey: word.id) }
         return true
+    }
+    public static func nextReviewBoundary(after date: Date, minutes: Int, calendar: Calendar = .current) -> Date {
+        guard minutes > 0 else { return date }
+        if minutes >= 10_080 {
+            let week = calendar.dateInterval(of: .weekOfYear, for: date)?.start ?? calendar.startOfDay(for: date)
+            return calendar.date(byAdding: .weekOfYear, value: 1, to: week) ?? date.addingTimeInterval(604_800)
+        }
+        let day = calendar.startOfDay(for: date)
+        if minutes >= 1_440 {
+            let anchor = calendar.date(from: DateComponents(year: 2001, month: 1, day: 1)) ?? day
+            let elapsedDays = calendar.dateComponents([.day], from: anchor, to: day).day ?? 0
+            let span = max(1, minutes / 1_440)
+            let nextDay = ((elapsedDays / span) + 1) * span
+            return calendar.date(byAdding: .day, value: nextDay, to: anchor) ?? date.addingTimeInterval(Double(minutes * 60))
+        }
+        let elapsed = max(0, calendar.dateComponents([.minute], from: day, to: date).minute ?? 0)
+        let next = (elapsed / minutes + 1) * minutes
+        return calendar.date(byAdding: .minute, value: next, to: day) ?? date.addingTimeInterval(Double(minutes * 60))
     }
     @discardableResult public mutating func removeLegacyExamples() -> Bool {
         var changed = false
@@ -280,6 +350,7 @@ public struct Archive: Codable, Sendable {
     }
 }
 
+// Legacy save format only; no notification or review behavior.
 public struct MicroReviewSettings: Codable, Equatable, Sendable {
     public var usesSystemAlarm: Bool?
     public var enabled = false
@@ -289,21 +360,6 @@ public struct MicroReviewSettings: Codable, Equatable, Sendable {
     public var includesWeekends = true
     public init() {}
 
-    public func upcomingDates(after date: Date, limit: Int = 60, calendar: Calendar = .current) -> [Date] {
-        guard limit > 0, intervalMinutes > 0, startHour >= 0, endHour <= 24, startHour < endHour else { return [] }
-        var dates: [Date] = []
-        let startOfToday = calendar.startOfDay(for: date)
-        for dayOffset in 0..<30 where dates.count < limit {
-            guard let day = calendar.date(byAdding: .day, value: dayOffset, to: startOfToday) else { continue }
-            let weekday = calendar.component(.weekday, from: day)
-            if !includesWeekends && (weekday == 1 || weekday == 7) { continue }
-            for minutes in stride(from: startHour * 60, to: endHour * 60, by: intervalMinutes) where dates.count < limit {
-                guard let slot = calendar.date(byAdding: .minute, value: minutes, to: day), slot > date else { continue }
-                dates.append(slot)
-            }
-        }
-        return dates
-    }
 }
 
 public enum MicroReviewStatus: String, Codable, Sendable { case active, completed, stopped }
@@ -320,18 +376,6 @@ public struct MicroReviewEntry: Identifiable, Codable, Equatable, Sendable {
     public init(word: Word, sourceTitle: String, addedAt: Date = Date()) {
         id = UUID(); self.word = word; self.sourceTitle = sourceTitle
         successCount = 0; status = .active; self.addedAt = addedAt
-    }
-    public mutating func answer(known: Bool, at date: Date = Date()) {
-        guard status == .active else { return }
-        lastReviewedAt = date
-        if known {
-            successCount = min(3, successCount + 1)
-            if successCount == 3 { status = .completed }
-        }
-    }
-    public mutating func stop() { if status == .active { status = .stopped } }
-    public mutating func restart() {
-        successCount = 0; lastReviewedAt = nil; status = .active
     }
 }
 

@@ -16,9 +16,11 @@ struct StudyView: View {
     @State private var exiting = false
     @State private var undo: Stack?
     @State private var undoPromotion: (depth: Int, previousTarget: Stack)?
-    @State private var undoAdvance: ReviewDepthAdvanceSnapshot?
     @State private var advanceTask: Task<Void, Never>?
     @State private var reporting = false
+    @State private var settings = false
+    @State private var initialized = false
+    @State private var undoReviewState: ([Stack], [Word], [UUID: Date])?
     @State private var deletingWord: Word?
     private var item: ReviewItem? { stack.queue.first }
     private var word: Word? { stack.words.first { $0.id == item?.wordID } }
@@ -29,7 +31,7 @@ struct StudyView: View {
         _activeStackID = State(initialValue: stackID)
     }
     private func persist(_ updated: Stack) {
-        if let activeReviewDepth { store.updateReviewDepthStack(updated, at: activeReviewDepth) }
+        if activeReviewDepth != nil { return }
         else { store.update(updated) }
     }
     private var sourceLibrary: Library? {
@@ -44,17 +46,19 @@ struct StudyView: View {
                     Button { dismiss() } label: { Image(systemName: "xmark").font(.headline).frame(width: 44, height: 44).background(.background, in: Circle()) }.accessibilityLabel("학습 닫기")
                     Spacer()
                     VStack(spacing: 4) {
-                        Text(activeReviewDepth.map { "\($0)단계" } ?? stack.title).font(.subheadline.bold()).lineLimit(1)
-                        Text(activeReviewDepth.map { _ in "단계별 단어 \(stack.words.count)개" } ?? "\(stack.mastered.count) / \(stack.words.count * 2) 완료")
+                        Text(activeReviewDepth != nil ? "반복 학습" : stack.title).font(.subheadline.bold()).lineLimit(1)
+                        Text(activeReviewDepth.map { _ in "반복 학습 단어 \(stack.words.count)개" } ?? "\(stack.mastered.count) / \(stack.allItems.count) 완료")
                             .font(.caption).foregroundStyle(.secondary)
                     }
                     Spacer()
                     Button {
                         if let undo {
-                            if let undoAdvance {
-                                store.undoReviewDepthAdvance(undoAdvance, restore: undo)
-                                activeReviewDepth = undoAdvance.sourceDepth
-                                activeStackID = undo.id
+                            if let previous = undoReviewState {
+                                store.archive.reviewDepthStacks = previous.0
+                                store.archive.completedReviewWords = previous.1
+                                store.archive.reviewReadyAt = previous.2
+                                store.save()
+                                undoReviewState = nil
                             } else if let undoPromotion {
                                 store.restoreReviewDepths(source: nil,
                                                           sourceDepth: nil,
@@ -65,14 +69,15 @@ struct StudyView: View {
                                 persist(undo)
                             }
                             stack = undo
-                            self.undo = nil; undoPromotion = nil; undoAdvance = nil; revealed = false; offset = .zero
+                            self.undo = nil; undoPromotion = nil; revealed = false; offset = .zero
                         }
                     } label: { Image(systemName: "arrow.uturn.backward").frame(width: 44, height: 44) }.disabled(undo == nil || exiting).accessibilityLabel("이전 응답 취소")
                 }
                 if activeReviewDepth == nil { ProgressView(value: stack.progress).tint(Palette.accent) }
                 if let word, let item {
                     HStack {
-                        Text(item.direction.label).font(.caption.weight(.semibold))
+                        Text(activeReviewDepth != nil ? "\(word.sourceLanguageName) → \(word.targetLanguageName) · \(store.archive.reviewDepth(of: word.id) ?? 1)단계" : (item.direction == .japaneseToKorean ? "\(word.sourceLanguageName) → \(word.targetLanguageName)" : "\(word.targetLanguageName) → \(word.sourceLanguageName)"))
+                            .font(.caption.weight(.semibold))
                         Spacer()
                         Text(activeReviewDepth == nil
                              ? "학습 풀 \(stack.queue.count)/\(store.poolSize) · 남은 \(stack.remainingCount)"
@@ -88,7 +93,7 @@ struct StudyView: View {
                         if stack.queue.count > 1,
                            let nextWord = stack.words.first(where: { $0.id == stack.queue[1].wordID }) {
                             VStack(spacing: 24) {
-                                Text(stack.queue[1].direction == .japaneseToKorean ? nextWord.japanese : nextWord.korean)
+                                Text(stack.queue[1].direction == .japaneseToKorean ? (store.kanaStudyMode ? nextWord.kanaText : nextWord.japanese) : nextWord.korean)
                                     .font(.system(size: 38, weight: .semibold, design: .rounded))
                             }.multilineTextAlignment(.center).padding(28)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -116,12 +121,11 @@ struct StudyView: View {
                         responseButton("다시 볼게요", icon: "arrow.left", known: false, width: geometry.size.width)
                         responseButton("알았어요", icon: "arrow.right", known: true, width: geometry.size.width)
                     }.disabled(!revealed || exiting).opacity(revealed ? 1 : 0.35)
-                    HStack(spacing: 10) {
-                        if activeReviewDepth == nil {
+                    if activeReviewDepth == nil {
                             Button {
                                 answer(true, width: geometry.size.width, promoteTo: 1)
                             } label: {
-                                Label("단계별 학습에 담기", systemImage: "square.stack.3d.up")
+                                Label("반복 학습에 담기", systemImage: "square.stack.3d.up")
                                     .font(.subheadline.weight(.semibold))
                                     .frame(maxWidth: .infinity).padding(.vertical, 12)
                                     .background(Palette.accent.opacity(0.10), in: RoundedRectangle(cornerRadius: 14))
@@ -130,28 +134,32 @@ struct StudyView: View {
                             .disabled(!revealed || exiting)
                             .opacity(revealed ? 1 : 0.55)
                             .accessibilityIdentifier("addToReviewDepth")
-                        }
-                        Menu {
-                        Button("오류 제보", systemImage: "flag") { reporting = true }
-                        Button("세트에서 제거", systemImage: "trash", role: .destructive) { deletingWord = word }
-                    } label: {
-                            Image(systemName: "ellipsis.circle")
-                                .font(.title3).frame(width: 48, height: 44)
                     }
-                    .disabled(exiting)
-                    .accessibilityLabel("카드 관리")
-                    }
-                    Text(revealed
+                    HStack {
+                        Spacer(minLength: 48)
+                        Text(revealed
                          ? (activeReviewDepth == nil
                             ? "모르면 왼쪽, 알면 오른쪽으로 밀어 주세요"
                             : "모르면 왼쪽, 알면 오른쪽 · 맞히면 다음 단계로 이동")
                          : "카드를 누르면 뜻을 확인할 수 있어요")
                         .font(.caption).foregroundStyle(.secondary)
+                        Spacer(minLength: 0)
+                        Menu {
+                            Button("학습 설정", systemImage: "slider.horizontal.3") { settings = true }
+                            Button("오류 제보", systemImage: "flag") { reporting = true }
+                            Button("세트에서 제거", systemImage: "trash", role: .destructive) { deletingWord = word }
+                        } label: {
+                            Image(systemName: "ellipsis.circle")
+                                .font(.title3).frame(width: 48, height: 44)
+                        }
+                        .disabled(exiting)
+                        .accessibilityLabel("카드 관리")
+                    }
                 } else if stack.words.isEmpty && activeReviewDepth != nil {
                     Spacer()
                     Image(systemName: "checkmark.seal.fill").font(.system(size: 76)).foregroundStyle(Palette.accent)
-                    Text("단계별 학습을 마쳤어요").font(.title.bold())
-                    Text("완료한 단어는 별도 목록에 보관됩니다.").foregroundStyle(.secondary).multilineTextAlignment(.center)
+                    Text("반복 학습을 마쳤어요").font(.title.bold())
+                    Text(store.archive.reviewDepthStacks?.prefix(store.reviewDepthCount).flatMap(\.words).isEmpty == false ? "이번에 학습할 카드가 없어요. 다음 대기시간 이후 다시 확인해 주세요." : "모든 단계를 완료했어요.").foregroundStyle(.secondary).multilineTextAlignment(.center)
                     Spacer()
                     Button("학습 마치기") { dismiss() }.buttonStyle(PrimaryButton())
                 } else if stack.words.isEmpty {
@@ -165,23 +173,36 @@ struct StudyView: View {
                     Spacer()
                     Image(systemName: "checkmark.seal.fill").font(.system(size: 76)).foregroundStyle(Palette.accent)
                     Text("스택을 모두 익혔어요!").font(.title.bold())
-                    Text("\(stack.words.count)개의 표현을 양방향으로 학습했어요.").foregroundStyle(.secondary).multilineTextAlignment(.center)
+                    Text("\(stack.words.count)개의 표현을 학습했어요.").foregroundStyle(.secondary).multilineTextAlignment(.center)
                     Spacer()
                     Button("학습 마치기") { dismiss() }.buttonStyle(PrimaryButton())
                 }
             }.padding(24).frame(maxWidth: 650).frame(maxWidth: .infinity).background(Palette.canvas)
         }.onAppear {
+            guard !initialized else { return }
+            initialized = true
             activeReviewDepth = initialReviewDepth
             activeStackID = stackID
-            if let saved = initialReviewDepth.flatMap({ store.reviewDepthStack(at: $0) }) ?? store.archive.stacks.first(where: { $0.id == stackID }) {
+            if let saved = initialReviewDepth.map({ _ in store.archive.reviewSession(poolSize: store.poolSize) }) ?? store.archive.stacks.first(where: { $0.id == stackID }) {
                 stack = saved
                 if initialReviewDepth != nil { stack.prepareReviewDepth(poolSize: store.poolSize) }
-                else { stack.prepare(poolSize: store.poolSize) }
+                else { stack.oneWay = store.oneWayStudy; stack.prepare(poolSize: store.poolSize) }
                 persist(stack)
             }
         }.onDisappear { advanceTask?.cancel() }
+        .sheet(isPresented: $settings, onDismiss: {
+            if activeReviewDepth != nil { stack.prepareReviewDepth(poolSize: store.poolSize) }
+            else { stack.oneWay = store.oneWayStudy; stack.prepare(poolSize: store.poolSize); persist(stack) }
+        }) {
+            NavigationStack {
+                StudySettingsView().toolbar { ToolbarItem(placement: .confirmationAction) { Button("완료") { settings = false } } }
+            }
+        }
         .sheet(isPresented: $reporting, onDismiss: {
-            if let updated = activeReviewDepth.flatMap({ store.reviewDepthStack(at: $0) }) ?? store.archive.stacks.first(where: { $0.id == activeStackID }) { stack = updated }
+            if activeReviewDepth != nil {
+                let current = store.reviewDepthStacks.flatMap(\.words)
+                stack.words = stack.words.map { word in current.first(where: { $0.id == word.id }) ?? word }
+            } else if let updated = store.archive.stacks.first(where: { $0.id == activeStackID }) { stack = updated }
         }) {
             NavigationStack {
                 WordReportComposer(library: sourceLibrary, stacks: [stack], initialWordID: word?.id)
@@ -214,25 +235,25 @@ struct StudyView: View {
     }
     private func cardSurface(_ word: Word, japaneseFirst: Bool, showingAnswer: Bool) -> some View {
         VStack(spacing: 22) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(showingAnswer ? "ANSWER" : "THINK IN \(japaneseFirst ? "JAPANESE" : "KOREAN")")
+            HStack(spacing: 6) {
+                Text(showingAnswer ? "ANSWER" : (japaneseFirst ? word.sourceLanguageName : word.targetLanguageName))
                     .font(.system(size: 10, weight: .bold, design: .monospaced)).tracking(2).foregroundStyle(.secondary)
+                Spacer(minLength: 0)
                 if japaneseFirst || showingAnswer {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 68, maximum: 92), spacing: 8)], alignment: .trailing, spacing: 4) {
-                        Button { UIPasteboard.general.string = word.japanese } label: {
-                            cardActionLabel("복사", icon: "doc.on.doc")
-                        }.buttonStyle(.borderless).accessibilityLabel("일본어 복사")
-                        ForEach(store.searchProviders.filter(\.enabled)) { provider in
-                            Button { store.search(word.japanese, using: provider) } label: {
-                                cardActionLabel(provider.name.isEmpty ? "검색" : provider.name, icon: "magnifyingglass")
-                            }.buttonStyle(.borderless).accessibilityLabel("\(word.japanese) \(provider.name) 검색")
-                        }
-                        Button { store.speak(word.japanese) } label: {
-                            cardActionLabel("듣기", icon: "speaker.wave.2")
-                        }.buttonStyle(.borderless).accessibilityLabel("일본어 발음 듣기")
-                    }.frame(maxWidth: .infinity, minHeight: 52, alignment: .trailing)
+                    ForEach(store.searchProviders.filter(\.enabled)) { provider in
+                        Button { store.search(word.japanese, using: provider) } label: {
+                            HStack(spacing: 4) {
+                                Image(systemName: "magnifyingglass")
+                                Text(provider.name.isEmpty ? "검색" : provider.name)
+                                    .font(.caption).lineLimit(1).minimumScaleFactor(0.8)
+                            }
+                            .frame(minHeight: 44)
+                        }.buttonStyle(.borderless).accessibilityLabel("\(word.japanese) \(provider.name) 검색")
+                    }
                 }
             }
+            .foregroundStyle(Palette.accent)
+            .frame(minHeight: 44)
             ViewThatFits(in: .vertical) {
                 cardFace(word, japaneseFirst: japaneseFirst, showingAnswer: showingAnswer, scale: 1)
                 cardFace(word, japaneseFirst: japaneseFirst, showingAnswer: showingAnswer, scale: 0.82)
@@ -245,30 +266,21 @@ struct StudyView: View {
                 .font(.caption).foregroundStyle(.tertiary)
         }.padding(28).frame(maxWidth: .infinity, maxHeight: .infinity)
     }
-    private func cardActionLabel(_ title: String, icon: String) -> some View {
-        VStack(spacing: 3) {
-            Image(systemName: icon).font(.system(size: 17, weight: .medium))
-            Text(title).font(.system(size: 9, weight: .medium)).lineLimit(1).minimumScaleFactor(0.75)
-        }
-        .foregroundStyle(Palette.accent)
-        .frame(maxWidth: .infinity, minHeight: 48)
-        .background(Palette.accent.opacity(0.07), in: RoundedRectangle(cornerRadius: 12))
-    }
     private func cardFace(_ word: Word, japaneseFirst: Bool, showingAnswer: Bool, scale: CGFloat, compact: Bool = false) -> some View {
         VStack(spacing: compact ? 10 : 20 * scale) {
-            Text(japaneseFirst ? word.japanese : word.korean)
+            Text(japaneseFirst ? (store.kanaStudyMode ? word.kanaText : word.japanese) : word.korean)
                 .font(.system(size: (showingAnswer ? 24 : 38) * scale, weight: showingAnswer ? .medium : .semibold, design: .rounded))
                 .foregroundStyle(showingAnswer ? .secondary : .primary)
                 .lineLimit(compact ? 4 : nil)
                 .minimumScaleFactor(0.65)
                 .fixedSize(horizontal: false, vertical: true)
-            if (showingAnswer || (japaneseFirst && store.showReadingOnFront)), let reading = word.reading, !reading.isEmpty {
+            if !store.kanaStudyMode && (showingAnswer || (japaneseFirst && store.showReadingOnFront)), let reading = word.normalizedReading {
                 Text(reading).font(.system(size: 17 * scale)).foregroundStyle(.secondary)
                     .lineLimit(compact ? 2 : nil).fixedSize(horizontal: false, vertical: true)
             }
             if showingAnswer {
                 Rectangle().fill(Palette.accent.opacity(0.15)).frame(width: 36, height: 3)
-                Text(japaneseFirst ? word.korean : word.japanese)
+                Text(japaneseFirst ? word.korean : (store.kanaStudyMode ? word.kanaText : word.japanese))
                     .font(.system(size: 34 * scale, weight: .semibold, design: .rounded))
                     .lineLimit(compact ? 4 : nil).minimumScaleFactor(0.65)
                     .fixedSize(horizontal: false, vertical: true)
@@ -327,34 +339,15 @@ struct StudyView: View {
             do { try await Task.sleep(for: .milliseconds(reduceMotion ? 100 : 240)) } catch { return }
             undo = stack
             undoPromotion = nil
-            undoAdvance = nil
-            if let activeReviewDepth, let answeredWord {
-                var updated = stack
-                updated.answer(known: known, poolSize: store.poolSize)
-                updated.prepareReviewDepth(poolSize: store.poolSize)
-                let japaneseToKorean = ReviewItem(wordID: answeredWord.id, direction: .japaneseToKorean)
-                if known, updated.mastered.contains(japaneseToKorean),
-                   let snapshot = store.advanceReviewDepthWord(answeredWord, updatedSource: updated, from: activeReviewDepth) {
-                    undoAdvance = snapshot
-                    var remaining = store.reviewDepthStack(at: activeReviewDepth) ?? updated
-                    remaining.prepareReviewDepth(poolSize: store.poolSize)
-                    store.updateReviewDepthStack(remaining, at: activeReviewDepth)
-                    stack = remaining
-                    if activeReviewDepth < store.reviewDepthCount,
-                       var next = store.reviewDepthStack(at: activeReviewDepth + 1),
-                       next.words.contains(where: { $0.id == answeredWord.id }) {
-                        next.prepareReviewDepth(poolSize: store.poolSize)
-                        store.updateReviewDepthStack(next, at: activeReviewDepth + 1)
-                        self.activeReviewDepth = activeReviewDepth + 1
-                        activeStackID = next.id
-                        stack = next
-                    } else if stack.words.isEmpty {
-                        advanceToNextStageIfAvailable()
+            if activeReviewDepth != nil, let answeredWord {
+                undoReviewState = (store.archive.reviewDepthStacks ?? [], store.completedReviewWords, store.archive.reviewReadyAt ?? [:])
+                if known {
+                    if let depth = store.archive.reviewDepth(of: answeredWord.id) {
+                        _ = store.archive.advanceReviewDepthWord(answeredWord, from: depth, poolSize: store.poolSize)
+                        store.save()
                     }
-                } else {
-                    stack = updated
-                    persist(updated)
                 }
+                stack.answerReviewSession(known: known, poolSize: store.poolSize)
             } else {
                 if known, let depth = promotionDepth, let answeredWord, let previousTarget = store.reviewDepthStack(at: depth),
                    store.addToReviewDepth(answeredWord, at: depth) {
@@ -367,25 +360,16 @@ struct StudyView: View {
             withTransaction(transaction) { revealed = false; offset = .zero; exiting = false }
         }
     }
-    private func advanceToNextStageIfAvailable() {
-        guard let activeReviewDepth else { return }
-        guard activeReviewDepth < store.reviewDepthCount else { return }
-        for depth in (activeReviewDepth + 1)...store.reviewDepthCount {
-            guard var next = store.reviewDepthStack(at: depth), !next.words.isEmpty else { continue }
-            next.prepareReviewDepth(poolSize: store.poolSize)
-            store.updateReviewDepthStack(next, at: depth)
-            self.activeReviewDepth = depth
-            activeStackID = next.id
-            stack = next
-            return
-        }
-    }
     private func removeCurrentWord(_ wordID: UUID) {
         guard !exiting, stack.words.contains(where: { $0.id == wordID }) else { deletingWord = nil; return }
         advanceTask?.cancel()
-        if let activeReviewDepth { store.removeReviewDepthWord(wordID, at: activeReviewDepth) }
+        if activeReviewDepth != nil, let depth = store.archive.reviewDepth(of: wordID) { store.removeReviewDepthWord(wordID, at: depth) }
         else { store.removeWord(wordID, from: activeStackID) }
-        if let updated = activeReviewDepth.flatMap({ store.reviewDepthStack(at: $0) }) ?? store.archive.stacks.first(where: { $0.id == activeStackID }) { stack = updated }
+        if activeReviewDepth != nil {
+            stack.words.removeAll { $0.id == wordID }
+            stack.prepareReviewDepth(poolSize: store.poolSize)
+        } else if let updated = store.archive.stacks.first(where: { $0.id == activeStackID }) { stack = updated }
+        undoReviewState = nil
         undo = nil
         undoPromotion = nil
         revealed = false
