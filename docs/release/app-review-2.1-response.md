@@ -2,6 +2,8 @@
 
 심사 요청: 2026-11-07, CardVoca 1.0 (build 2). 이 요청은 TestFlight 테스터 초대 여부가 아니라 심사 정보의 누락에 관한 것이다. 새 바이너리를 요구하는 버그 지적은 없다.
 
+2026-11-07에 받은 첫 녹화 `ScreenRecording_11-07-2026 11-43-19_1.MP4`는 앱 실행·학습·반복 학습을 보여 주지만 iPhone의 iOS가 27.0.1이었다. Apple의 당시 최신 공개 iOS는 27.2이므로 심사 재제출에 사용하지 않는다. App Store Connect에 올린 임시 사본은 제거했고, 최신 iOS 재녹화를 기다린다.
+
 ## App Store Connect → App Review Information → Notes
 
 아래 영문을 붙여 넣고, **실기기 녹화 파일을 첨부한 후** 다시 제출한다. 녹화 파일명과 iOS 버전은 실제 파일에 맞춰 확인한다.
