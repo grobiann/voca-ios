@@ -2,11 +2,13 @@
 
 심사 요청: 2026-11-07, CardVoca 1.0 (build 2). 이 요청은 TestFlight 테스터 초대 여부가 아니라 심사 정보의 누락에 관한 것이다. 새 바이너리를 요구하는 버그 지적은 없다.
 
-2026-11-07에 받은 첫 녹화 `ScreenRecording_11-07-2026 11-43-19_1.MP4`는 앱 실행·학습·반복 학습을 보여 주지만 iPhone의 iOS가 27.0.1이었다. Apple의 당시 최신 공개 iOS는 27.2이므로 심사 재제출에 사용하지 않는다. App Store Connect에 올린 임시 사본은 제거했고, 최신 iOS 재녹화를 기다린다.
+2026-11-07에 받은 첫 녹화 `ScreenRecording_11-07-2026 11-43-19_1.MP4`는 iOS 27.0.1이어서 사용하지 않았다. 연결된 iPhone 16을 iOS 27.2로 업데이트한 뒤 녹화한 `ScreenRecording_11-07-2026 14-06-24_1.MP4`를 확인했다. App Store Connect에 `CardVoca-iPhone-iOS27.2-demo.mp4`로 첨부했다. 앱 실행·라이브러리·카드 학습·반복 학습 흐름이 포함된다.
+
+2026-11-07 14:13 KST에 App Store Connect에서 CardVoca 1.0(2)를 다시 제출했고, 제출 상태가 **심사 대기 중**으로 바뀐 것을 확인했다. 심사 제출 ID는 `4b302660-6f09-4e74-a9d5-749bd23a79c1`이다. 승인 후 출시는 수동으로 설정되어 있다.
 
 ## App Store Connect → App Review Information → Notes
 
-아래 영문을 붙여 넣고, **실기기 녹화 파일을 첨부한 후** 다시 제출한다. 녹화 파일명과 iOS 버전은 실제 파일에 맞춰 확인한다.
+아래 영문은 제출용 초안이다. 실제 App Store Connect의 메모에는 첨부 파일명 `CardVoca-iPhone-iOS27.2-demo.mp4`와 기기·운영체제 `iPhone 16 / iOS 27.2`를 적었다.
 
 ```text
 CardVoca 1.0 (build 2) — response to Guideline 2.1
