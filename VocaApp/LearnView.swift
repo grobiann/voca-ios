@@ -95,11 +95,6 @@ struct LearnView: View {
                     .buttonStyle(PrimaryButton(height: 60))
                     .disabled(next == nil)
                     .opacity(next == nil ? 0.45 : 1)
-                    if store.dailyStudyLimitEnabled {
-                        Text("오늘 카드 \(store.dailyStudyDisplays) / \(store.dailyStudyLimit)회")
-                            .font(.caption).foregroundStyle(.secondary)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                    }
                     TimelineView(.periodic(from: .now, by: 60)) { _ in
                         Button { studyingDepth = nextDepth } label: {
                             Label(nextDepth == nil && store.reviewDepthStacks.contains(where: { !$0.words.isEmpty }) ? "반복 학습 대기 중" : "반복 학습 시작", systemImage: "square.stack.3d.up.fill")

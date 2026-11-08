@@ -118,7 +118,12 @@ struct PublicDirectoryEntry: Identifiable {
     }
     var dailyStudyLimitEnabled: Bool {
         get { archive.dailyStudyLimitEnabled ?? true }
-        set { archive.dailyStudyLimitEnabled = newValue; save() }
+        set {
+            archive.dailyStudyLimitEnabled = newValue
+            // Re-enabling the limit ends today's manual override, but keeps the count.
+            if newValue { archive.dailyStudyUnlimitedToday = false }
+            save()
+        }
     }
     var dailyStudyLimit: Int {
         get { min(10_000, max(1, archive.dailyStudyLimit ?? 100)) }

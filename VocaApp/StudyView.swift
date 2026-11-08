@@ -160,8 +160,8 @@ struct StudyView: View {
                 } else if limitReached && activeReviewDepth == nil && stack.remainingCount > 0 {
                     Spacer()
                     Image(systemName: "calendar.badge.clock").font(.system(size: 64)).foregroundStyle(Palette.accent)
-                    Text("오늘의 학습량을 채웠어요").font(.title.bold())
-                    Text("오늘 카드 \(store.dailyStudyDisplays)회를 봤어요. 남은 카드는 내일 이어서 볼 수 있어요.")
+                    Text("오늘도 정말 열심히 공부했어요!").font(.title.bold())
+                    Text("충분히 해냈어요. 더 하고 싶다면 오늘만 이어서 학습할 수 있어요.")
                         .foregroundStyle(.secondary).multilineTextAlignment(.center)
                     Spacer()
                     Button("오늘만 더 학습하기") {
@@ -388,7 +388,7 @@ struct StudyView: View {
             return
         }
         limitReached = false
-        if countDisplay && !store.dailyStudyCapReached { store.recordStudyDisplay(next) }
+        if countDisplay { store.recordStudyDisplay(next) }
     }
     private func removeCurrentWord(_ wordID: UUID) {
         guard !exiting, stack.words.contains(where: { $0.id == wordID }) else { deletingWord = nil; return }
