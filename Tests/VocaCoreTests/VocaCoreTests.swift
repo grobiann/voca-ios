@@ -3,7 +3,7 @@ import XCTest
 final class VocaCoreTests: XCTestCase {
     func testPublicDirectoryRefreshAcceptsReorderedColumns() throws {
         let csv = """
-        라이브러리 그룹 이름,Google Sheets 링크,상태,닉네임,설명
+        LibraryName,GoogleSheetLinks,Status,NickName,Description
         새 자료,https://docs.google.com/spreadsheets/d/sample/edit,TRUE,제작자,새 설명
         숨긴 자료,https://docs.google.com/spreadsheets/d/hidden/edit,FALSE,제작자,숨김
         """

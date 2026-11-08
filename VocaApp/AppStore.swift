@@ -116,7 +116,7 @@ struct PublicDirectoryEntry: Identifiable {
         }
     }
     var dailyStudyLimitEnabled: Bool {
-        get { archive.dailyStudyLimitEnabled ?? true }
+        get { archive.dailyStudyLimitEnabled ?? false }
         set {
             archive.dailyStudyLimitEnabled = newValue
             // Re-enabling the limit ends today's manual override, but keeps the count.

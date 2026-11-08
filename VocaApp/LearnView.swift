@@ -89,6 +89,36 @@ struct LearnView: View {
                     }
                     .padding(20)
                     .background(.background, in: RoundedRectangle(cornerRadius: 24))
+                    if store.dailyStudyLimitEnabled {
+                        TimelineView(.periodic(from: .now, by: 60)) { _ in
+                            let completed = store.dailyStudyDisplays
+                            let goal = store.dailyStudyLimit
+                            VStack(alignment: .leading, spacing: 12) {
+                                HStack(spacing: 12) {
+                                    Image(systemName: completed >= goal ? "checkmark" : "target")
+                                        .font(.headline.weight(.semibold))
+                                        .foregroundStyle(Palette.accent)
+                                        .frame(width: 38, height: 38)
+                                        .background(Palette.accent.opacity(0.10), in: RoundedRectangle(cornerRadius: 12))
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text("오늘의 학습 목표").font(.subheadline.weight(.semibold))
+                                        Text(completed >= goal ? "오늘 목표를 달성했어요" : "한 장씩 채워 가고 있어요")
+                                            .font(.caption).foregroundStyle(.secondary)
+                                    }
+                                    Spacer(minLength: 8)
+                                    Text("\(completed) / \(goal)")
+                                        .font(.subheadline.monospacedDigit().weight(.bold))
+                                        .foregroundStyle(Palette.accent)
+                                }
+                                ProgressView(value: Double(min(completed, goal)), total: Double(goal))
+                                    .tint(Palette.accent)
+                                    .accessibilityLabel("오늘의 학습 목표 진행도")
+                                    .accessibilityValue("\(completed)회 중 목표 \(goal)회")
+                            }
+                            .padding(16)
+                            .background(.background, in: RoundedRectangle(cornerRadius: 18))
+                        }
+                    }
                     Button { studying = next } label: {
                         Label("학습 시작", systemImage: "play.fill")
                     }

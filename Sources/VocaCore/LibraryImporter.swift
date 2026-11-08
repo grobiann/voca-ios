@@ -22,18 +22,19 @@ public enum PublicLibraryDirectory {
         guard let header = rows.first else { throw ImportFailure.invalid("공개 목록이 비어 있습니다.") }
         var columns: [String: Int] = [:]
         for (index, title) in header.enumerated() {
-            let key = title.trimmingCharacters(in: .whitespacesAndNewlines)
+            let key = title.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
             guard columns.updateValue(index, forKey: key) == nil else {
                 throw ImportFailure.invalid("공개 목록의 열 이름이 중복되어 있습니다.")
             }
         }
-        guard let nameIndex = columns["라이브러리 그룹 이름"],
-              let linkIndex = columns["Google Sheets 링크"],
-              let statusIndex = columns["상태"] else {
-            throw ImportFailure.invalid("공개 목록에 라이브러리 그룹 이름, Google Sheets 링크, 상태 열이 필요합니다.")
+        func column(_ names: String...) -> Int? { names.compactMap { columns[$0.lowercased()] }.first }
+        guard let nameIndex = column("LibraryName", "라이브러리 그룹 이름"),
+              let linkIndex = column("GoogleSheetLinks", "Google Sheets 링크"),
+              let statusIndex = column("Status", "상태") else {
+            throw ImportFailure.invalid("공개 목록에 LibraryName, GoogleSheetLinks, Status 열이 필요합니다.")
         }
-        let descriptionIndex = columns["설명"]
-        let nicknameIndex = columns["닉네임"]
+        let descriptionIndex = column("Description", "설명")
+        let nicknameIndex = column("NickName", "닉네임")
         var seenLinks = Set<String>()
         return rows.dropFirst().compactMap { row in
             func value(_ index: Int?) -> String {
