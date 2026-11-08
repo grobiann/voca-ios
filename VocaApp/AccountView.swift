@@ -17,9 +17,9 @@ struct AccountView: View {
                     NavigationLink("Google Sheets 목록") { SheetLinksView() }
                     NavigationLink("검색 버튼 설정") { SearchSettingsView() }
                     NavigationLink("내 카드 뜻 수정 기록") { WordReportList() }
-                    NavigationLink("개발자 이야기") { DeveloperStoryView() }
                     NavigationLink("개인정보 처리방침") { PrivacyPolicyView() }
                     LabeledContent("버전", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0")
+                    NavigationLink("개발자") { DeveloperStoryView() }
                 }
             }.navigationTitle("설정")
         }
@@ -196,7 +196,7 @@ struct PrivacyPolicyView: View {
                 Text("Google Sheets 가져오기를 실행하면 Google에 접속해 공개된 시트를 읽습니다. 공개 공유한 시트는 링크를 아는 다른 사람도 볼 수 있으므로 개인정보를 넣지 마세요.")
                 Text("검색 버튼을 누르면 일본어 단어가 선택한 검색 사이트로 전달되고 외부 브라우저가 열립니다. 해당 서비스의 개인정보 처리방침이 적용됩니다.")
                 Text("뜻 수정 기록은 자동으로 전송되지 않습니다. 공유를 선택하면 선택한 앱과 수신자에게 수정 내용이 전달됩니다.")
-                Text("개발자 이야기에서 좋아요 버튼을 누르면 Google Apps Script로 좋아요 1회가 전송되어 운영자의 비공개 Google Sheet에 날짜별 횟수로 합산됩니다. 계정, 이메일, 기기 ID와 학습 데이터는 보내지 않습니다.")
+                Text("개발자 화면에서 좋아요 버튼을 누르면 앱이 임의로 만든 앱 전용 ID와 좋아요 1회가 Google Apps Script로 전송됩니다. 운영자의 비공개 Google Sheet에 ID별 횟수와 날짜별 합계가 저장됩니다. 계정, 이메일, 실제 기기 ID와 학습 데이터는 보내지 않습니다.")
             }
             Section("보관과 삭제") {
                 Text("앱 안에서 스택과 라이브러리를 삭제할 수 있습니다. 기기에 저장된 전체 데이터를 지우려면 iPhone 설정에서 앱을 삭제하세요. 앱 정리하기는 데이터 삭제와 다릅니다.")
@@ -216,41 +216,25 @@ struct PrivacyPolicyView: View {
 }
 
 struct DeveloperStoryView: View {
-    @State private var sendingLike = false
-    @State private var likeMessage: String?
+    @State private var likesTapped = 0
     var body: some View {
         List {
-            Section("CardVoca를 만든 이유") {
-                Text("일본어 단어를 제 방식대로 꾸준히 외우려고 만든 앱입니다. 제가 공부하면서 쓰던 도구를 다른 분들과도 나누고 싶어 공개를 준비하고 있습니다.")
-                Text("지금은 수익을 목적으로 운영하지 않습니다. 더 편하게 배우는 방법을 찾으며 조금씩 다듬어 가겠습니다.")
-            }
-            Section("자료와 학습 기록") {
-                Text("라이브러리는 공개 Google Sheets에서 읽어 오고, 학습 기록과 개인적인 뜻 수정은 내 기기에 남습니다.")
+            Section {
+                Text("제가 일본어를 공부하려고 만든 앱이고, 지금도 직접 사용하고 있습니다. 제 공부에 필요한 방향으로 계속 발전시켜 나갈 생각이에요.")
+                Text("수익화를 목적으로 만든 앱은 아닙니다.")
+                Text("인터넷에 공유된 단어 목록을 샘플로 넣어 두었습니다. 각자 필요한 자료를 기기에 추가하거나 다른 사람과 공유할 수도 있어요. 앞으로는 문장이나 조금 더 어려운 내용도 더해질 수 있습니다. 다른 언어도 언젠가는요… 제 일본어 공부가 먼저 끝나면요! 😄")
             }
             Section {
                 Button {
-                    guard !sendingLike else { return }
-                    sendingLike = true
-                    likeMessage = nil
-                    Task {
-                        do {
-                            try await LikeFeedback.send()
-                            likeMessage = "고마워요! 마음이 전해졌어요."
-                        } catch {
-                            likeMessage = "전송하지 못했어요. 연결을 확인하고 다시 눌러 주세요."
-                        }
-                        sendingLike = false
-                    }
+                    likesTapped += 1
+                    Task { await LikeFeedback.send() }
                 } label: {
-                    Label(sendingLike ? "전송 중…" : "좋아요!", systemImage: "heart.fill")
+                    Label("눌러서 개발자에게 좋아요 전달하기", systemImage: "heart.fill")
                         .frame(maxWidth: .infinity)
+                        .symbolEffect(.bounce, value: likesTapped)
                 }
-                .disabled(sendingLike)
-                if let likeMessage { Text(likeMessage).font(.footnote).foregroundStyle(.secondary) }
-            } footer: {
-                Text("한 번 누르면 운영자에게 좋아요 횟수만 전달됩니다. 로그인이나 권한 요청은 없고, 여러 번 눌러도 괜찮아요.")
             }
-        }.navigationTitle("개발자 이야기")
+        }.navigationTitle("개발자")
     }
 }
 

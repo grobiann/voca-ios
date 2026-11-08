@@ -111,9 +111,6 @@ struct LibraryDetailView: View {
                                     .font(.caption).foregroundStyle(.secondary).lineLimit(1)
                             }
                             Spacer(minLength: 4)
-                            NavigationLink { WordReportComposer(library: library, stacks: [stack]) } label: {
-                                Image(systemName: "pencil").frame(width: 32, height: 40)
-                            }.accessibilityLabel("\(stack.title) 뜻 수정")
                             if local {
                                 NavigationLink { LibraryStackEditor(libraryID: library.id, stackID: stack.id) } label: {
                                     Image(systemName: "pencil").frame(width: 32, height: 40)
@@ -144,9 +141,6 @@ struct LibraryDetailView: View {
             }
         }.background(Palette.canvas).navigationTitle(library?.title ?? "덱").toolbarTitleDisplayMode(.inline)
             .toolbar {
-                if let library {
-                    NavigationLink { WordReportComposer(library: library, stacks: library.stacks) } label: { Label("덱 뜻 수정", systemImage: "pencil") }
-                }
                 if local {
                     Menu {
                         Button("덱 제거", systemImage: "trash", role: .destructive) { deletingLibrary = true }
