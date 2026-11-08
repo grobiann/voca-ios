@@ -116,6 +116,43 @@ struct PublicDirectoryEntry: Identifiable {
             save()
         }
     }
+    var dailyStudyLimitEnabled: Bool {
+        get { archive.dailyStudyLimitEnabled ?? true }
+        set { archive.dailyStudyLimitEnabled = newValue; save() }
+    }
+    var dailyStudyLimit: Int {
+        get { min(10_000, max(1, archive.dailyStudyLimit ?? 100)) }
+        set { archive.dailyStudyLimit = min(10_000, max(1, newValue)); save() }
+    }
+    private func resetDailyStudyIfNeeded(now: Date = Date()) {
+        let today = Calendar.current.startOfDay(for: now)
+        guard archive.dailyStudyDay != today else { return }
+        archive.dailyStudyDay = today
+        archive.dailyStudyDisplays = 0
+        archive.dailyStudySeenItems = []
+        archive.dailyStudyUnlimitedToday = false
+        save()
+    }
+    var dailyStudyDisplays: Int {
+        archive.dailyStudyDay == Calendar.current.startOfDay(for: Date()) ? (archive.dailyStudyDisplays ?? 0) : 0
+    }
+    var dailyStudyCapReached: Bool {
+        dailyStudyLimitEnabled && !(archive.dailyStudyDay == Calendar.current.startOfDay(for: Date()) && archive.dailyStudyUnlimitedToday == true) && dailyStudyDisplays >= dailyStudyLimit
+    }
+    var dailyStudySeenItems: Set<ReviewItem> {
+        archive.dailyStudyDay == Calendar.current.startOfDay(for: Date()) ? (archive.dailyStudySeenItems ?? []) : []
+    }
+    func recordStudyDisplay(_ item: ReviewItem) {
+        resetDailyStudyIfNeeded()
+        archive.dailyStudySeenItems = (archive.dailyStudySeenItems ?? []).union([item])
+        archive.dailyStudyDisplays = (archive.dailyStudyDisplays ?? 0) + 1
+        save()
+    }
+    func allowMoreStudyToday() {
+        resetDailyStudyIfNeeded()
+        archive.dailyStudyUnlimitedToday = true
+        save()
+    }
     var oneWayStudy: Bool {
         get { archive.oneWayStudy ?? false }
         set { archive.oneWayStudy = newValue; for i in archive.stacks.indices { archive.stacks[i].oneWay = newValue; archive.stacks[i].prepare(poolSize: poolSize) }; save() }

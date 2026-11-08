@@ -20,6 +20,7 @@ public struct Word: Identifiable, Codable, Equatable, Sendable {
     public var sourceLanguageCode: String?
     public var targetLanguageCode: String?
     public var translations: [String: String]?
+    public var externalCardID: String?
     public var sourceLanguageName: String { Locale(identifier: "ko_KR").localizedString(forLanguageCode: sourceLanguageCode?.split(separator: "-").first.map(String.init) ?? "ja") ?? "일본어" }
     public var targetLanguageName: String { Locale(identifier: "ko_KR").localizedString(forLanguageCode: targetLanguageCode?.split(separator: "-").first.map(String.init) ?? "ko") ?? "한국어" }
     public init(id: UUID = UUID(), japanese: String, korean: String, example: String) {
@@ -42,6 +43,7 @@ public struct Stack: Identifiable, Codable, Equatable, Sendable {
     public var mastered: Set<ReviewItem>
     public var queue: [ReviewItem]
     public var sourceID: UUID?
+    public var externalStackID: String?
     public var recentWordIDs: [UUID]?
     public var hasShuffledQueue: Bool?
     public var oneWay: Bool?
@@ -140,6 +142,23 @@ public struct Stack: Identifiable, Codable, Equatable, Sendable {
     }
     public mutating func reset(poolSize: Int = Self.poolLimit) { mastered = []; queue = []; recentWordIDs = []; hasShuffledQueue = nil; prepare(poolSize: poolSize) }
 
+    public mutating func restrictToSeen(_ seen: Set<ReviewItem>, poolSize: Int) {
+        queue.removeAll { !seen.contains($0) }
+        var active = Set(queue.map(\.wordID))
+        for item in allItems.filter({ seen.contains($0) && !mastered.contains($0) }).shuffled() {
+            guard queue.count < poolSize else { break }
+            if active.insert(item.wordID).inserted { queue.append(item) }
+        }
+    }
+
+    public mutating func remapWordIDs(_ ids: [UUID: UUID]) {
+        guard !ids.isEmpty else { return }
+        for index in words.indices { words[index].id = ids[words[index].id] ?? words[index].id }
+        mastered = Set(mastered.map { ReviewItem(wordID: ids[$0.wordID] ?? $0.wordID, direction: $0.direction) })
+        queue = queue.map { ReviewItem(wordID: ids[$0.wordID] ?? $0.wordID, direction: $0.direction) }
+        recentWordIDs = recentWordIDs?.map { ids[$0] ?? $0 }
+    }
+
 }
 public struct Library: Identifiable, Codable, Equatable, Sendable {
     public var id: UUID
@@ -155,6 +174,12 @@ public struct Library: Identifiable, Codable, Equatable, Sendable {
 public struct Archive: Codable, Sendable {
     public var sheetLinks: [String]?
     public var studyPoolSize: Int?
+    public var dailyStudyLimitEnabled: Bool?
+    public var dailyStudyLimit: Int?
+    public var dailyStudyDay: Date?
+    public var dailyStudyDisplays: Int?
+    public var dailyStudySeenItems: Set<ReviewItem>?
+    public var dailyStudyUnlimitedToday: Bool?
     public var oneWayStudy: Bool?
     public var reviewWaitMinutes: Int?
     public var reviewReadyAt: [UUID: Date]?
@@ -172,6 +197,43 @@ public struct Archive: Codable, Sendable {
     public var server: [Library]
     public init(stacks: [Stack] = [], libraries: [Library] = [], server: [Library] = []) {
         self.stacks = stacks; self.libraries = libraries; self.server = server
+    }
+    public mutating func installImportedLibrary(_ imported: Library) {
+        if let index = libraries.firstIndex(where: { $0.id == imported.id }) {
+            let previous = libraries[index]
+            for oldStack in previous.stacks {
+                guard let newStack = imported.stacks.first(where: {
+                    $0.id == oldStack.id || $0.externalStackID == oldStack.externalStackID ||
+                    ($0.externalStackID.flatMap(UUID.init(uuidString:)) == oldStack.id)
+                }) else { continue }
+                var ids: [UUID: UUID] = [:]
+                for oldWord in oldStack.words {
+                    if let newWord = newStack.words.first(where: {
+                        $0.id == oldWord.id || $0.externalCardID == oldWord.externalCardID && oldWord.externalCardID != nil ||
+                        ($0.externalCardID.flatMap(UUID.init(uuidString:)) == oldWord.id)
+                    }) { ids[oldWord.id] = newWord.id }
+                }
+                for localIndex in stacks.indices where stacks[localIndex].sourceID == oldStack.id {
+                    stacks[localIndex].sourceID = newStack.id
+                    stacks[localIndex].remapWordIDs(ids)
+                }
+                let unambiguousIDs = ids.filter { oldID, _ in
+                    libraries.flatMap(\.stacks).flatMap(\.words).filter { $0.id == oldID }.count == 1
+                }
+                for depthIndex in (reviewDepthStacks ?? []).indices {
+                    reviewDepthStacks?[depthIndex].remapWordIDs(unambiguousIDs)
+                }
+                completedReviewWords = completedReviewWords?.map { word in
+                    var updated = word
+                    updated.id = unambiguousIDs[word.id] ?? word.id
+                    return updated
+                }
+                if let ready = reviewReadyAt {
+                    reviewReadyAt = Dictionary(ready.map { (unambiguousIDs[$0.key] ?? $0.key, $0.value) }, uniquingKeysWith: { first, _ in first })
+                }
+            }
+            libraries[index] = imported
+        } else { libraries.append(imported) }
     }
     public func reviewDepth(of id: UUID) -> Int? {
         reviewDepthStacks?.firstIndex(where: { $0.words.contains(where: { $0.id == id }) }).map { $0 + 1 }

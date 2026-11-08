@@ -32,7 +32,7 @@ public enum LibraryImporter {
             let names = header.map { name in
                 switch name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
                 case "일본어", "japanese", "jp", "jp-jp": return "ja-jp"
-                case "읽는법", "읽는 법": return "reading"
+                case "읽는법", "읽는 법", "ja-jp-reading": return "ja-jp-reading"
                 case "한글뜻", "한글 뜻", "한국어", "korean", "kr", "kr-kr": return "ko-kr"
                 default: return name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
                 }
@@ -48,7 +48,7 @@ public enum LibraryImporter {
             let stackColumn = names.firstIndex(of: "stack")
             let stackIDColumn = names.firstIndex(of: "stack_id")
             let cardIDColumn = names.firstIndex(of: "card_id")
-            let readingColumn = names.firstIndex(of: "reading")
+            let readingColumn = names.firstIndex(of: "ja-jp-reading") ?? names.firstIndex(of: "reading")
             let typeColumn = names.firstIndex(of: "type")
             var keys: [String] = []
             var wordKeys = Set<String>()
@@ -58,16 +58,19 @@ public enum LibraryImporter {
                 guard row.count == header.count else { throw ImportFailure.invalid("CSV \(index + 2)행의 열 개수를 확인해 주세요.") }
                 let title = stackColumn.map { row[$0] }.flatMap { $0.isEmpty ? nil : $0 } ?? "가져온 카드"
                 let key = stackIDColumn.map { row[$0] } ?? title
-                let wordKey = cardIDColumn.map { row[$0] } ?? "\(row[source.offset])|\(row[target.offset])"
+                let explicitID = cardIDColumn.map { row[$0].trimmingCharacters(in: .whitespacesAndNewlines) } ?? ""
+                let reading = readingColumn.map { row[$0].trimmingCharacters(in: .whitespacesAndNewlines) } ?? ""
+                let kind = typeColumn.map { row[$0].trimmingCharacters(in: .whitespacesAndNewlines).lowercased() } ?? "word"
+                let wordKey = explicitID.isEmpty ? "auto:\(row[source.offset].trimmingCharacters(in: .whitespacesAndNewlines))|\(reading)|\(kind)" : explicitID
                 guard !key.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
                       !wordKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
                       wordKeys.insert(key + ":" + wordKey).inserted else { throw ImportFailure.invalid("스택/카드 ID가 비어 있거나 카드 ID가 중복됩니다: \(index + 2)행") }
-                let wordID = UUID(uuidString: wordKey) ?? namespace.map { stableID($0 + ":word:" + key + ":" + wordKey) } ?? UUID()
+                let wordID = namespace.map { stableID($0 + ":word:" + key + ":" + wordKey) } ?? stableID("local:word:" + key + ":" + wordKey)
                 var word = Word(id: wordID, japanese: row[source.offset], korean: row[target.offset], example: "")
+                word.externalCardID = explicitID.isEmpty ? nil : explicitID
                 word.sourceLanguageCode = source.element
                 word.targetLanguageCode = target.element
                 word.translations = Dictionary(uniqueKeysWithValues: languageColumns.map { ($0.element, row[$0.offset]) })
-                let kind = typeColumn.map { row[$0].trimmingCharacters(in: .whitespacesAndNewlines).lowercased() } ?? "word"
                 guard ["", "word", "sentence"].contains(kind) else { throw ImportFailure.invalid("\(index + 2)행의 type은 word 또는 sentence여야 합니다.") }
                 word.isSentence = kind == "sentence"
                 word.reading = readingColumn.map { row[$0] }
@@ -76,9 +79,11 @@ public enum LibraryImporter {
                 word.translationStatus = names.firstIndex(of: "translation_status").map { row[$0] }
                 if let i = keys.firstIndex(of: key) { stacks[i].words.append(word) }
                 else {
-                    let stackID = UUID(uuidString: key) ?? namespace.map { stableID($0 + ":stack:" + key) } ?? UUID()
+                    let stackID = namespace.map { stableID($0 + ":stack:" + key) } ?? stableID("local:stack:" + key)
                     keys.append(key)
-                    stacks.append(Stack(id: stackID, title: title, words: [word]))
+                    var stack = Stack(id: stackID, title: title, words: [word])
+                    stack.externalStackID = key
+                    stacks.append(stack)
                 }
             }
             result = Library(id: namespace.map { stableID($0) } ?? UUID(), title: (filename as NSString).deletingPathExtension, stacks: stacks)

@@ -203,7 +203,7 @@ struct SheetImportView: View {
                 }
                 Section {
                     Text("시트를 ‘링크가 있는 모든 사용자: 뷰어’로 공유하고 원본 링크를 입력해 주세요. 파일의 실제 시트 목록에서 하나를 선택합니다.")
-                    Text("필수 열: stack, card_id, ja-JP, reading, ko-KR. 문장 덱은 type 열에 sentence를 적으세요.").font(.caption)
+                    Text("필수 열: stack, ja-JP, ko-KR. 읽는 법은 ja-JP-reading, 고정 ID는 card_id(선택) 열을 사용하세요. 문장은 type에 sentence를 적으세요.").font(.caption)
                     Text("JLPT 단어장은 비공식 공개 목록이며 한국어 자동번역은 미검수입니다. 가져온 데이터는 로컬 사본으로 저장되며 자동 동기화되지 않습니다.").font(.caption).foregroundStyle(.secondary)
                 }
                 if let error { Section { Text(error).foregroundStyle(.red) } }
@@ -242,15 +242,12 @@ struct SheetImportView: View {
                     throw ImportFailure.invalid("시트 첫 행을 읽을 수 없습니다.")
                 }
                 let names = Set(header.map { $0.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() })
-                guard names.contains("stack"), names.contains("card_id"),
-                      (names.contains("reading") || names.contains("읽는법") || names.contains("읽는 법")) else {
-                    throw ImportFailure.invalid("덱에 stack, card_id, reading 및 두 개의 언어 코드 열이 필요합니다.")
+                guard names.contains("stack") else {
+                    throw ImportFailure.invalid("덱에 stack 및 두 개의 언어 코드 열이 필요합니다.")
                 }
                 var library = try LibraryImporter.read(data, filename: selectedSheet + ".csv", namespace: url.absoluteString)
                 library.title = name.trimmingCharacters(in: .whitespacesAndNewlines)
-                if let i = store.archive.libraries.firstIndex(where: { $0.id == library.id }) {
-                    store.archive.libraries[i] = library
-                } else { store.archive.libraries.append(library) }
+                store.archive.installImportedLibrary(library)
                 store.registerSheetLink(link)
                 store.save(); dismiss()
             } catch is CancellationError { }
@@ -329,15 +326,12 @@ struct PublicSheetTabsView: View {
                 throw ImportFailure.invalid("시트 데이터를 읽을 수 없습니다.")
             }
             let names = Set(header.map { $0.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() })
-            guard names.contains("stack"), names.contains("card_id"),
-                  (names.contains("reading") || names.contains("읽는법") || names.contains("읽는 법")) else {
-                throw ImportFailure.invalid("stack, card_id, reading 및 두 개의 언어 코드 열이 필요합니다.")
+            guard names.contains("stack") else {
+                throw ImportFailure.invalid("stack 및 두 개의 언어 코드 열이 필요합니다.")
             }
             var library = try LibraryImporter.read(data, filename: tab.name + ".csv", namespace: url.absoluteString)
             library.title = tab.name
-            if let index = store.archive.libraries.firstIndex(where: { $0.id == library.id }) {
-                store.archive.libraries[index] = library
-            } else { store.archive.libraries.append(library) }
+            store.archive.installImportedLibrary(library)
             store.registerSheetLink(entry.link)
             store.save()
             error = nil

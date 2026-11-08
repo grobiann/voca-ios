@@ -227,13 +227,46 @@ final class VocaCoreTests: XCTestCase {
         XCTAssertTrue(archive.libraries[0].stacks[0].words[0].example.isEmpty)
         XCTAssertFalse(archive.removeLegacyExamples())
     }
-    func testGroupedSheetKeepsBuiltInStackAndCardIDs() throws {
+    func testImportedUUIDsAreScopedToSheetAndCanMigrateProgress() throws {
         let original = GroupedExpressions.library.stacks[0]
         let card = original.words[0]
         let csv = "stack_id,stack,card_id,japanese,reading,korean\n\(original.id),\(original.title),\(card.id),\(card.japanese),\(card.reading!),\(card.korean)\n"
         let imported = try LibraryImporter.read(Data(csv.utf8), filename: "묶어서 외우는 일본어.csv", namespace: "sheet-link")
-        XCTAssertEqual(imported.stacks[0].id, original.id)
-        XCTAssertEqual(imported.stacks[0].words[0].id, card.id)
+        let other = try LibraryImporter.read(Data(csv.utf8), filename: "다른 시트.csv", namespace: "another-sheet")
+        XCTAssertNotEqual(imported.stacks[0].id, original.id)
+        XCTAssertNotEqual(imported.stacks[0].words[0].id, card.id)
+        XCTAssertNotEqual(imported.stacks[0].words[0].id, other.stacks[0].words[0].id)
+        var archive = Archive(libraries: [Library(id: imported.id, title: "이전", stacks: [original])])
+        var local = Stack(title: original.title, words: [card], sourceID: original.id)
+        local.oneWay = true
+        local.prepare()
+        local.answer(known: true)
+        archive.stacks = [local]
+        archive.installImportedLibrary(imported)
+        XCTAssertEqual(archive.stacks[0].sourceID, imported.stacks[0].id)
+        XCTAssertEqual(archive.stacks[0].words[0].id, imported.stacks[0].words[0].id)
+        XCTAssertTrue(archive.stacks[0].isComplete)
+    }
+    func testReadingHeaderAndOptionalCardIDStayStableAcrossRows() throws {
+        let first = "stack,ja-JP,ja-JP-reading,ko-KR,en-US\n기본,猫,ねこ,고양이,cat\n"
+        let added = "stack,ja-JP,ja-JP-reading,ko-KR,en-US\n기본,犬,いぬ,개,dog\n기본,猫,ねこ,고양이,cat\n"
+        let original = try LibraryImporter.read(Data(first.utf8), filename: "단어.csv", namespace: "sheet-a")
+        let updated = try LibraryImporter.read(Data(added.utf8), filename: "단어.csv", namespace: "sheet-a")
+        XCTAssertEqual(original.stacks[0].words[0].id, updated.stacks[0].words[1].id)
+        XCTAssertEqual(updated.stacks[0].words[1].reading, "ねこ")
+        XCTAssertEqual(updated.stacks[0].words[1].translations?["en-us"], "cat")
+    }
+    func testDailyCapKeepsSeenRetriesAndHidesUnseenCards() {
+        var stack = Stack(title: "학습", words: (0..<30).map { Word(japanese: "語\($0)", korean: "말\($0)", example: "") })
+        stack.oneWay = true
+        stack.prepare(poolSize: 20)
+        let repeated = stack.queue[0]
+        stack.answer(known: false, poolSize: 20)
+        stack.restrictToSeen([repeated], poolSize: 20)
+        XCTAssertEqual(stack.queue, [repeated])
+        XCTAssertEqual(stack.remainingCount, 30)
+        stack.prepare(poolSize: 20)
+        XCTAssertEqual(stack.queue.count, 20)
     }
     func testPoolLimitAndWrongAnswersDoNotAdmitWords() {
         var stack = Stack(title: "100 words", words: (0..<100).map { Word(japanese: "語\($0)", korean: "말\($0)", example: "例") })

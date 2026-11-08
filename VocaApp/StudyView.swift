@@ -22,6 +22,7 @@ struct StudyView: View {
     @State private var initialized = false
     @State private var undoReviewState: ([Stack], [Word], [UUID: Date])?
     @State private var deletingWord: Word?
+    @State private var limitReached = false
     private var item: ReviewItem? { stack.queue.first }
     private var word: Word? { stack.words.first { $0.id == item?.wordID } }
     init(stackID: UUID, reviewDepth: Int? = nil) {
@@ -70,6 +71,7 @@ struct StudyView: View {
                             }
                             stack = undo
                             self.undo = nil; undoPromotion = nil; revealed = false; offset = .zero
+                            admitNextCard()
                         }
                     } label: { Image(systemName: "arrow.uturn.backward").frame(width: 44, height: 44) }.disabled(undo == nil || exiting).accessibilityLabel("이전 응답 취소")
                 }
@@ -155,6 +157,20 @@ struct StudyView: View {
                         .disabled(exiting)
                         .accessibilityLabel("카드 관리")
                     }
+                } else if limitReached && activeReviewDepth == nil && stack.remainingCount > 0 {
+                    Spacer()
+                    Image(systemName: "calendar.badge.clock").font(.system(size: 64)).foregroundStyle(Palette.accent)
+                    Text("오늘의 학습량을 채웠어요").font(.title.bold())
+                    Text("오늘 카드 \(store.dailyStudyDisplays)회를 봤어요. 남은 카드는 내일 이어서 볼 수 있어요.")
+                        .foregroundStyle(.secondary).multilineTextAlignment(.center)
+                    Spacer()
+                    Button("오늘만 더 학습하기") {
+                        store.allowMoreStudyToday()
+                        stack.prepare(poolSize: store.poolSize)
+                        admitNextCard()
+                        persist(stack)
+                    }.buttonStyle(PrimaryButton())
+                    Button("학습 마치기") { dismiss() }.padding(.top, 8)
                 } else if stack.words.isEmpty && activeReviewDepth != nil {
                     Spacer()
                     Image(systemName: "checkmark.seal.fill").font(.system(size: 76)).foregroundStyle(Palette.accent)
@@ -187,12 +203,13 @@ struct StudyView: View {
                 stack = saved
                 if initialReviewDepth != nil { stack.prepareReviewDepth(poolSize: store.poolSize) }
                 else { stack.oneWay = store.oneWayStudy; stack.prepare(poolSize: store.poolSize) }
+                if activeReviewDepth == nil { admitNextCard() }
                 persist(stack)
             }
         }.onDisappear { advanceTask?.cancel() }
         .sheet(isPresented: $settings, onDismiss: {
             if activeReviewDepth != nil { stack.prepareReviewDepth(poolSize: store.poolSize) }
-            else { stack.oneWay = store.oneWayStudy; stack.prepare(poolSize: store.poolSize); persist(stack) }
+            else { stack.oneWay = store.oneWayStudy; stack.prepare(poolSize: store.poolSize); admitNextCard(countDisplay: false); persist(stack) }
         }) {
             NavigationStack {
                 StudySettingsView().toolbar { ToolbarItem(placement: .confirmationAction) { Button("완료") { settings = false } } }
@@ -354,11 +371,24 @@ struct StudyView: View {
                     undoPromotion = (depth, previousTarget)
                 }
                 stack.answer(known: known, poolSize: store.poolSize)
+                admitNextCard()
                 persist(stack)
             }
             var transaction = Transaction(); transaction.disablesAnimations = true
             withTransaction(transaction) { revealed = false; offset = .zero; exiting = false }
         }
+    }
+    private func admitNextCard(countDisplay: Bool = true) {
+        guard activeReviewDepth == nil else { return }
+        if store.dailyStudyCapReached {
+            stack.restrictToSeen(store.dailyStudySeenItems, poolSize: store.poolSize)
+        }
+        guard let next = stack.queue.first else {
+            limitReached = stack.remainingCount > 0 && store.dailyStudyCapReached
+            return
+        }
+        limitReached = false
+        if countDisplay && !store.dailyStudyCapReached { store.recordStudyDisplay(next) }
     }
     private func removeCurrentWord(_ wordID: UUID) {
         guard !exiting, stack.words.contains(where: { $0.id == wordID }) else { deletingWord = nil; return }
