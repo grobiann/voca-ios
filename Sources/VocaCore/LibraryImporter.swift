@@ -5,6 +5,52 @@ public enum ImportFailure: LocalizedError {
     case invalid(String)
     public var errorDescription: String? { if case .invalid(let message) = self { return message }; return nil }
 }
+
+public struct PublicLibraryRow: Equatable, Sendable {
+    public let name: String
+    public let link: String
+    public let description: String
+    public let nickname: String
+}
+
+public enum PublicLibraryDirectory {
+    public static func read(_ data: Data) throws -> [PublicLibraryRow] {
+        guard let raw = String(data: data, encoding: .utf8) else {
+            throw ImportFailure.invalid("공개 목록을 읽을 수 없습니다.")
+        }
+        let rows = try LibraryImporter.parseCSV(raw.replacingOccurrences(of: "\u{FEFF}", with: ""))
+        guard let header = rows.first else { throw ImportFailure.invalid("공개 목록이 비어 있습니다.") }
+        var columns: [String: Int] = [:]
+        for (index, title) in header.enumerated() {
+            let key = title.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard columns.updateValue(index, forKey: key) == nil else {
+                throw ImportFailure.invalid("공개 목록의 열 이름이 중복되어 있습니다.")
+            }
+        }
+        guard let nameIndex = columns["라이브러리 그룹 이름"],
+              let linkIndex = columns["Google Sheets 링크"],
+              let statusIndex = columns["상태"] else {
+            throw ImportFailure.invalid("공개 목록에 라이브러리 그룹 이름, Google Sheets 링크, 상태 열이 필요합니다.")
+        }
+        let descriptionIndex = columns["설명"]
+        let nicknameIndex = columns["닉네임"]
+        var seenLinks = Set<String>()
+        return rows.dropFirst().compactMap { row in
+            func value(_ index: Int?) -> String {
+                guard let index, row.indices.contains(index) else { return "" }
+                return row[index].trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+            let name = value(nameIndex)
+            let link = value(linkIndex)
+            guard value(statusIndex).uppercased() == "TRUE", !name.isEmpty,
+                  (try? SheetURL.manifestURL(from: link)) != nil,
+                  seenLinks.insert(link).inserted else { return nil }
+            return PublicLibraryRow(name: name, link: link,
+                                    description: value(descriptionIndex), nickname: value(nicknameIndex))
+        }
+    }
+}
+
 public enum LibraryImporter {
     private struct Document: Decodable {
         var title: String

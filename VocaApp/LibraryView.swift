@@ -24,7 +24,11 @@ struct LibraryView: View {
                         HStack {
                             Text("공개 라이브러리").font(.headline)
                             Spacer()
+                            if store.isRefreshingPublicDirectory {
+                                ProgressView().accessibilityLabel("공개 라이브러리 새로고침 중")
+                            }
                             Button("새로고침") { Task { await store.refreshPublicDirectory() } }
+                                .disabled(store.isRefreshingPublicDirectory)
                         }
                         if let publicError = store.publicDirectoryError { Text(publicError).font(.caption).foregroundStyle(.secondary) }
                         ForEach(store.publicEntries) { entry in

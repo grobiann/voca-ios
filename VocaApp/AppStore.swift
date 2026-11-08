@@ -58,27 +58,26 @@ struct PublicDirectoryEntry: Identifiable {
     private let directoryURL = "https://docs.google.com/spreadsheets/d/1ffae20f-FFBJCvyIiu49kj1UKz3YuMMQYFYKiJmEbVw/edit?gid=349747093"
     var publicEntries: [PublicDirectoryEntry] = []
     var publicDirectoryError: String?
+    var isRefreshingPublicDirectory = false
     var sheetLinks: [String] { archive.sheetLinks ?? [] }
     func refreshPublicDirectory() async {
+        isRefreshingPublicDirectory = true
+        defer { isRefreshingPublicDirectory = false }
         do {
-            let url = try SheetURL.csvURL(from: directoryURL, sheetName: "공개 목록")
-            var request = URLRequest(url: url); request.timeoutInterval = 30
+            var components = URLComponents(url: try SheetURL.csvURL(from: directoryURL, sheetName: "공개 목록"), resolvingAgainstBaseURL: false)!
+            components.queryItems = (components.queryItems ?? []) + [URLQueryItem(name: "_", value: String(Int(Date().timeIntervalSince1970 * 1_000)))]
+            var request = URLRequest(url: components.url!)
+            request.timeoutInterval = 30
+            request.cachePolicy = .reloadIgnoringLocalCacheData
+            request.setValue("no-cache", forHTTPHeaderField: "Cache-Control")
             let (data, response) = try await URLSession.shared.data(for: request)
             guard let http = response as? HTTPURLResponse, http.statusCode == 200,
-                  data.count <= 1_000_000, let raw = String(data: data, encoding: .utf8) else {
+                  data.count <= 1_000_000 else {
                 throw ImportFailure.invalid("공개 목록을 읽을 수 없습니다.")
             }
-            let rows = try LibraryImporter.parseCSV(raw.replacingOccurrences(of: "\u{FEFF}", with: ""))
-            guard let header = rows.first, header.count >= 5,
-                  header[0] == "라이브러리 그룹 이름", header[1] == "Google Sheets 링크",
-                  header[2] == "상태", header[3] == "설명", header[4] == "닉네임" else {
-                throw ImportFailure.invalid("공개 목록의 열을 확인해 주세요.")
-            }
-            publicEntries = rows.dropFirst().compactMap { row in
-                guard row.count >= 5, row[2].uppercased() == "TRUE", !row[0].isEmpty,
-                      (try? SheetURL.manifestURL(from: row[1])) != nil else { return nil }
-                return PublicDirectoryEntry(name: row[0], link: row[1],
-                                            description: row[3], nickname: row[4])
+            publicEntries = try PublicLibraryDirectory.read(data).map { row in
+                PublicDirectoryEntry(name: row.name, link: row.link,
+                                     description: row.description, nickname: row.nickname)
             }
             publicDirectoryError = nil
         } catch { publicDirectoryError = error.localizedDescription }

@@ -1,6 +1,20 @@
 import XCTest
 @testable import VocaCore
 final class VocaCoreTests: XCTestCase {
+    func testPublicDirectoryRefreshAcceptsReorderedColumns() throws {
+        let csv = """
+        라이브러리 그룹 이름,Google Sheets 링크,상태,닉네임,설명
+        새 자료,https://docs.google.com/spreadsheets/d/sample/edit,TRUE,제작자,새 설명
+        숨긴 자료,https://docs.google.com/spreadsheets/d/hidden/edit,FALSE,제작자,숨김
+        """
+        let rows = try PublicLibraryDirectory.read(Data(csv.utf8))
+        XCTAssertEqual(rows.count, 1)
+        XCTAssertEqual(rows[0].name, "새 자료")
+        XCTAssertEqual(rows[0].nickname, "제작자")
+        XCTAssertEqual(rows[0].description, "새 설명")
+        let originalOrder = "라이브러리 그룹 이름,Google Sheets 링크,상태,설명,닉네임\n첫 자료,https://docs.google.com/spreadsheets/d/first/edit,true,설명,작가\n"
+        XCTAssertEqual(try PublicLibraryDirectory.read(Data(originalOrder.utf8))[0].nickname, "작가")
+    }
     func testOneWayAndSentenceCards() throws {
         var stack = Stack(title: "단어", words: [Word(japanese: "猫", korean: "고양이", example: "")])
         stack.oneWay = true
