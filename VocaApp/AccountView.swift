@@ -16,9 +16,9 @@ struct AccountView: View {
                     NavigationLink("학습 설정") { StudySettingsView() }
                     NavigationLink("Google Sheets 목록") { SheetLinksView() }
                     NavigationLink("검색 버튼 설정") { SearchSettingsView() }
-                    NavigationLink("단어 오류 제보함") { WordReportList() }
+                    NavigationLink("내 카드 뜻 수정 기록") { WordReportList() }
+                    NavigationLink("개발자 이야기") { DeveloperStoryView() }
                     NavigationLink("개인정보 처리방침") { PrivacyPolicyView() }
-                    NavigationLink("데이터 출처와 라이선스") { DataLicenseView() }
                     LabeledContent("버전", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0")
                 }
             }.navigationTitle("설정")
@@ -99,12 +99,12 @@ struct WordReportList: View {
                             Text(report.message)
                         }
                         Text(report.createdAt, style: .date).font(.caption).foregroundStyle(.secondary)
-                        ShareLink(item: report.shareText) { Label("제보 공유", systemImage: "square.and.arrow.up") }
+                        ShareLink(item: report.shareText) { Label("수정 내용 공유", systemImage: "square.and.arrow.up") }
                     }.padding(.vertical, 6)
                 }
-                if (store.archive.wordReports ?? []).isEmpty { Text("저장된 제보가 없어요.").foregroundStyle(.secondary) }
-            } footer: { Text("제보는 이 기기에 저장됩니다. 공유 버튼으로 내용을 전달할 수 있습니다.") }
-        }.navigationTitle("단어 오류 제보함")
+                if (store.archive.wordReports ?? []).isEmpty { Text("수정 기록이 없어요.").foregroundStyle(.secondary) }
+            } footer: { Text("수정 기록은 이 기기에만 저장됩니다. 원본 Google Sheet나 작성자에게 자동으로 전달되지 않습니다.") }
+        }.navigationTitle("내 카드 뜻 수정 기록")
     }
 }
 
@@ -129,20 +129,26 @@ struct WordReportComposer: View {
     private var word: Word? { stack?.words.first { $0.id == selectedWordID } }
     private var isInMyCards: Bool {
         guard let stack, let word else { return false }
-        return store.archive.stacks.contains { mine in
+        let inStack = store.archive.stacks.contains { mine in
             (mine.id == stack.id || mine.sourceID == stack.id) && mine.words.contains { $0.id == word.id }
         }
+        let inLibrary = store.archive.libraries.contains { mine in
+            mine.id == library?.id && mine.stacks.contains { deck in
+                (deck.id == stack.id || deck.id == stack.sourceID) && deck.words.contains { $0.id == word.id }
+            }
+        }
+        return inStack || inLibrary
     }
     var body: some View {
         Form {
-            Section("제보 위치") {
+            Section("수정할 카드") {
                 Text(library?.title ?? "내 스택")
                 Picker("스택", selection: $selectedStackID) {
                     ForEach(stacks) { Text($0.title).tag(Optional($0.id)) }
                 }.onChange(of: selectedStackID) { _, _ in selectedWordID = nil; query = "" }
             }
             if initialWordID == nil {
-                Section("틀린 단어 선택") {
+                Section("카드 선택") {
                     TextField("일본어 · 한국어 검색", text: $query)
                     ForEach((stack?.words ?? []).filter { query.isEmpty || $0.japanese.localizedCaseInsensitiveContains(query) || $0.korean.localizedCaseInsensitiveContains(query) }) { candidate in
                         Button { selectedWordID = candidate.id } label: {
@@ -160,14 +166,18 @@ struct WordReportComposer: View {
             }
             Section {
                 TextField("올바른 한국어 뜻을 적어 주세요", text: $correctedKorean, axis: .vertical).lineLimit(3...8).accessibilityIdentifier("reportMessage")
-                Button(isInMyCards ? "제보 저장 및 내 카드 수정" : "제보 저장") {
+                Button("내 카드 뜻 수정") {
                     guard let stack, let word else { return }
                     store.recordMeaningCorrection(library: library, stack: stack, word: word, correctedKorean: correctedKorean)
                     if store.error == nil { dismiss() }
-                }.disabled(word == nil || correctedKorean.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-            } header: { Text("올바른 뜻") } footer: { Text("제보는 기기에 저장됩니다. 내 카드에 있는 단어는 뜻이 즉시 수정되며, 라이브러리 원본은 유지됩니다.") }
+                }.disabled(!isInMyCards || correctedKorean.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            } header: { Text("수정할 뜻") } footer: {
+                Text(isInMyCards
+                     ? "내 카드의 뜻과 수정 기록은 이 기기에 저장됩니다. 원본 Google Sheet는 바뀌지 않습니다."
+                     : "수정하려면 먼저 이 덱을 내 덱에 추가하거나 스택을 내 스택에 등록해 주세요.")
+            }
         }
-        .navigationTitle("틀린 단어 제보")
+        .navigationTitle("내 카드 뜻 수정")
         .toolbar {
             if initialWordID != nil {
                 ToolbarItem(placement: .cancellationAction) { Button("닫기") { dismiss() } }
@@ -180,19 +190,20 @@ struct PrivacyPolicyView: View {
     var body: some View {
         List {
             Section("기기에 저장하는 정보") {
-                Text("단어, 라이브러리, 학습 진행, 반복 학습 목록, 오류 제보와 검색 설정은 이 기기에 저장됩니다. 로그인, 광고, 추적 및 개발자 서버로의 자동 전송 기능은 없습니다.")
+                Text("단어, 라이브러리, 학습 진행, 반복 학습 목록, 뜻 수정 기록과 검색 설정은 이 기기에 저장됩니다. 로그인, 광고, 추적 및 학습 데이터의 자동 전송 기능은 없습니다.")
             }
             Section("외부 서비스") {
                 Text("Google Sheets 가져오기를 실행하면 Google에 접속해 공개된 시트를 읽습니다. 공개 공유한 시트는 링크를 아는 다른 사람도 볼 수 있으므로 개인정보를 넣지 마세요.")
                 Text("검색 버튼을 누르면 일본어 단어가 선택한 검색 사이트로 전달되고 외부 브라우저가 열립니다. 해당 서비스의 개인정보 처리방침이 적용됩니다.")
-                Text("오류 제보는 자동으로 전송되지 않습니다. 공유를 선택하면 선택한 앱과 수신자에게 제보 내용이 전달됩니다.")
+                Text("뜻 수정 기록은 자동으로 전송되지 않습니다. 공유를 선택하면 선택한 앱과 수신자에게 수정 내용이 전달됩니다.")
+                Text("개발자 이야기에서 좋아요 버튼을 누르면 Google Apps Script로 좋아요 1회가 전송되어 운영자의 비공개 Google Sheet에 날짜별 횟수로 합산됩니다. 계정, 이메일, 기기 ID와 학습 데이터는 보내지 않습니다.")
             }
             Section("보관과 삭제") {
                 Text("앱 안에서 스택과 라이브러리를 삭제할 수 있습니다. 기기에 저장된 전체 데이터를 지우려면 iPhone 설정에서 앱을 삭제하세요. 앱 정리하기는 데이터 삭제와 다릅니다.")
                 Text("앱 자체의 기기 간 동기화는 없습니다. iCloud 또는 기기 백업에 포함되는 데이터는 사용자의 Apple 백업 설정에 따릅니다. 외부로 공유한 사본은 해당 서비스에서 별도로 삭제해야 합니다.")
             }
             Section("권한") {
-                Text("알림, 알람, 카메라, 마이크, 사진 및 연락처 권한을 요청하지 않습니다. 파일 가져오기는 사용자가 파일 선택기에서 선택한 파일만 읽습니다.")
+                Text("알림, 알람, 카메라, 마이크, 사진 및 연락처 권한을 요청하지 않습니다.")
             }
             Section("운영자 및 문의") {
                 Text("CardVoca · 장진석")
@@ -204,20 +215,42 @@ struct PrivacyPolicyView: View {
     }
 }
 
-struct DataLicenseView: View {
+struct DeveloperStoryView: View {
+    @State private var sendingLike = false
+    @State private var likeMessage: String?
     var body: some View {
         List {
-            Section("JLPT 단어장") {
-                Text("OpenJLPT의 공개 어휘 목록을 바탕으로 합니다. 원본 출처는 Jonathan Waller의 JLPT 목록과 JMdict/EDRDG입니다. JLPT 공식 전체 출제 어휘 목록이 아닙니다.")
-                Text("한국어 뜻은 자동번역 후 일부 교정되었으며 전체 전문 검수는 하지 않았습니다. 한국어 번역, 스택 분할, 카드 식별자 추가 및 예문 제거가 적용된 파생 데이터입니다.")
-                Link("OpenJLPT 출처 고지", destination: URL(string: "https://github.com/evanclan/OpenJLPT/blob/main/NOTICE.md")!)
-                Link("CC BY-SA 4.0 라이선스", destination: URL(string: "https://creativecommons.org/licenses/by-sa/4.0/")!)
-                Text("이 파생 단어 데이터는 CC BY-SA 4.0으로 제공됩니다. 재배포 시 출처와 변경 내역을 표시하고 같은 라이선스를 적용해야 합니다. 이 데이터 라이선스는 앱 코드 전체에 적용되는 것은 아닙니다.")
+            Section("CardVoca를 만든 이유") {
+                Text("일본어 단어를 제 방식대로 꾸준히 외우려고 만든 앱입니다. 제가 공부하면서 쓰던 도구를 다른 분들과도 나누고 싶어 공개를 준비하고 있습니다.")
+                Text("지금은 수익을 목적으로 운영하지 않습니다. 더 편하게 배우는 방법을 찾으며 조금씩 다듬어 가겠습니다.")
             }
-            Section("직접 가져온 단어장") {
-                Text("사용자는 공유 또는 배포 권한이 있는 파일과 시트만 이용해 주세요. 가져온 콘텐츠의 권리는 각 원저작자에게 있습니다.")
+            Section("자료와 학습 기록") {
+                Text("라이브러리는 공개 Google Sheets에서 읽어 오고, 학습 기록과 개인적인 뜻 수정은 내 기기에 남습니다.")
             }
-        }.navigationTitle("데이터 출처와 라이선스")
+            Section {
+                Button {
+                    guard !sendingLike else { return }
+                    sendingLike = true
+                    likeMessage = nil
+                    Task {
+                        do {
+                            try await LikeFeedback.send()
+                            likeMessage = "고마워요! 마음이 전해졌어요."
+                        } catch {
+                            likeMessage = "전송하지 못했어요. 연결을 확인하고 다시 눌러 주세요."
+                        }
+                        sendingLike = false
+                    }
+                } label: {
+                    Label(sendingLike ? "전송 중…" : "좋아요!", systemImage: "heart.fill")
+                        .frame(maxWidth: .infinity)
+                }
+                .disabled(sendingLike)
+                if let likeMessage { Text(likeMessage).font(.footnote).foregroundStyle(.secondary) }
+            } footer: {
+                Text("한 번 누르면 운영자에게 좋아요 횟수만 전달됩니다. 로그인이나 권한 요청은 없고, 여러 번 눌러도 괜찮아요.")
+            }
+        }.navigationTitle("개발자 이야기")
     }
 }
 

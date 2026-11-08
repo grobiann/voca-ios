@@ -148,7 +148,7 @@ struct StudyView: View {
                         Spacer(minLength: 0)
                         Menu {
                             Button("학습 설정", systemImage: "slider.horizontal.3") { settings = true }
-                            Button("오류 제보", systemImage: "flag") { reporting = true }
+                            Button("내 카드 뜻 수정", systemImage: "pencil") { reporting = true }
                             Button("세트에서 제거", systemImage: "trash", role: .destructive) { deletingWord = word }
                         } label: {
                             Image(systemName: "ellipsis.circle")

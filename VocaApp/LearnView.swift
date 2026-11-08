@@ -364,7 +364,7 @@ struct StackDetailView: View {
                 }.navigationTitle(stack.title).toolbar {
                     NavigationLink {
                         WordReportComposer(library: (store.archive.libraries + store.archive.server).first { $0.stacks.contains { $0.id == (stack.sourceID ?? stack.id) } }, stacks: [stack])
-                    } label: { Label("틀린 단어 제보", systemImage: "flag") }
+                    } label: { Label("내 카드 뜻 수정", systemImage: "pencil") }
                 }
             }
         }

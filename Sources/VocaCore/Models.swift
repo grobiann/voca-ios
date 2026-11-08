@@ -201,17 +201,27 @@ public struct Archive: Codable, Sendable {
     public mutating func installImportedLibrary(_ imported: Library) {
         if let index = libraries.firstIndex(where: { $0.id == imported.id }) {
             let previous = libraries[index]
+            var updated = imported
             for oldStack in previous.stacks {
-                guard let newStack = imported.stacks.first(where: {
+                guard let newStackIndex = imported.stacks.firstIndex(where: {
                     $0.id == oldStack.id || $0.externalStackID == oldStack.externalStackID ||
                     ($0.externalStackID.flatMap(UUID.init(uuidString:)) == oldStack.id)
                 }) else { continue }
+                let newStack = imported.stacks[newStackIndex]
                 var ids: [UUID: UUID] = [:]
                 for oldWord in oldStack.words {
-                    if let newWord = newStack.words.first(where: {
+                    if let newWordIndex = newStack.words.firstIndex(where: {
                         $0.id == oldWord.id || $0.externalCardID == oldWord.externalCardID && oldWord.externalCardID != nil ||
                         ($0.externalCardID.flatMap(UUID.init(uuidString:)) == oldWord.id)
-                    }) { ids[oldWord.id] = newWord.id }
+                    }) {
+                        ids[oldWord.id] = newStack.words[newWordIndex].id
+                        if let correction = wordReports?.reversed().first(where: {
+                            $0.libraryID == imported.id && $0.stackID == oldStack.id &&
+                            $0.word.id == oldWord.id && $0.correctedKorean != nil
+                        })?.correctedKorean {
+                            updated.stacks[newStackIndex].words[newWordIndex].korean = correction
+                        }
+                    }
                 }
                 for localIndex in stacks.indices where stacks[localIndex].sourceID == oldStack.id {
                     stacks[localIndex].sourceID = newStack.id
@@ -232,7 +242,7 @@ public struct Archive: Codable, Sendable {
                     reviewReadyAt = Dictionary(ready.map { (unambiguousIDs[$0.key] ?? $0.key, $0.value) }, uniquingKeysWith: { first, _ in first })
                 }
             }
-            libraries[index] = imported
+            libraries[index] = updated
         } else { libraries.append(imported) }
     }
     public func reviewDepth(of id: UUID) -> Int? {
@@ -373,6 +383,12 @@ public struct Archive: Codable, Sendable {
         let report = WordReport(library: library, stack: stack, word: word, correctedKorean: correction)
         wordReports = (wordReports ?? []) + [report]
         var updatedMyCard = false
+        if let libraryIndex = libraries.firstIndex(where: { $0.id == library?.id }),
+           let stackIndex = libraries[libraryIndex].stacks.firstIndex(where: { $0.id == (stack.sourceID ?? stack.id) || $0.id == stack.id }),
+           let wordIndex = libraries[libraryIndex].stacks[stackIndex].words.firstIndex(where: { $0.id == word.id }) {
+            libraries[libraryIndex].stacks[stackIndex].words[wordIndex].korean = correction
+            updatedMyCard = true
+        }
         for stackIndex in stacks.indices where stacks[stackIndex].id == stack.id || stacks[stackIndex].sourceID == stack.id {
             guard let wordIndex = stacks[stackIndex].words.firstIndex(where: { $0.id == word.id }) else { continue }
             stacks[stackIndex].words[wordIndex].korean = correction
@@ -461,7 +477,7 @@ public struct WordReport: Identifiable, Codable, Equatable, Sendable {
         self.correctedKorean = correctedKorean
     }
     public var shareText: String {
-        "틀린 단어 제보\n라이브러리: \(libraryTitle ?? "내 스택")\n스택: \(stackTitle)\n일본어: \(word.japanese)\n읽기: \(word.reading ?? "")\n기존 한국어 뜻: \(word.korean)\n\(correctedKorean.map { "올바른 한국어 뜻: \($0)" } ?? "제보 내용: \(message)")\n단어 ID: \(word.id)\n스택 ID: \(stackID)\n출처: \(word.source ?? "직접 등록")"
+        "카드 뜻 수정 내용\n라이브러리: \(libraryTitle ?? "내 스택")\n스택: \(stackTitle)\n일본어: \(word.japanese)\n읽기: \(word.reading ?? "")\n기존 한국어 뜻: \(word.korean)\n\(correctedKorean.map { "수정한 한국어 뜻: \($0)" } ?? "메모: \(message)")\n단어 ID: \(word.id)\n스택 ID: \(stackID)\n출처: \(word.source ?? "직접 등록")"
     }
 }
 

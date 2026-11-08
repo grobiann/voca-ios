@@ -289,7 +289,7 @@ struct PublicDirectoryEntry: Identifiable {
         return true
     }
     func recordMeaningCorrection(library: Library?, stack: Stack, word: Word, correctedKorean: String) {
-        guard storageReadable else { error = "원본 데이터 보호를 위해 제보 저장을 중단했습니다. 앱을 다시 실행해 주세요."; return }
+        guard storageReadable else { error = "저장된 데이터 보호를 위해 뜻 수정을 중단했습니다. 앱을 다시 실행해 주세요."; return }
         archive.recordMeaningCorrection(library: library, stack: stack, word: word, correctedKorean: correctedKorean)
         save()
     }

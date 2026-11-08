@@ -1,5 +1,17 @@
 import XCTest
 @MainActor final class VocaUITests: XCTestCase {
+    func testLibraryPickerStaysVisibleWhileBrowsingScrolls() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
+        app.launch()
+        selectTab("라이브러리", in: app)
+        app.buttons["둘러보기"].tap()
+        XCTAssertTrue(app.buttons["새로고침"].waitForExistence(timeout: 5))
+        app.swipeUp()
+        XCTAssertTrue(app.buttons["내 덱"].isHittable)
+        XCTAssertTrue(app.buttons["둘러보기"].isHittable)
+        XCTAssertTrue(app.buttons["새로고침"].isHittable)
+    }
     func testStoreScreenshots() {
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting"]
@@ -131,20 +143,20 @@ import XCTest
         app.launch()
         app.buttons["학습 시작"].tap()
         app.buttons["카드 관리"].tap()
-        XCTAssertTrue(app.buttons["오류 제보"].waitForExistence(timeout: 5))
-        app.buttons["오류 제보"].tap()
+        XCTAssertTrue(app.buttons["내 카드 뜻 수정"].waitForExistence(timeout: 5))
+        app.buttons["내 카드 뜻 수정"].tap()
         XCTAssertTrue(app.staticTexts["선택한 카드"].waitForExistence(timeout: 5))
         XCTAssertFalse(app.textFields["일본어 · 한국어 검색"].exists)
         let message = app.descendants(matching: .any)["reportMessage"].firstMatch
         message.tap()
         message.typeText("학습 중 수정한 뜻")
-        app.buttons["제보 저장 및 내 카드 수정"].tap()
+        app.buttons["내 카드 뜻 수정"].tap()
         app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
         XCTAssertTrue(app.staticTexts["학습 중 수정한 뜻"].waitForExistence(timeout: 5))
         app.buttons["학습 닫기"].tap()
         selectTab("설정", in: app)
         app.swipeUp()
-        app.buttons["단어 오류 제보함"].tap()
+        app.buttons["내 카드 뜻 수정 기록"].tap()
         XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", "학습 중 수정한 뜻")).firstMatch.waitForExistence(timeout: 5))
     }
     func testRemoveCardsAndStack() {
@@ -222,22 +234,22 @@ import XCTest
         selectTab("라이브러리", in: app)
         app.buttons["둘러보기"].tap()
         app.staticTexts["작은 일본어 생활"].tap()
-        app.buttons["라이브러리 오류 제보"].tap()
+        app.buttons["덱 뜻 수정"].tap()
         app.buttons.containing(.staticText, identifier: "おはようございます").firstMatch.tap()
         app.swipeUp()
         let field = app.descendants(matching: .any)["reportMessage"].firstMatch
         XCTAssertTrue(field.waitForExistence(timeout: 5))
         field.tap(); field.typeText("Meaning correction")
-        app.buttons["제보 저장 및 내 카드 수정"].tap()
+        app.buttons["내 카드 뜻 수정"].tap()
         app.terminate()
         app.launchArguments = ["--uitesting-resume"]
         app.launch()
         selectTab("설정", in: app)
         XCTAssertTrue(app.staticTexts["학습 풀 크기: 21개"].exists)
         app.swipeUp()
-        app.buttons["단어 오류 제보함"].tap()
+        app.buttons["내 카드 뜻 수정 기록"].tap()
         XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", "Meaning correction")).firstMatch.waitForExistence(timeout: 5))
-        XCTAssertTrue(app.buttons["제보 공유"].exists)
+        XCTAssertTrue(app.buttons["수정 내용 공유"].exists)
         screenshot("12-Word-Report")
     }
     func testStudyAndLibrary() {

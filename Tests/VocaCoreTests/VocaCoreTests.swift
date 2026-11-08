@@ -377,6 +377,20 @@ final class VocaCoreTests: XCTestCase {
         XCTAssertEqual(restored.stacks[0].words[0].korean, "안녕한 아침")
         XCTAssertEqual(restored.wordReports?[0].correctedKorean, "안녕한 아침")
     }
+    func testLocalDeckCorrectionSurvivesSheetRefresh() throws {
+        let originalCSV = "stack,card_id,ja-JP,ko-KR\n인사,hello,こんにちは,안녕하세요\n"
+        let library = try LibraryImporter.read(Data(originalCSV.utf8), filename: "인사.csv", namespace: "sheet:hello")
+        let sourceStack = library.stacks[0]
+        let word = sourceStack.words[0]
+        var archive = Archive(libraries: [library])
+        XCTAssertTrue(archive.recordMeaningCorrection(library: library, stack: sourceStack, word: word, correctedKorean: "반가워요"))
+        XCTAssertEqual(archive.libraries[0].stacks[0].words[0].korean, "반가워요")
+        XCTAssertEqual(archive.wordReports?[0].word.korean, "안녕하세요")
+        let refreshedCSV = "stack,card_id,ja-JP,ko-KR\n인사,hello,こんにちは,새 원본 뜻\n"
+        let refreshed = try LibraryImporter.read(Data(refreshedCSV.utf8), filename: "인사.csv", namespace: "sheet:hello")
+        archive.installImportedLibrary(refreshed)
+        XCTAssertEqual(archive.libraries[0].stacks[0].words[0].korean, "반가워요")
+    }
     func testStableSheetIDsAndStackGrouping() throws {
         let csv = "stack_id,stack,card_id,japanese,korean,example\na,같은 이름,1,猫,고양이,\nb,같은 이름,2,犬,개,"
         let a = try LibraryImporter.read(Data(csv.utf8), filename: "N5.csv", namespace: "sheet:N5")

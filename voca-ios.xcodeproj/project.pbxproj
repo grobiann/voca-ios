@@ -18,6 +18,7 @@
 		A9D8AB9A9D50523605743C03 /* LibraryImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91175FE22664C92743552113 /* LibraryImporter.swift */; };
 		B64D5B17F91530529ECDCEC2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7E971ABF818F6BE32634933 /* Assets.xcassets */; };
 		BF5E7B959D0FBCEAC9E13976 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D4B8EFE414FC06B466D46B /* AppStore.swift */; };
+		D0E2EB88427F2C20B9EF5F57 /* LikeFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A003EB07DE24704D9E7A7F /* LikeFeedback.swift */; };
 		E4388A4FE3AB4B6857CD191F /* LearnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FE33C4134807AC0D8507AF /* LearnView.swift */; };
 		EC619806BB307F91B512C3C2 /* VocaCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 718BB6F0DBD2308788F4DB6E /* VocaCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F81C7E9E6877A303FC1BCBDC /* VocaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DE0F4683544D0E34772370 /* VocaApp.swift */; };
@@ -55,6 +56,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		01A003EB07DE24704D9E7A7F /* LikeFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeFeedback.swift; sourceTree = "<group>"; };
 		07EE0498A004A41FB802F806 /* SheetURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetURL.swift; sourceTree = "<group>"; };
 		0D5EBC90D7184DF03F34C4E6 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		0DA3F99A0A68A54366AEA57E /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 				C89E508B7659CCAC07BD3507 /* Info.plist */,
 				32FE33C4134807AC0D8507AF /* LearnView.swift */,
 				F8E28BEA33488E5798C6B994 /* LibraryView.swift */,
+				01A003EB07DE24704D9E7A7F /* LikeFeedback.swift */,
 				FCF34415F92CAC01FC24608A /* PrivacyInfo.xcprivacy */,
 				3B8148A66BA0041F57C78AC0 /* StudyView.swift */,
 				B44881B645EAE6798BC84185 /* VocaApp.entitlements */,
@@ -283,6 +286,7 @@
 				BF5E7B959D0FBCEAC9E13976 /* AppStore.swift in Sources */,
 				E4388A4FE3AB4B6857CD191F /* LearnView.swift in Sources */,
 				4C6ECAD3B7AD956670A55614 /* LibraryView.swift in Sources */,
+				D0E2EB88427F2C20B9EF5F57 /* LikeFeedback.swift in Sources */,
 				75B4479DEF7AF82B3BB58C46 /* StudyView.swift in Sources */,
 				F81C7E9E6877A303FC1BCBDC /* VocaApp.swift in Sources */,
 			);

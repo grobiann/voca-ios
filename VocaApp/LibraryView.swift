@@ -9,18 +9,17 @@ struct LibraryView: View {
     private var libraries: [Library] { store.archive.libraries }
     var body: some View {
         NavigationStack {
-            ScrollView {
+            VStack(spacing: 0) {
                 VStack(alignment: .leading, spacing: 10) {
-
-                    Picker("덱 위치", selection: $source) { Text("내 덱").tag(0); Text("둘러보기").tag(1) }.pickerStyle(.segmented)
+                    Picker("덱 위치", selection: $source) { Text("내 덱").tag(0); Text("둘러보기").tag(1) }
+                        .pickerStyle(.segmented)
                     if source == 0 {
                         Button { sheets = true } label: {
                             Label("Google Sheets 가져오기", systemImage: "link")
                                 .font(.headline).frame(maxWidth: .infinity).padding(16)
                                 .background(Palette.accent.opacity(0.08), in: RoundedRectangle(cornerRadius: 16))
                         }
-                    }
-                    if source == 1 {
+                    } else {
                         HStack {
                             Text("공개 라이브러리").font(.headline)
                             Spacer()
@@ -30,8 +29,15 @@ struct LibraryView: View {
                             Button("새로고침") { Task { await store.refreshPublicDirectory() } }
                                 .disabled(store.isRefreshingPublicDirectory)
                         }
-                        if let publicError = store.publicDirectoryError { Text(publicError).font(.caption).foregroundStyle(.secondary) }
-                        ForEach(store.publicEntries) { entry in
+                    }
+                }
+                .padding(.horizontal, 14).padding(.top, 14).padding(.bottom, 10)
+                ScrollView {
+                    LazyVStack(alignment: .leading, spacing: 10) {
+                        if let publicError = store.publicDirectoryError, source == 1 {
+                            Text(publicError).font(.caption).foregroundStyle(.secondary)
+                        }
+                        if source == 1 { ForEach(store.publicEntries) { entry in
                             Button { selectedPublicEntry = entry } label: {
                                 HStack {
                                     Image(systemName: "link").frame(width: 40)
@@ -45,10 +51,9 @@ struct LibraryView: View {
                                     Image(systemName: "chevron.right")
                                 }.padding(14).background(.background, in: RoundedRectangle(cornerRadius: 17))
                             }.buttonStyle(.plain)
-                        }
-                    }
-                    if libraries.isEmpty && source == 0 { EmptyState(icon: "books.vertical", title: "아직 덱이 없어요", message: "라이브러리 링크를 추가해 주세요.") }
-                    if source == 0 { ForEach(libraries) { library in
+                        } }
+                        if libraries.isEmpty && source == 0 { EmptyState(icon: "books.vertical", title: "아직 덱이 없어요", message: "라이브러리 링크를 추가해 주세요.") }
+                        if source == 0 { ForEach(libraries) { library in
                         NavigationLink { LibraryDetailView(libraryID: library.id, local: source == 0) } label: {
                             HStack(spacing: 14) {
                                 Image(systemName: "books.vertical")
@@ -63,8 +68,9 @@ struct LibraryView: View {
                                 Image(systemName: "chevron.right").font(.caption).foregroundStyle(.secondary)
                             }.padding(14).background(.background, in: RoundedRectangle(cornerRadius: 17))
                         }.buttonStyle(.plain)
-                    } }
-                }.padding(14)
+                        } }
+                    }.padding(.horizontal, 14).padding(.bottom, 14)
+                }
             }.background(Palette.canvas).navigationTitle("라이브러리").toolbarTitleDisplayMode(.inline)
                 .sheet(isPresented: $sheets) { SheetImportView() }
                 .sheet(item: $selectedPublicEntry) { entry in
@@ -106,8 +112,8 @@ struct LibraryDetailView: View {
                             }
                             Spacer(minLength: 4)
                             NavigationLink { WordReportComposer(library: library, stacks: [stack]) } label: {
-                                Image(systemName: "flag").frame(width: 32, height: 40)
-                            }.accessibilityLabel("\(stack.title) 오류 제보")
+                                Image(systemName: "pencil").frame(width: 32, height: 40)
+                            }.accessibilityLabel("\(stack.title) 뜻 수정")
                             if local {
                                 NavigationLink { LibraryStackEditor(libraryID: library.id, stackID: stack.id) } label: {
                                     Image(systemName: "pencil").frame(width: 32, height: 40)
@@ -139,7 +145,7 @@ struct LibraryDetailView: View {
         }.background(Palette.canvas).navigationTitle(library?.title ?? "덱").toolbarTitleDisplayMode(.inline)
             .toolbar {
                 if let library {
-                    NavigationLink { WordReportComposer(library: library, stacks: library.stacks) } label: { Label("덱 오류 제보", systemImage: "flag") }
+                    NavigationLink { WordReportComposer(library: library, stacks: library.stacks) } label: { Label("덱 뜻 수정", systemImage: "pencil") }
                 }
                 if local {
                     Menu {
