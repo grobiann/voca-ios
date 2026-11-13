@@ -23,7 +23,6 @@ struct StudyView: View {
     @State private var undoReviewState: ([Stack], [Word], [UUID: Date])?
     @State private var deletingWord: Word?
     @State private var limitReached = false
-    @State private var selectedReviewWaitMinutes: Int?
     private var item: ReviewItem? { stack.queue.first }
     private var word: Word? { stack.words.first { $0.id == item?.wordID } }
     init(stackID: UUID, reviewDepth: Int? = nil) {
@@ -72,7 +71,6 @@ struct StudyView: View {
                             }
                             stack = undo
                             self.undo = nil; undoPromotion = nil; revealed = false; offset = .zero
-                            selectedReviewWaitMinutes = nil
                             admitNextCard()
                         }
                     } label: { Image(systemName: "arrow.uturn.backward").frame(width: 44, height: 44) }.disabled(undo == nil || exiting).accessibilityLabel("이전 응답 취소")
@@ -281,36 +279,9 @@ struct StudyView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .clipped()
-            if showingAnswer && activeReviewDepth != nil {
-                reviewWaitPicker
-            } else {
-                Label(showingAnswer ? "기억을 확인해 보세요" : "탭해서 뒤집기", systemImage: showingAnswer ? "sparkle" : "hand.tap")
-                    .font(.caption).foregroundStyle(.tertiary)
-            }
+            Label(showingAnswer ? "기억을 확인해 보세요" : "탭해서 뒤집기", systemImage: showingAnswer ? "sparkle" : "hand.tap")
+                .font(.caption).foregroundStyle(.tertiary)
         }.padding(28).frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-    private var reviewWaitPicker: some View {
-        HStack(spacing: 5) {
-            Text("다음 확인")
-                .font(.caption2).foregroundStyle(.secondary)
-                .lineLimit(1)
-            ForEach([(1_440, "1일"), (10_080, "1주일"), (20_160, "2주일")], id: \.0) { minutes, label in
-                let selected = (selectedReviewWaitMinutes ?? store.reviewWaitMinutes) == minutes
-                Button {
-                    selectedReviewWaitMinutes = selectedReviewWaitMinutes == minutes ? nil : minutes
-                } label: {
-                    Text(label)
-                        .font(.caption2.weight(selected ? .bold : .medium))
-                        .frame(maxWidth: .infinity, minHeight: 40)
-                        .foregroundStyle(selected ? Color.white : Palette.accent)
-                        .background(selected ? Palette.accent : Palette.accent.opacity(0.09), in: Capsule())
-                }
-                .buttonStyle(.borderless)
-                .accessibilityLabel("다음 확인 \(label)")
-                .accessibilityAddTraits(selected ? .isSelected : [])
-            }
-        }
-        .accessibilityElement(children: .contain)
     }
     private func cardFace(_ word: Word, japaneseFirst: Bool, showingAnswer: Bool, scale: CGFloat, compact: Bool = false) -> some View {
         VStack(spacing: compact ? 10 : 20 * scale) {
@@ -389,9 +360,7 @@ struct StudyView: View {
                 undoReviewState = (store.archive.reviewDepthStacks ?? [], store.completedReviewWords, store.archive.reviewReadyAt ?? [:])
                 if known {
                     if let depth = store.archive.reviewDepth(of: answeredWord.id) {
-                        _ = store.archive.advanceReviewDepthWord(answeredWord, from: depth,
-                                                                 poolSize: store.reviewPoolSize,
-                                                                 waitMinutes: selectedReviewWaitMinutes)
+                        _ = store.archive.advanceReviewDepthWord(answeredWord, from: depth, poolSize: store.reviewPoolSize)
                         store.save()
                     }
                 }
@@ -406,7 +375,7 @@ struct StudyView: View {
                 persist(stack)
             }
             var transaction = Transaction(); transaction.disablesAnimations = true
-            withTransaction(transaction) { revealed = false; offset = .zero; exiting = false; selectedReviewWaitMinutes = nil }
+            withTransaction(transaction) { revealed = false; offset = .zero; exiting = false }
         }
     }
     private func admitNextCard(countDisplay: Bool = true) {
@@ -434,7 +403,6 @@ struct StudyView: View {
         undo = nil
         undoPromotion = nil
         revealed = false
-        selectedReviewWaitMinutes = nil
         offset = .zero
         deletingWord = nil
     }

@@ -292,8 +292,7 @@ public struct Archive: Codable, Sendable {
         reviewDepthStacks![sourceDepth - 1].prepare(poolSize: poolSize)
         return true
     }
-    @discardableResult public mutating func advanceReviewDepthWord(_ word: Word, from sourceDepth: Int, poolSize: Int = Stack.poolLimit,
-                                                                 waitMinutes: Int? = nil, now: Date = Date()) -> Bool {
+    @discardableResult public mutating func advanceReviewDepthWord(_ word: Word, from sourceDepth: Int, poolSize: Int = Stack.poolLimit) -> Bool {
         guard sourceDepth >= 1, sourceDepth <= configuredReviewDepthCount,
               reviewDepthStacks?.indices.contains(sourceDepth - 1) == true,
               reviewDepthStacks![sourceDepth - 1].words.contains(where: { $0.id == word.id }) else { return false }
@@ -314,19 +313,18 @@ public struct Archive: Codable, Sendable {
         }
         reviewDepthStacks![sourceDepth - 1].words.removeAll { $0.id == word.id }
         reviewDepthStacks![sourceDepth - 1].prepare(poolSize: poolSize)
-        let minutes = waitMinutes ?? reviewWaitMinutes ?? 1_440
+        let minutes = reviewWaitMinutes ?? 1_440
         if sourceDepth < configuredReviewDepthCount, minutes > 0 {
             reviewReadyAt = reviewReadyAt ?? [:]
-            reviewReadyAt?[word.id] = Self.nextReviewBoundary(after: now, minutes: minutes)
+            reviewReadyAt?[word.id] = Self.nextReviewBoundary(after: Date(), minutes: minutes)
         } else { reviewReadyAt?.removeValue(forKey: word.id) }
         return true
     }
     public static func nextReviewBoundary(after date: Date, minutes: Int, calendar: Calendar = .current) -> Date {
         guard minutes > 0 else { return date }
         if minutes >= 10_080 {
-            let days = minutes / 1_440
-            return calendar.date(byAdding: .day, value: days, to: calendar.startOfDay(for: date))
-                ?? date.addingTimeInterval(Double(minutes * 60))
+            let week = calendar.dateInterval(of: .weekOfYear, for: date)?.start ?? calendar.startOfDay(for: date)
+            return calendar.date(byAdding: .weekOfYear, value: 1, to: week) ?? date.addingTimeInterval(604_800)
         }
         let day = calendar.startOfDay(for: date)
         if minutes >= 1_440 {

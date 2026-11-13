@@ -55,24 +55,6 @@ final class VocaCoreTests: XCTestCase {
         XCTAssertTrue(archive.reviewSession(now: Date(timeIntervalSince1970: 1_000)).words.isEmpty)
         XCTAssertEqual(archive.reviewSession(now: Date(timeIntervalSince1970: 3_000)).words.count, 1)
     }
-    func testReviewWaitCanBeChosenForEachCompletedCard() {
-        var archive = Archive()
-        archive.reviewDepthCount = 3
-        archive.reviewWaitMinutes = 30
-        let now = Calendar.current.date(from: DateComponents(year: 2026, month: 11, day: 14, hour: 13))!
-        let words = (0..<4).map { Word(japanese: "語\($0)", korean: "뜻", example: "") }
-        for word in words { XCTAssertTrue(archive.addToReviewDepth(word, at: 1)) }
-
-        for (word, minutes) in zip(words, [nil, 1_440, 10_080, 20_160] as [Int?]) {
-            XCTAssertTrue(archive.advanceReviewDepthWord(word, from: 1, waitMinutes: minutes, now: now))
-        }
-        XCTAssertEqual(archive.reviewReadyAt?[words[0].id], Archive.nextReviewBoundary(after: now, minutes: 30))
-        for (index, days) in [(1, 1), (2, 7), (3, 14)] {
-            XCTAssertEqual(archive.reviewReadyAt?[words[index].id],
-                           Calendar.current.date(byAdding: .day, value: days, to: Calendar.current.startOfDay(for: now)))
-        }
-        XCTAssertTrue(archive.reviewSession(now: now).words.isEmpty)
-    }
     func testLegacyReminderSaveRemainsReadableWithoutReminderBehavior() throws {
         var original = Archive.sample
         original.stacks[0].prepare()
