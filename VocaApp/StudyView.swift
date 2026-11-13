@@ -83,7 +83,7 @@ struct StudyView: View {
                         Spacer()
                         Text(activeReviewDepth == nil
                              ? "학습 풀 \(stack.queue.count)/\(store.poolSize) · 남은 \(stack.remainingCount)"
-                             : "학습 풀 \(stack.queue.count)/\(store.poolSize) · 남은 \(stack.words.count)")
+                             : "학습 풀 \(stack.queue.count)/\(store.reviewPoolSize) · 남은 \(stack.words.count)")
                             .font(.caption)
                     }.foregroundStyle(.secondary)
                     ZStack {
@@ -199,16 +199,16 @@ struct StudyView: View {
             initialized = true
             activeReviewDepth = initialReviewDepth
             activeStackID = stackID
-            if let saved = initialReviewDepth.map({ _ in store.archive.reviewSession(poolSize: store.poolSize) }) ?? store.archive.stacks.first(where: { $0.id == stackID }) {
+            if let saved = initialReviewDepth.map({ _ in store.archive.reviewSession(poolSize: store.reviewPoolSize) }) ?? store.archive.stacks.first(where: { $0.id == stackID }) {
                 stack = saved
-                if initialReviewDepth != nil { stack.prepareReviewDepth(poolSize: store.poolSize) }
+                if initialReviewDepth != nil { stack.prepareReviewDepth(poolSize: store.reviewPoolSize) }
                 else { stack.oneWay = store.oneWayStudy; stack.prepare(poolSize: store.poolSize) }
                 if activeReviewDepth == nil { admitNextCard() }
                 persist(stack)
             }
         }.onDisappear { advanceTask?.cancel() }
         .sheet(isPresented: $settings, onDismiss: {
-            if activeReviewDepth != nil { stack.prepareReviewDepth(poolSize: store.poolSize) }
+            if activeReviewDepth != nil { stack.prepareReviewDepth(poolSize: store.reviewPoolSize) }
             else { stack.oneWay = store.oneWayStudy; stack.prepare(poolSize: store.poolSize); admitNextCard(countDisplay: false); persist(stack) }
         }) {
             NavigationStack {
@@ -360,11 +360,11 @@ struct StudyView: View {
                 undoReviewState = (store.archive.reviewDepthStacks ?? [], store.completedReviewWords, store.archive.reviewReadyAt ?? [:])
                 if known {
                     if let depth = store.archive.reviewDepth(of: answeredWord.id) {
-                        _ = store.archive.advanceReviewDepthWord(answeredWord, from: depth, poolSize: store.poolSize)
+                        _ = store.archive.advanceReviewDepthWord(answeredWord, from: depth, poolSize: store.reviewPoolSize)
                         store.save()
                     }
                 }
-                stack.answerReviewSession(known: known, poolSize: store.poolSize)
+                stack.answerReviewSession(known: known, poolSize: store.reviewPoolSize)
             } else {
                 if known, let depth = promotionDepth, let answeredWord, let previousTarget = store.reviewDepthStack(at: depth),
                    store.addToReviewDepth(answeredWord, at: depth) {
@@ -397,7 +397,7 @@ struct StudyView: View {
         else { store.removeWord(wordID, from: activeStackID) }
         if activeReviewDepth != nil {
             stack.words.removeAll { $0.id == wordID }
-            stack.prepareReviewDepth(poolSize: store.poolSize)
+            stack.prepareReviewDepth(poolSize: store.reviewPoolSize)
         } else if let updated = store.archive.stacks.first(where: { $0.id == activeStackID }) { stack = updated }
         undoReviewState = nil
         undo = nil

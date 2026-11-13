@@ -174,6 +174,7 @@ public struct Library: Identifiable, Codable, Equatable, Sendable {
 public struct Archive: Codable, Sendable {
     public var sheetLinks: [String]?
     public var studyPoolSize: Int?
+    public var reviewPoolSize: Int?
     public var dailyStudyLimitEnabled: Bool?
     public var dailyStudyLimit: Int?
     public var dailyStudyDay: Date?

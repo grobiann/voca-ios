@@ -41,7 +41,7 @@ struct LearnView: View {
     @State private var studyingDepth: Int?
     private var next: Stack? { store.archive.stacks.first { !$0.words.isEmpty && !$0.isComplete } }
     private var nextDepth: Int? {
-        let ready = Set(store.archive.reviewSession(poolSize: store.poolSize).words.map(\.id))
+        let ready = Set(store.archive.reviewSession(poolSize: store.reviewPoolSize).words.map(\.id))
         return (1...store.reviewDepthCount).first { depth in
             guard let stack = store.reviewDepthStack(at: depth) else { return false }
             return stack.words.contains { ready.contains($0.id) }

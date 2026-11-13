@@ -252,6 +252,7 @@ struct StudySettingsView: View {
                     .disabled(store.kanaStudyMode)
                 Toggle("단방향 학습 (일본어 → 한국어)", isOn: $store.oneWayStudy)
                     Stepper("학습 풀 크기: \(store.poolSize)개", value: $store.poolSize, in: 1...100)
+                    Stepper("반복 학습 풀 크기: \(store.reviewPoolSize)개", value: $store.reviewPoolSize, in: 1...100)
                     Toggle("일일 학습 목표 설정", isOn: $store.dailyStudyLimitEnabled)
                     Stepper("일일 학습 목표: \(store.dailyStudyLimit)회", value: $store.dailyStudyLimit, in: 10...1000, step: 10)
                         .disabled(!store.dailyStudyLimitEnabled)

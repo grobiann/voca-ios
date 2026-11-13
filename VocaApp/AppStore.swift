@@ -109,8 +109,17 @@ struct PublicDirectoryEntry: Identifiable {
         set {
             archive.studyPoolSize = min(100, max(1, newValue))
             for i in archive.stacks.indices { archive.stacks[i].prepare(poolSize: poolSize) }
+            save()
+        }
+    }
+    var reviewPoolSize: Int {
+        get { min(100, max(1, archive.reviewPoolSize ?? Stack.poolLimit)) }
+        set {
+            archive.reviewPoolSize = min(100, max(1, newValue))
             if archive.reviewDepthStacks != nil {
-                for i in archive.reviewDepthStacks!.indices { archive.reviewDepthStacks![i].prepare(poolSize: poolSize) }
+                for i in archive.reviewDepthStacks!.indices {
+                    archive.reviewDepthStacks![i].prepareReviewDepth(poolSize: reviewPoolSize)
+                }
             }
             save()
         }
@@ -222,12 +231,12 @@ struct PublicDirectoryEntry: Identifiable {
         save()
     }
     @discardableResult func addToReviewDepth(_ word: Word, at depth: Int) -> Bool {
-        let added = archive.addToReviewDepth(word, at: depth, poolSize: poolSize)
+        let added = archive.addToReviewDepth(word, at: depth, poolSize: reviewPoolSize)
         if added { save() }
         return added
     }
     @discardableResult func moveToReviewDepth(_ word: Word, from sourceDepth: Int) -> Bool {
-        let moved = archive.moveToReviewDepth(word, from: sourceDepth, poolSize: poolSize)
+        let moved = archive.moveToReviewDepth(word, from: sourceDepth, poolSize: reviewPoolSize)
         if moved { save() }
         return moved
     }
@@ -237,7 +246,7 @@ struct PublicDirectoryEntry: Identifiable {
         let previousDestination = destinationDepth.flatMap { reviewDepthStack(at: $0) }
         let previousCompleted = archive.completedReviewWords ?? []
         archive.reviewDepthStacks![sourceDepth - 1] = updatedSource
-        guard archive.advanceReviewDepthWord(word, from: sourceDepth, poolSize: poolSize) else { return nil }
+        guard archive.advanceReviewDepthWord(word, from: sourceDepth, poolSize: reviewPoolSize) else { return nil }
         save()
         return ReviewDepthAdvanceSnapshot(sourceDepth: sourceDepth, previousDestination: previousDestination,
                                           destinationDepth: destinationDepth, previousCompleted: previousCompleted)
@@ -268,13 +277,13 @@ struct PublicDirectoryEntry: Identifiable {
         guard (1...reviewDepthCount).contains(depth), archive.reviewDepthStacks?.indices.contains(depth - 1) == true else { return }
         archive.reviewDepthStacks![depth - 1].words.removeAll { $0.id == wordID }
         archive.reviewReadyAt?.removeValue(forKey: wordID)
-        archive.reviewDepthStacks![depth - 1].prepare(poolSize: poolSize)
+        archive.reviewDepthStacks![depth - 1].prepareReviewDepth(poolSize: reviewPoolSize)
         save()
     }
     func restartReviewDepth(at depth: Int) -> Bool {
         guard (1...reviewDepthCount).contains(depth), archive.reviewDepthStacks?.indices.contains(depth - 1) == true,
               !archive.reviewDepthStacks![depth - 1].words.isEmpty else { return false }
-        archive.reviewDepthStacks![depth - 1].reset(poolSize: poolSize)
+        archive.reviewDepthStacks![depth - 1].reset(poolSize: reviewPoolSize)
         save()
         return true
     }
