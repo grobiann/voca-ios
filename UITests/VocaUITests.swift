@@ -86,6 +86,27 @@ import XCTest
         app.buttons["반복 학습 단어풀"].tap()
         XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", "반복 학습 완료 · 1개")).firstMatch.waitForExistence(timeout: 5))
     }
+    func testReviewCardWaitChoiceKeepsCompletionFlow() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
+        app.launch()
+        app.buttons["학습 시작"].tap()
+        let card = app.descendants(matching: .any)["studyCard"].firstMatch
+        XCTAssertTrue(card.waitForExistence(timeout: 5))
+        card.tap()
+        app.buttons["addToReviewDepth"].tap()
+        app.buttons["학습 닫기"].tap()
+
+        app.buttons["반복 학습 시작"].tap()
+        XCTAssertFalse(app.buttons["다음 확인 2주일"].exists)
+        card.tap()
+        let twoWeeks = app.buttons["다음 확인 2주일"]
+        XCTAssertTrue(twoWeeks.waitForExistence(timeout: 5))
+        twoWeeks.tap()
+        XCTAssertTrue(twoWeeks.isSelected)
+        app.buttons["알았어요"].tap()
+        XCTAssertTrue(app.staticTexts["반복 학습을 마쳤어요"].waitForExistence(timeout: 5))
+    }
     func testStudySettingsCanBeOpenedWithoutRestartingCard() {
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting"]
