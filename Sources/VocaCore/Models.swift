@@ -31,6 +31,8 @@ public enum Direction: String, Codable, CaseIterable, Sendable {
     case japaneseToKorean, koreanToJapanese
     public var label: String { self == .japaneseToKorean ? "일본어 → 한국어" : "한국어 → 일본어" }
 }
+public enum ReviewCompletion: Sendable { case advance, onceMore, complete }
+
 public struct ReviewItem: Codable, Equatable, Hashable, Sendable {
     public var wordID: UUID
     public var direction: Direction
@@ -48,6 +50,7 @@ public struct Stack: Identifiable, Codable, Equatable, Sendable {
     public var hasShuffledQueue: Bool?
     public var oneWay: Bool?
     public var sentenceDirection: Direction?
+    public var failedReviewWordIDs: Set<UUID>?
     public static let poolLimit = 20
     public var remainingCount: Int { allItems.filter { !mastered.contains($0) }.count }
     public init(id: UUID = UUID(), title: String, words: [Word] = [], sourceID: UUID? = nil) {
@@ -90,6 +93,7 @@ public struct Stack: Identifiable, Codable, Equatable, Sendable {
             words.removeAll { $0.id == current.wordID }
             prepareReviewDepth(poolSize: poolSize)
         } else {
+            failedReviewWordIDs = (failedReviewWordIDs ?? []).union([current.wordID])
             queue.removeFirst()
             queue.insert(current, at: Int.random(in: min(3, queue.count)...queue.count))
         }
@@ -332,6 +336,35 @@ public struct Archive: Codable, Sendable {
         reviewDepthStacks![sourceDepth - 1].prepare(poolSize: poolSize)
         let minutes = reviewWaitMinutes ?? 1_440
         if sourceDepth < configuredReviewDepthCount, minutes > 0 {
+            reviewReadyAt = reviewReadyAt ?? [:]
+            reviewReadyAt?[word.id] = Self.nextReviewBoundary(after: Date(), minutes: minutes)
+        } else { reviewReadyAt?.removeValue(forKey: word.id) }
+        return true
+    }
+    @discardableResult public mutating func completeReviewWord(_ word: Word, action: ReviewCompletion,
+                                                              failedThisSession: Bool, poolSize: Int = Stack.poolLimit) -> Bool {
+        guard let depth = reviewDepth(of: word.id) else { return false }
+        let last = configuredReviewDepthCount
+        let mustRetryFinal = depth == last && failedThisSession
+        if action == .advance && !mustRetryFinal {
+            return advanceReviewDepthWord(word, from: depth, poolSize: poolSize)
+        }
+        if action == .complete && !mustRetryFinal {
+            // Explicit graduation uses the same completed-word storage as normal advancement.
+            reviewDepthStacks![depth - 1].words.removeAll { $0.id == word.id }
+            reviewDepthStacks![depth - 1].prepare(poolSize: poolSize)
+            completedReviewWords = (completedReviewWords ?? []).filter { $0.id != word.id } + [word]
+            reviewReadyAt?.removeValue(forKey: word.id)
+            return true
+        }
+        // Once-more and failed final-stage cards stay pending until a later session.
+        reviewDepthStacks![depth - 1].words.removeAll { $0.id == word.id }
+        reviewDepthStacks![last - 1].words.removeAll { $0.id == word.id }
+        reviewDepthStacks![last - 1].words.append(word)
+        reviewDepthStacks![depth - 1].prepare(poolSize: poolSize)
+        reviewDepthStacks![last - 1].prepare(poolSize: poolSize)
+        let minutes = reviewWaitMinutes ?? 1_440
+        if minutes > 0 {
             reviewReadyAt = reviewReadyAt ?? [:]
             reviewReadyAt?[word.id] = Self.nextReviewBoundary(after: Date(), minutes: minutes)
         } else { reviewReadyAt?.removeValue(forKey: word.id) }

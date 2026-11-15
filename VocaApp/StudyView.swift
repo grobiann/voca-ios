@@ -123,6 +123,17 @@ struct StudyView: View {
                         responseButton("다시 볼게요", icon: "arrow.left", known: false, width: geometry.size.width)
                         responseButton("알았어요", icon: "arrow.right", known: true, width: geometry.size.width)
                     }.disabled(!revealed || exiting).opacity(revealed ? 1 : 0.35)
+                    if activeReviewDepth != nil {
+                        HStack(spacing: 12) {
+                            Button("한 번만 더 보기") { answer(true, width: geometry.size.width, reviewAction: .onceMore) }
+                            Spacer()
+                            Button("완료", systemImage: "checkmark.seal") { answer(true, width: geometry.size.width, reviewAction: .complete) }
+                        }
+                        .font(.subheadline.weight(.semibold))
+                        .buttonStyle(.bordered)
+                        .tint(Palette.accent)
+                        .disabled(!revealed || exiting)
+                    }
                     if activeReviewDepth == nil {
                             Button {
                                 answer(true, width: geometry.size.width, promoteTo: 1)
@@ -142,7 +153,9 @@ struct StudyView: View {
                         Text(revealed
                          ? (activeReviewDepth == nil
                             ? "모르면 왼쪽, 알면 오른쪽으로 밀어 주세요"
-                            : "모르면 왼쪽, 알면 오른쪽 · 맞히면 다음 단계로 이동")
+                            : (store.archive.reviewDepth(of: word.id) == store.reviewDepthCount && stack.failedReviewWordIDs?.contains(word.id) == true
+                               ? "이번에 헷갈린 단어는 마지막 단계에서 한 번 더 확인해요"
+                               : "모르면 왼쪽, 알면 오른쪽 · 맞히면 다음 단계로 이동"))
                          : "카드를 누르면 뜻을 확인할 수 있어요")
                         .font(.caption).foregroundStyle(.secondary)
                         Spacer(minLength: 0)
@@ -349,7 +362,7 @@ struct StudyView: View {
                 .background((known ? Palette.accent : Palette.orange).opacity(0.09), in: RoundedRectangle(cornerRadius: 18))
         }
     }
-    private func answer(_ known: Bool, width: CGFloat, promoteTo promotionDepth: Int? = nil) {
+    private func answer(_ known: Bool, width: CGFloat, promoteTo promotionDepth: Int? = nil, reviewAction: ReviewCompletion = .advance) {
         guard revealed && !exiting else { return }
         let answeredWord = word
         exiting = true; store.feedback(.medium)
@@ -363,10 +376,10 @@ struct StudyView: View {
             if activeReviewDepth != nil, let answeredWord {
                 undoReviewState = (store.archive.reviewDepthStacks ?? [], store.completedReviewWords, store.archive.reviewReadyAt ?? [:])
                 if known {
-                    if let depth = store.archive.reviewDepth(of: answeredWord.id) {
-                        _ = store.archive.advanceReviewDepthWord(answeredWord, from: depth, poolSize: store.reviewPoolSize)
-                        store.save()
-                    }
+                    _ = store.archive.completeReviewWord(answeredWord, action: reviewAction,
+                                                         failedThisSession: stack.failedReviewWordIDs?.contains(answeredWord.id) == true,
+                                                         poolSize: store.reviewPoolSize)
+                    store.save()
                 }
                 stack.answerReviewSession(known: known, poolSize: store.reviewPoolSize)
             } else {

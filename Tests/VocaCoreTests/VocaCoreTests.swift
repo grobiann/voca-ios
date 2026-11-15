@@ -1,6 +1,36 @@
 import XCTest
 @testable import VocaCore
 final class VocaCoreTests: XCTestCase {
+    func testReviewCompletionChoicesAndFailedFinalProtection() {
+        let word = Word(japanese: "猫", korean: "고양이", example: "")
+        for action in [ReviewCompletion.advance, .onceMore, .complete] {
+            var archive = Archive()
+            archive.reviewWaitMinutes = 0
+            _ = archive.addToReviewDepth(word, at: 5)
+            var session = archive.reviewSession(poolSize: 1)
+            session.answerReviewSession(known: false, poolSize: 1)
+            XCTAssertTrue(session.failedReviewWordIDs?.contains(word.id) == true)
+            _ = archive.completeReviewWord(word, action: action, failedThisSession: true)
+            session.answerReviewSession(known: true, poolSize: 1)
+            XCTAssertTrue(session.words.isEmpty)
+            XCTAssertEqual(archive.reviewDepth(of: word.id), 5)
+            XCTAssertTrue((archive.completedReviewWords ?? []).isEmpty)
+            let nextSession = archive.reviewSession()
+            XCTAssertFalse(nextSession.failedReviewWordIDs?.contains(word.id) == true)
+            _ = archive.completeReviewWord(word, action: .advance, failedThisSession: false)
+            XCTAssertEqual(archive.completedReviewWords?.map(\.id), [word.id])
+        }
+        var archive = Archive()
+        _ = archive.addToReviewDepth(word, at: 1)
+        _ = archive.completeReviewWord(word, action: .onceMore, failedThisSession: false)
+        XCTAssertEqual(archive.reviewDepth(of: word.id), 5)
+        XCTAssertNotNil(archive.reviewReadyAt?[word.id])
+        XCTAssertTrue(archive.reviewSession().words.isEmpty)
+        _ = archive.completeReviewWord(word, action: .complete, failedThisSession: false)
+        XCTAssertNil(archive.reviewDepth(of: word.id))
+        XCTAssertEqual(archive.completedReviewWords?.map(\.id), [word.id])
+    }
+
     func testSentenceDirectionInStudyAndReview() throws {
         var sentence = Word(japanese: "今日は暑いです。", korean: "오늘은 덥습니다.", example: "")
         sentence.isSentence = true
