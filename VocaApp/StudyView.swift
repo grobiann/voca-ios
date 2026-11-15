@@ -124,14 +124,17 @@ struct StudyView: View {
                         responseButton("알았어요", icon: "arrow.right", known: true, width: geometry.size.width)
                     }.disabled(!revealed || exiting).opacity(revealed ? 1 : 0.35)
                     if activeReviewDepth != nil {
-                        HStack(spacing: 12) {
-                            Spacer()
-                            Button("완료", systemImage: "checkmark.seal") { answer(true, width: geometry.size.width, reviewAction: .complete) }
+                        Button {
+                            answer(true, width: geometry.size.width, reviewAction: .complete)
+                        } label: {
+                            Label("완료", systemImage: "checkmark.seal")
+                                .font(.subheadline.weight(.semibold))
+                                .frame(maxWidth: .infinity).padding(.vertical, 12)
+                                .background(Palette.accent.opacity(0.10), in: RoundedRectangle(cornerRadius: 14))
+                                .foregroundStyle(Palette.accent)
                         }
-                        .font(.subheadline.weight(.semibold))
-                        .buttonStyle(.bordered)
-                        .tint(Palette.accent)
                         .disabled(!revealed || exiting)
+                        .opacity(revealed ? 1 : 0.55)
                     }
                     if activeReviewDepth == nil {
                             Button {
