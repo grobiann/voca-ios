@@ -47,6 +47,7 @@ public struct Stack: Identifiable, Codable, Equatable, Sendable {
     public var recentWordIDs: [UUID]?
     public var hasShuffledQueue: Bool?
     public var oneWay: Bool?
+    public var sentenceDirection: Direction?
     public static let poolLimit = 20
     public var remainingCount: Int { allItems.filter { !mastered.contains($0) }.count }
     public init(id: UUID = UUID(), title: String, words: [Word] = [], sourceID: UUID? = nil) {
@@ -54,14 +55,15 @@ public struct Stack: Identifiable, Codable, Equatable, Sendable {
     }
     public var allItems: [ReviewItem] {
         Direction.allCases.flatMap { direction in words.compactMap {
-            direction == .koreanToJapanese && (oneWay == true || $0.isSentence == true) ? nil : ReviewItem(wordID: $0.id, direction: direction)
+            ($0.isSentence == true ? direction != (sentenceDirection ?? .japaneseToKorean) : (direction == .koreanToJapanese && oneWay == true)) ? nil : ReviewItem(wordID: $0.id, direction: direction)
         } }
     }
     public var isComplete: Bool { !words.isEmpty && allItems.allSatisfy { mastered.contains($0) } }
     public var progress: Double { allItems.isEmpty ? 0 : Double(allItems.filter { mastered.contains($0) }.count) / Double(allItems.count) }
     public mutating func prepare(poolSize: Int = Self.poolLimit) {
         let valid = Set(allItems)
-        mastered.formIntersection(valid)
+        let sentenceIDs = Set(words.filter { $0.isSentence == true }.map(\.id))
+        mastered = mastered.filter { valid.contains($0) || sentenceIDs.contains($0.wordID) }
         var seenWords = Set<UUID>()
         queue = Array(queue.filter {
             valid.contains($0) && !mastered.contains($0) && seenWords.insert($0.wordID).inserted
@@ -72,7 +74,7 @@ public struct Stack: Identifiable, Codable, Equatable, Sendable {
         refill(poolSize: max(1, poolSize))
     }
     public mutating func prepareReviewDepth(poolSize: Int = Self.poolLimit) {
-        let valid = Set(words.map { ReviewItem(wordID: $0.id, direction: .japaneseToKorean) })
+        let valid = Set(words.map { ReviewItem(wordID: $0.id, direction: $0.isSentence == true ? (sentenceDirection ?? .japaneseToKorean) : .japaneseToKorean) })
         mastered.formIntersection(valid)
         var seen = Set<UUID>()
         queue = Array(queue.filter {
@@ -97,7 +99,7 @@ public struct Stack: Identifiable, Codable, Equatable, Sendable {
         let recent = recentWordIDs ?? []
         while queue.count < poolSize {
             let candidates = words
-                .map { ReviewItem(wordID: $0.id, direction: .japaneseToKorean) }
+                .map { ReviewItem(wordID: $0.id, direction: $0.isSentence == true ? (sentenceDirection ?? .japaneseToKorean) : .japaneseToKorean) }
                 .filter { !mastered.contains($0) && !active.contains($0.wordID) }
             guard !candidates.isEmpty else { break }
             let oldest = candidates.map { recent.firstIndex(of: $0.wordID) ?? -1 }.min() ?? -1
@@ -182,6 +184,7 @@ public struct Archive: Codable, Sendable {
     public var dailyStudySeenItems: Set<ReviewItem>?
     public var dailyStudyUnlimitedToday: Bool?
     public var oneWayStudy: Bool?
+    public var sentenceStudyDirection: Direction?
     public var reviewWaitMinutes: Int?
     public var reviewReadyAt: [UUID: Date]?
     public var kanaStudyMode: Bool?
@@ -255,10 +258,24 @@ public struct Archive: Codable, Sendable {
             seen.insert($0.id).inserted && (reviewReadyAt?[$0.id] ?? .distantPast) <= now
         }
         var session = Stack(title: "반복 학습", words: words)
+        session.sentenceDirection = sentenceStudyDirection
         session.prepareReviewDepth(poolSize: poolSize)
         return session
     }
-    public var configuredReviewDepthCount: Int { min(20, max(3, reviewDepthCount ?? 5)) }
+    public var configuredReviewDepthCount: Int { min(20, max(1, reviewDepthCount ?? 5)) }
+    public mutating func setReviewDepthCount(_ count: Int) {
+        let target = min(20, max(1, count))
+        prepareReviewDepths()
+        if target < 20 {
+            for index in target..<reviewDepthStacks!.count {
+                reviewDepthStacks![target - 1].words.append(contentsOf: reviewDepthStacks![index].words)
+                reviewDepthStacks![index].words = []
+                reviewDepthStacks![index].queue = []
+            }
+        }
+        reviewDepthCount = target
+        prepareReviewDepths()
+    }
     public mutating func prepareReviewDepths() {
         var depths = reviewDepthStacks ?? []
         while depths.count < 20 { depths.append(Stack(title: "\(depths.count + 1)단계 단어")) }

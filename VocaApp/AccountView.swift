@@ -250,13 +250,18 @@ struct StudySettingsView: View {
                 Toggle("히라가나·가타카나 모드", isOn: $store.kanaStudyMode)
                 Toggle("앞면에 히라가나 표시", isOn: $store.showReadingOnFront)
                     .disabled(store.kanaStudyMode)
+                Picker("문장 학습 방향", selection: $store.sentenceStudyDirection) {
+                    ForEach(Direction.allCases, id: \.self) { direction in
+                        Text(direction.label).tag(direction)
+                    }
+                }
                 Toggle("단방향 학습 (일본어 → 한국어)", isOn: $store.oneWayStudy)
                     Stepper("학습 풀 크기: \(store.poolSize)개", value: $store.poolSize, in: 1...100)
                     Stepper("반복 학습 풀 크기: \(store.reviewPoolSize)개", value: $store.reviewPoolSize, in: 1...100)
                     Toggle("일일 학습 목표 설정", isOn: $store.dailyStudyLimitEnabled)
                     Stepper("일일 학습 목표: \(store.dailyStudyLimit)회", value: $store.dailyStudyLimit, in: 10...1000, step: 10)
                         .disabled(!store.dailyStudyLimitEnabled)
-                    Stepper("반복 학습 단계: \(store.reviewDepthCount)단계", value: $store.reviewDepthCount, in: store.highestUsedReviewDepth...20)
+                    Stepper("반복 학습 단계: \(store.reviewDepthCount)단계", value: $store.reviewDepthCount, in: 1...20)
                     Button { showingWaitOptions = true } label: {
                         HStack {
                             Text("반복학습 단계업 대기시간")

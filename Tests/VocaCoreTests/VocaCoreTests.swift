@@ -1,6 +1,48 @@
 import XCTest
 @testable import VocaCore
 final class VocaCoreTests: XCTestCase {
+    func testSentenceDirectionInStudyAndReview() throws {
+        var sentence = Word(japanese: "今日は暑いです。", korean: "오늘은 덥습니다.", example: "")
+        sentence.isSentence = true
+        let word = Word(japanese: "猫", korean: "고양이", example: "")
+        var stack = Stack(title: "mixed", words: [sentence, word])
+        stack.sentenceDirection = .koreanToJapanese
+        stack.prepare(poolSize: 20)
+        XCTAssertEqual(stack.allItems.filter { $0.wordID == sentence.id }.map(\.direction), [.koreanToJapanese])
+        XCTAssertEqual(stack.allItems.filter { $0.wordID == word.id }.count, 2)
+        stack.mastered.insert(ReviewItem(wordID: sentence.id, direction: .koreanToJapanese))
+        stack.sentenceDirection = .japaneseToKorean
+        stack.prepare()
+        stack.sentenceDirection = .koreanToJapanese
+        stack.prepare()
+        XCTAssertTrue(stack.mastered.contains(ReviewItem(wordID: sentence.id, direction: .koreanToJapanese)))
+        var archive = Archive()
+        archive.sentenceStudyDirection = .koreanToJapanese
+        _ = archive.addToReviewDepth(sentence, at: 1)
+        _ = archive.addToReviewDepth(word, at: 1)
+        var session = archive.reviewSession(poolSize: 1)
+        XCTAssertEqual(session.queue.count, 1)
+        let expected: [UUID: Direction] = [sentence.id: .koreanToJapanese, word.id: .japaneseToKorean]
+        for _ in 0..<2 {
+            XCTAssertEqual(session.queue.first?.direction, expected[session.queue.first!.wordID])
+            session.answerReviewSession(known: true, poolSize: 1)
+        }
+        XCTAssertTrue(session.words.isEmpty)
+        let restored = try JSONDecoder().decode(Archive.self, from: JSONEncoder().encode(archive))
+        XCTAssertEqual(restored.sentenceStudyDirection, .koreanToJapanese)
+    }
+    func testReviewDepthCanShrinkToOneWithoutLosingCards() {
+        var archive = Archive()
+        let word = Word(japanese: "猫", korean: "고양이", example: "")
+        _ = archive.addToReviewDepth(word, at: 5)
+        archive.setReviewDepthCount(1)
+        XCTAssertEqual(archive.configuredReviewDepthCount, 1)
+        XCTAssertEqual(archive.reviewDepth(of: word.id), 1)
+        XCTAssertEqual(archive.reviewSession().words.count, 1)
+        _ = archive.advanceReviewDepthWord(word, from: 1)
+        XCTAssertEqual(archive.completedReviewWords?.map(\.id), [word.id])
+    }
+
     func testPublicDirectoryRefreshAcceptsReorderedColumns() throws {
         let csv = """
         LibraryName,GoogleSheetLinks,Status,NickName,Description

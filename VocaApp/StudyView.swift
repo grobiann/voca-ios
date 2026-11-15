@@ -201,6 +201,7 @@ struct StudyView: View {
             activeStackID = stackID
             if let saved = initialReviewDepth.map({ _ in store.archive.reviewSession(poolSize: store.reviewPoolSize) }) ?? store.archive.stacks.first(where: { $0.id == stackID }) {
                 stack = saved
+                stack.sentenceDirection = store.sentenceStudyDirection
                 if initialReviewDepth != nil { stack.prepareReviewDepth(poolSize: store.reviewPoolSize) }
                 else { stack.oneWay = store.oneWayStudy; stack.prepare(poolSize: store.poolSize) }
                 if activeReviewDepth == nil { admitNextCard() }
@@ -208,8 +209,11 @@ struct StudyView: View {
             }
         }.onDisappear { advanceTask?.cancel() }
         .sheet(isPresented: $settings, onDismiss: {
+            let previousItem = item
+            stack.sentenceDirection = store.sentenceStudyDirection
             if activeReviewDepth != nil { stack.prepareReviewDepth(poolSize: store.reviewPoolSize) }
             else { stack.oneWay = store.oneWayStudy; stack.prepare(poolSize: store.poolSize); admitNextCard(countDisplay: false); persist(stack) }
+            if item != previousItem { revealed = false; offset = .zero; undo = nil; undoReviewState = nil }
         }) {
             NavigationStack {
                 StudySettingsView().toolbar { ToolbarItem(placement: .confirmationAction) { Button("완료") { settings = false } } }

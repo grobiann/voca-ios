@@ -97,10 +97,10 @@ struct PublicDirectoryEntry: Identifiable {
     private var storageReadable = true
     var reviewDepthCount: Int {
         get { archive.configuredReviewDepthCount }
-        set { archive.reviewDepthCount = min(20, max(highestUsedReviewDepth, max(3, newValue))); save() }
+        set { archive.setReviewDepthCount(newValue); save() }
     }
     var highestUsedReviewDepth: Int {
-        max(3, (archive.reviewDepthStacks ?? []).enumerated().filter { !$0.element.words.isEmpty }.map { $0.offset + 1 }.max() ?? 3)
+        max(1, (archive.reviewDepthStacks ?? []).enumerated().filter { !$0.element.words.isEmpty }.map { $0.offset + 1 }.max() ?? 1)
     }
     var reviewDepthStacks: [Stack] { Array((archive.reviewDepthStacks ?? []).prefix(reviewDepthCount)) }
     var completedReviewWords: [Word] { archive.completedReviewWords ?? [] }
@@ -165,6 +165,17 @@ struct PublicDirectoryEntry: Identifiable {
         resetDailyStudyIfNeeded()
         archive.dailyStudyUnlimitedToday = true
         save()
+    }
+    var sentenceStudyDirection: Direction {
+        get { archive.sentenceStudyDirection ?? .japaneseToKorean }
+        set {
+            archive.sentenceStudyDirection = newValue
+            for i in archive.stacks.indices {
+                archive.stacks[i].sentenceDirection = newValue
+                archive.stacks[i].prepare(poolSize: poolSize)
+            }
+            save()
+        }
     }
     var oneWayStudy: Bool {
         get { archive.oneWayStudy ?? false }
@@ -292,6 +303,7 @@ struct PublicDirectoryEntry: Identifiable {
         guard let i = archive.stacks.firstIndex(where: { $0.id == stackID }),
               !archive.stacks[i].words.isEmpty else { return false }
         // Reset the local copy so removed cards stay removed and corrections are retained.
+        archive.stacks[i].sentenceDirection = sentenceStudyDirection
         archive.stacks[i].oneWay = oneWayStudy
         archive.stacks[i].reset(poolSize: poolSize)
         save()
@@ -323,6 +335,7 @@ struct PublicDirectoryEntry: Identifiable {
     func enroll(_ stack: Stack) {
         guard !isEnrolled(stack) else { return }
         var copy = Stack(title: stack.title, words: stack.words, sourceID: stack.id)
+        copy.sentenceDirection = sentenceStudyDirection
         copy.oneWay = oneWayStudy
         copy.prepare(poolSize: poolSize); archive.stacks.append(copy); save()
     }
