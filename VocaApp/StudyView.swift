@@ -103,7 +103,7 @@ struct StudyView: View {
                                 .scaleEffect(0.96 + min(abs(offset.width) / 400, 1) * 0.04)
                                 .accessibilityHidden(true)
                         }
-                        card(word, item: item)
+                        card(word, item: item, width: geometry.size.width)
                             .overlay(alignment: .top) {
                                 HStack {
                                     swipeStamp("알았어요", color: Palette.accent, angle: -12)
@@ -125,7 +125,6 @@ struct StudyView: View {
                     }.disabled(!revealed || exiting).opacity(revealed ? 1 : 0.35)
                     if activeReviewDepth != nil {
                         HStack(spacing: 12) {
-                            Button("한 번만 더 보기") { answer(true, width: geometry.size.width, reviewAction: .onceMore) }
                             Spacer()
                             Button("완료", systemImage: "checkmark.seal") { answer(true, width: geometry.size.width, reviewAction: .complete) }
                         }
@@ -250,13 +249,13 @@ struct StudyView: View {
             }
         } message: { Text("양방향 학습 대기열에서도 제거됩니다. 라이브러리의 원본은 유지됩니다.") }
     }
-    private func card(_ word: Word, item: ReviewItem) -> some View {
+    private func card(_ word: Word, item: ReviewItem, width: CGFloat) -> some View {
         let japaneseFirst = item.direction == .japaneseToKorean
         return ZStack {
             if revealed {
-                cardSurface(word, japaneseFirst: japaneseFirst, showingAnswer: true)
+                cardSurface(word, japaneseFirst: japaneseFirst, showingAnswer: true, width: width)
             } else {
-                cardSurface(word, japaneseFirst: japaneseFirst, showingAnswer: false)
+                cardSurface(word, japaneseFirst: japaneseFirst, showingAnswer: false, width: width)
             }
         }
             .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 30))
@@ -267,7 +266,7 @@ struct StudyView: View {
             .onTapGesture { reveal() }
             .accessibilityAction(named: "정답 보기") { reveal() }
     }
-    private func cardSurface(_ word: Word, japaneseFirst: Bool, showingAnswer: Bool) -> some View {
+    private func cardSurface(_ word: Word, japaneseFirst: Bool, showingAnswer: Bool, width: CGFloat) -> some View {
         VStack(spacing: 22) {
             HStack(spacing: 6) {
                 Text(showingAnswer ? "ANSWER" : (japaneseFirst ? word.sourceLanguageName : word.targetLanguageName))
@@ -296,8 +295,32 @@ struct StudyView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .clipped()
-            Label(showingAnswer ? "기억을 확인해 보세요" : "탭해서 뒤집기", systemImage: showingAnswer ? "sparkle" : "hand.tap")
-                .font(.caption).foregroundStyle(.tertiary)
+            HStack(spacing: 8) {
+                Label(showingAnswer ? "기억을 확인해 보세요" : "탭해서 뒤집기", systemImage: showingAnswer ? "sparkle" : "hand.tap")
+                    .font(.caption).foregroundStyle(.tertiary)
+                if activeReviewDepth != nil {
+                    Spacer(minLength: 4)
+                    if store.archive.reviewDepth(of: word.id) == store.reviewDepthCount {
+                        Text("마지막 단계")
+                            .font(.caption.weight(.medium))
+                            .foregroundStyle(.secondary)
+                            .padding(.horizontal, 10)
+                            .frame(minHeight: 44)
+                            .accessibilityIdentifier("finalReviewStage")
+                    } else {
+                        Button("쉬워요") { answer(true, width: width, reviewAction: .onceMore) }
+                            .font(.caption.weight(.semibold))
+                            .padding(.horizontal, 12)
+                            .frame(minHeight: 44)
+                            .background(Palette.accent.opacity(0.08), in: Capsule())
+                            .foregroundStyle(Palette.accent)
+                            .buttonStyle(.borderless)
+                            .disabled(!showingAnswer || exiting)
+                            .opacity(showingAnswer ? 1 : 0.35)
+                            .accessibilityHint("마지막 단계로 이동해 다음 학습에서 한 번 더 확인합니다")
+                    }
+                }
+            }
         }.padding(28).frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     private func cardFace(_ word: Word, japaneseFirst: Bool, showingAnswer: Bool, scale: CGFloat, compact: Bool = false) -> some View {
