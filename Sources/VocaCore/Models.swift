@@ -36,7 +36,7 @@ public struct ReviewScore: Codable, Equatable, Sendable {
     public var streak: Int = 0
     public var retries: Int = 0
     public var nextAward: Int {
-        retries > 0 ? [20, 10, 5, 2, 0][min(4, retries)] : 20 * (1 << min(4, max(0, streak)))
+        retries > 0 ? [20, 10, 5, 2, 1][min(4, retries)] : 20 * (1 << min(4, max(0, streak)))
     }
     public init(points: Int = 0, streak: Int = 0, retries: Int = 0) {
         self.points = points; self.streak = streak; self.retries = retries

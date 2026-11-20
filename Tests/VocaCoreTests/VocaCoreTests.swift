@@ -23,7 +23,7 @@ final class VocaCoreTests: XCTestCase {
             a.reviewScoreTarget = 300
             _ = a.addToReviewDepth(word, at: 1)
             for _ in 0..<retryCount { a.recordReviewRetry(word.id) }
-            XCTAssertEqual(a.scoreReviewWord(word), [20,10,5,2,0][min(4,retryCount)])
+            XCTAssertEqual(a.scoreReviewWord(word), [20,10,5,2,1][min(4,retryCount)])
             XCTAssertEqual(a.reviewScores?[word.id]?.retries, 0)
             XCTAssertEqual(a.scoreReviewWord(word), retryCount == 0 ? 40 : 20)
         }
