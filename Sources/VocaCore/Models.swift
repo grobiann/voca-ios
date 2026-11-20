@@ -400,35 +400,6 @@ public struct Archive: Codable, Sendable {
         } else { reviewReadyAt?.removeValue(forKey: word.id) }
         return true
     }
-    @discardableResult public mutating func completeReviewWord(_ word: Word, action: ReviewCompletion,
-                                                              failedThisSession: Bool, poolSize: Int = Stack.poolLimit) -> Bool {
-        guard let depth = reviewDepth(of: word.id) else { return false }
-        let last = configuredReviewDepthCount
-        let mustRetryFinal = depth == last && failedThisSession
-        if action == .advance && !mustRetryFinal {
-            return advanceReviewDepthWord(word, from: depth, poolSize: poolSize)
-        }
-        if action == .complete && !mustRetryFinal {
-            // Explicit graduation uses the same completed-word storage as normal advancement.
-            reviewDepthStacks![depth - 1].words.removeAll { $0.id == word.id }
-            reviewDepthStacks![depth - 1].prepare(poolSize: poolSize)
-            completedReviewWords = (completedReviewWords ?? []).filter { $0.id != word.id } + [word]
-            reviewReadyAt?.removeValue(forKey: word.id)
-            return true
-        }
-        // Once-more and failed final-stage cards stay pending until a later session.
-        reviewDepthStacks![depth - 1].words.removeAll { $0.id == word.id }
-        reviewDepthStacks![last - 1].words.removeAll { $0.id == word.id }
-        reviewDepthStacks![last - 1].words.append(word)
-        reviewDepthStacks![depth - 1].prepare(poolSize: poolSize)
-        reviewDepthStacks![last - 1].prepare(poolSize: poolSize)
-        let minutes = reviewWaitMinutes ?? 1_440
-        if minutes > 0 {
-            reviewReadyAt = reviewReadyAt ?? [:]
-            reviewReadyAt?[word.id] = Self.nextReviewBoundary(after: Date(), minutes: minutes)
-        } else { reviewReadyAt?.removeValue(forKey: word.id) }
-        return true
-    }
     public static func nextReviewBoundary(after date: Date, minutes: Int, calendar: Calendar = .current) -> Date {
         guard minutes > 0 else { return date }
         if minutes >= 10_080 {
