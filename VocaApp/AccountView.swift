@@ -247,6 +247,7 @@ struct StudySettingsView: View {
         @Bindable var store = store
         Form {
             Section {
+                NavigationLink("일본어 글꼴") { JapaneseFontSettingsView() }
                 Toggle("히라가나·가타카나 모드", isOn: $store.kanaStudyMode)
                 Toggle("앞면에 히라가나 표시", isOn: $store.showReadingOnFront)
                     .disabled(store.kanaStudyMode)
@@ -261,10 +262,12 @@ struct StudySettingsView: View {
                     Toggle("일일 학습 목표 설정", isOn: $store.dailyStudyLimitEnabled)
                     Stepper("일일 학습 목표: \(store.dailyStudyLimit)회", value: $store.dailyStudyLimit, in: 10...1000, step: 10)
                         .disabled(!store.dailyStudyLimitEnabled)
-                    Stepper("반복 학습 단계: \(store.reviewDepthCount)단계", value: $store.reviewDepthCount, in: 1...20)
+                    Picker("반복 학습 목표 점수", selection: $store.reviewScoreTarget) {
+                        ForEach([50, 100, 150, 200, 300], id: \.self) { Text("\($0)점").tag($0) }
+                    }
                     Button { showingWaitOptions = true } label: {
                         HStack {
-                            Text("반복학습 단계업 대기시간")
+                            Text("반복 학습 대기시간")
                             Spacer()
                             Text(waitOptions.first(where: { $0.0 == store.reviewWaitMinutes })?.1 ?? "1일")
                                 .foregroundStyle(.secondary)
@@ -305,7 +308,7 @@ struct StudySettingsView: View {
                     .padding(20)
                     .frame(maxHeight: .infinity, alignment: .top)
                     .background(Palette.canvas)
-                    .navigationTitle("단계업 대기시간")
+                    .navigationTitle("반복 학습 대기시간")
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar { ToolbarItem(placement: .confirmationAction) { Button("닫기") { showingWaitOptions = false } } }
                 }
@@ -369,4 +372,41 @@ struct SheetLinksView: View {
         return components.url
     }
 
+}
+
+
+enum JapaneseStudyFont: String, CaseIterable, Identifiable {
+    case gothic = "HiraginoSans-W3"
+    case rounded = "HiraginoMaruGothicProN-W4"
+    case mincho = "HiraMinProN-W3"
+    var id: String { rawValue }
+    var title: String {
+        switch self {
+        case .gothic: "히라기노 고딕 · 또렷한 기본체"
+        case .rounded: "히라기노 둥근 고딕 · 부드러운 느낌"
+        case .mincho: "히라기노 명조 · 책에서 보는 글씨"
+        }
+    }
+    func font(size: CGFloat) -> Font {
+        let name = UIFont(name: rawValue, size: size) == nil ? "HiraginoSans-W3" : rawValue
+        return .custom(name, size: size)
+    }
+}
+struct JapaneseFontSettingsView: View {
+    @Environment(AppStore.self) private var store
+    var body: some View {
+        List(JapaneseStudyFont.allCases) { font in
+            Button { store.japaneseFont = font } label: {
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        Text(font.title).font(.subheadline)
+                        Spacer()
+                        if store.japaneseFont == font { Image(systemName: "checkmark").foregroundStyle(Palette.accent) }
+                    }
+                    Text("今日はいい天気ですね。あいうえお アイウエオ")
+                        .font(font.font(size: 24))
+                }.padding(.vertical, 8).foregroundStyle(.primary)
+            }.buttonStyle(.plain)
+        }.navigationTitle("일본어 글꼴")
+    }
 }

@@ -270,7 +270,7 @@ struct ReviewDepthListView: View {
                             Text(word.korean).font(.caption).foregroundStyle(.secondary)
                         }
                         Spacer()
-                        Text("\(store.archive.reviewDepth(of: word.id) ?? 1) / \(store.reviewDepthCount)단계")
+                        Text("\(store.archive.reviewScores?[word.id]?.points ?? 0) / \(store.reviewScoreTarget)점")
                             .font(.caption).foregroundStyle(.secondary)
                     }.swipeActions {
                         Button("제거", role: .destructive) {
@@ -282,7 +282,7 @@ struct ReviewDepthListView: View {
 
             Section("반복 학습 완료 · \(store.completedReviewWords.count)개") {
                 if store.completedReviewWords.isEmpty {
-                    Text("마지막 단계까지 익힌 단어가 이곳에 보관됩니다.").foregroundStyle(.secondary)
+                    Text("목표 점수를 달성하거나 직접 완료한 단어가 이곳에 보관됩니다.").foregroundStyle(.secondary)
                 }
                 ForEach(store.completedReviewWords) { word in
                     VStack(alignment: .leading, spacing: 4) {

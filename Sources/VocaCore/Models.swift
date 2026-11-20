@@ -31,6 +31,14 @@ public enum Direction: String, Codable, CaseIterable, Sendable {
     case japaneseToKorean, koreanToJapanese
     public var label: String { self == .japaneseToKorean ? "일본어 → 한국어" : "한국어 → 일본어" }
 }
+public struct ReviewScore: Codable, Equatable, Sendable {
+    public var points: Int = 0
+    public var streak: Int = 0
+    public var retries: Int = 0
+    public init(points: Int = 0, streak: Int = 0, retries: Int = 0) {
+        self.points = points; self.streak = streak; self.retries = retries
+    }
+}
 public enum ReviewCompletion: Sendable { case advance, onceMore, complete }
 
 public struct ReviewItem: Codable, Equatable, Hashable, Sendable {
@@ -192,6 +200,9 @@ public struct Archive: Codable, Sendable {
     public var reviewWaitMinutes: Int?
     public var reviewReadyAt: [UUID: Date]?
     public var kanaStudyMode: Bool?
+    public var reviewScoreTarget: Int?
+    public var reviewScores: [UUID: ReviewScore]?
+    public var japaneseFontName: String?
     public var reviewDepthCount: Int?
     public var reviewDepthStacks: [Stack]?
     public var completedReviewWords: [Word]?
@@ -246,12 +257,62 @@ public struct Archive: Codable, Sendable {
                     updated.id = unambiguousIDs[word.id] ?? word.id
                     return updated
                 }
+                if let scores = reviewScores {
+                    reviewScores = Dictionary(scores.map { (unambiguousIDs[$0.key] ?? $0.key, $0.value) }, uniquingKeysWith: { first, _ in first })
+                }
                 if let ready = reviewReadyAt {
                     reviewReadyAt = Dictionary(ready.map { (unambiguousIDs[$0.key] ?? $0.key, $0.value) }, uniquingKeysWith: { first, _ in first })
                 }
             }
             libraries[index] = updated
         } else { libraries.append(imported) }
+    }
+    public var scoreTarget: Int { [50, 100, 150, 200, 300].contains(reviewScoreTarget ?? 100) ? (reviewScoreTarget ?? 100) : 100 }
+    public mutating func migrateReviewScores() {
+        guard reviewScores == nil else { return }
+        var scores: [UUID: ReviewScore] = [:]
+        for (index, stack) in (reviewDepthStacks ?? []).enumerated() {
+            for word in stack.words {
+                scores[word.id] = ReviewScore(points: min(scoreTarget - 1, index * scoreTarget / configuredReviewDepthCount))
+            }
+        }
+        reviewScores = scores
+    }
+    public mutating func recordReviewRetry(_ id: UUID) {
+        var score = reviewScores?[id] ?? ReviewScore()
+        score.retries = min(4, score.retries + 1)
+        score.streak = 0
+        reviewScores = reviewScores ?? [:]
+        reviewScores?[id] = score
+    }
+    @discardableResult public mutating func scoreReviewWord(_ word: Word, complete: Bool = false, now: Date = Date()) -> Int {
+        guard reviewDepth(of: word.id) != nil else { return 0 }
+        var score = reviewScores?[word.id] ?? ReviewScore()
+        let earned: Int
+        if complete { earned = 0 }
+        else if score.retries > 0 {
+            earned = [20, 10, 5, 2, 0][min(4, score.retries)]
+            score.streak = 0
+        } else {
+            earned = 20 * (1 << min(4, score.streak))
+            score.streak = min(5, score.streak + 1)
+        }
+        score.points = min(300, score.points + earned)
+        score.retries = 0
+        reviewScores = reviewScores ?? [:]
+        reviewScores?[word.id] = score
+        if complete || score.points >= scoreTarget {
+            for i in (reviewDepthStacks ?? []).indices {
+                reviewDepthStacks![i].words.removeAll { $0.id == word.id }
+                reviewDepthStacks![i].queue.removeAll { $0.wordID == word.id }
+            }
+            completedReviewWords = (completedReviewWords ?? []).filter { $0.id != word.id } + [word]
+            reviewReadyAt?.removeValue(forKey: word.id)
+        } else {
+            reviewReadyAt = reviewReadyAt ?? [:]
+            reviewReadyAt?[word.id] = Self.nextReviewBoundary(after: now, minutes: reviewWaitMinutes ?? 1440)
+        }
+        return earned
     }
     public func reviewDepth(of id: UUID) -> Int? {
         reviewDepthStacks?.firstIndex(where: { $0.words.contains(where: { $0.id == id }) }).map { $0 + 1 }

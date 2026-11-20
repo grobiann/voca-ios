@@ -95,6 +95,14 @@ struct PublicDirectoryEntry: Identifiable {
     var haptics = true
     private let location: URL
     private var storageReadable = true
+    var reviewScoreTarget: Int {
+        get { archive.scoreTarget }
+        set { archive.reviewScoreTarget = newValue; save() }
+    }
+    var japaneseFont: JapaneseStudyFont {
+        get { JapaneseStudyFont(rawValue: archive.japaneseFontName ?? "") ?? .gothic }
+        set { archive.japaneseFontName = newValue.rawValue; save() }
+    }
     var reviewDepthCount: Int {
         get { archive.configuredReviewDepthCount }
         set { archive.setReviewDepthCount(newValue); save() }
@@ -216,10 +224,12 @@ struct PublicDirectoryEntry: Identifiable {
         haptics = UserDefaults.standard.object(forKey: "haptics") as? Bool ?? true
         let needsReviewDepths = archive.reviewDepthStacks == nil || (archive.reviewDepthStacks?.count ?? 0) < 20
         archive.prepareReviewDepths()
+        let needsScoreMigration = archive.reviewScores == nil
+        archive.migrateReviewScores()
         let removedExamples = archive.removeLegacyExamples()
         let needsGroupedLibrary = !archive.server.contains { $0.id == GroupedExpressions.libraryID }
         if needsGroupedLibrary { archive.server.append(GroupedExpressions.library) }
-        if removedExamples || needsGroupedLibrary || needsReviewDepths { save() }
+        if needsScoreMigration || removedExamples || needsGroupedLibrary || needsReviewDepths { save() }
 
     }
     func save() {

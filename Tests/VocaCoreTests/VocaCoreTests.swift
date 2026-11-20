@@ -1,6 +1,50 @@
 import XCTest
 @testable import VocaCore
 final class VocaCoreTests: XCTestCase {
+    func testReviewScoreStreakRetriesAndGraduation() throws {
+        let word = Word(japanese: "猫", korean: "고양이", example: "")
+        var archive = Archive()
+        archive.reviewScoreTarget = 150
+        archive.migrateReviewScores()
+        _ = archive.addToReviewDepth(word, at: 1)
+        XCTAssertEqual(archive.scoreReviewWord(word), 20)
+        XCTAssertEqual(archive.scoreReviewWord(word), 40)
+        XCTAssertEqual(archive.scoreReviewWord(word), 80)
+        XCTAssertEqual(archive.reviewScores?[word.id]?.points, 140)
+        XCTAssertNotNil(archive.reviewDepth(of: word.id))
+        archive.recordReviewRetry(word.id)
+        XCTAssertEqual(archive.reviewScores?[word.id]?.streak, 0)
+        archive = try JSONDecoder().decode(Archive.self, from: JSONEncoder().encode(archive))
+        XCTAssertEqual(archive.scoreReviewWord(word), 10)
+        XCTAssertNil(archive.reviewDepth(of: word.id))
+        XCTAssertEqual(archive.completedReviewWords?.map(\.id), [word.id])
+        for retryCount in 0...6 {
+            var a = Archive()
+            a.reviewScoreTarget = 300
+            _ = a.addToReviewDepth(word, at: 1)
+            for _ in 0..<retryCount { a.recordReviewRetry(word.id) }
+            XCTAssertEqual(a.scoreReviewWord(word), [20,10,5,2,0][min(4,retryCount)])
+            XCTAssertEqual(a.reviewScores?[word.id]?.retries, 0)
+            XCTAssertEqual(a.scoreReviewWord(word), retryCount == 0 ? 40 : 20)
+        }
+    }
+    func testScoreMigrationPreservesCompletedAndProgress() {
+        var archive = Archive()
+        let word = Word(japanese: "猫", korean: "고양이", example: "")
+        let done = Word(japanese: "犬", korean: "개", example: "")
+        _ = archive.addToReviewDepth(word, at: 5)
+        archive.completedReviewWords = [done]
+        archive.migrateReviewScores()
+        XCTAssertEqual(archive.reviewScores?[word.id]?.points, 80)
+        archive.migrateReviewScores()
+        XCTAssertEqual(archive.reviewScores?[word.id]?.points, 80)
+        XCTAssertEqual(archive.completedReviewWords, [done])
+        archive.reviewScoreTarget = 50
+        XCTAssertFalse(archive.reviewSession().words.isEmpty)
+        _ = archive.scoreReviewWord(word)
+        XCTAssertEqual(archive.completedReviewWords?.count, 2)
+    }
+
     func testReviewCompletionChoicesAndFailedFinalProtection() {
         let word = Word(japanese: "猫", korean: "고양이", example: "")
         for action in [ReviewCompletion.advance, .onceMore, .complete] {
