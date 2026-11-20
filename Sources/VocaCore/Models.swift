@@ -35,6 +35,9 @@ public struct ReviewScore: Codable, Equatable, Sendable {
     public var points: Int = 0
     public var streak: Int = 0
     public var retries: Int = 0
+    public var nextAward: Int {
+        retries > 0 ? [20, 10, 5, 2, 0][min(4, retries)] : 20 * (1 << min(4, max(0, streak)))
+    }
     public init(points: Int = 0, streak: Int = 0, retries: Int = 0) {
         self.points = points; self.streak = streak; self.retries = retries
     }
@@ -288,14 +291,9 @@ public struct Archive: Codable, Sendable {
     @discardableResult public mutating func scoreReviewWord(_ word: Word, complete: Bool = false, now: Date = Date()) -> Int {
         guard reviewDepth(of: word.id) != nil else { return 0 }
         var score = reviewScores?[word.id] ?? ReviewScore()
-        let earned: Int
-        if complete { earned = 0 }
-        else if score.retries > 0 {
-            earned = [20, 10, 5, 2, 0][min(4, score.retries)]
-            score.streak = 0
-        } else {
-            earned = 20 * (1 << min(4, score.streak))
-            score.streak = min(5, score.streak + 1)
+        let earned = complete ? 0 : score.nextAward
+        if !complete {
+            score.streak = score.retries > 0 ? 0 : min(5, score.streak + 1)
         }
         score.points = min(300, score.points + earned)
         score.retries = 0

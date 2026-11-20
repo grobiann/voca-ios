@@ -299,11 +299,19 @@ struct StudyView: View {
                     .font(.caption).foregroundStyle(.tertiary)
                 if activeReviewDepth != nil {
                     Spacer(minLength: 4)
-                    ProgressView(value: min(1, Double(store.archive.reviewScores?[word.id]?.points ?? 0) / Double(store.reviewScoreTarget)))
-                        .tint(Palette.accent.opacity(0.45))
-                        .frame(width: 72)
-                        .accessibilityLabel("반복 학습 달성률")
-                        .accessibilityValue("\(store.archive.reviewScores?[word.id]?.points ?? 0) / \(store.reviewScoreTarget)점")
+                    let score = store.archive.reviewScores?[word.id] ?? ReviewScore()
+                    let target = Double(store.reviewScoreTarget)
+                    ZStack(alignment: .leading) {
+                        Capsule().fill(Palette.accent.opacity(0.07))
+                        Capsule().fill(Palette.accent.opacity(0.18))
+                            .frame(width: 72 * min(1, Double(score.points + score.nextAward) / target))
+                        Capsule().fill(Palette.accent.opacity(0.45))
+                            .frame(width: 72 * min(1, Double(score.points) / target))
+                    }
+                    .frame(width: 72, height: 4)
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("반복 학습 달성률")
+                    .accessibilityValue("현재 \(score.points)점, 이번 성공 시 추가 \(score.nextAward)점, 목표 \(store.reviewScoreTarget)점")
                 }
             }
         }.padding(28).frame(maxWidth: .infinity, maxHeight: .infinity)
