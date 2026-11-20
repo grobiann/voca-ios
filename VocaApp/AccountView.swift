@@ -388,7 +388,9 @@ enum JapaneseStudyFont: String, CaseIterable, Identifiable {
         }
     }
     func font(size: CGFloat) -> Font {
-        let name = UIFont(name: rawValue, size: size) == nil ? "HiraginoSans-W3" : rawValue
+        // Keep the stored selection identifier compatible with existing settings.
+        let postScriptName = self == .rounded ? "HiraMaruProN-W4" : rawValue
+        let name = UIFont(name: postScriptName, size: size) == nil ? "HiraginoSans-W3" : postScriptName
         return .custom(name, size: size)
     }
 }
