@@ -63,6 +63,11 @@ import XCTest
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting"]
         app.launch()
+        selectTab("설정", in: app)
+        app.buttons["학습 설정"].tap()
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "반복 학습 대기시간")).firstMatch.tap()
+        app.buttons["재학습시"].tap()
+        selectTab("학습", in: app)
         app.buttons["학습 시작"].tap()
         XCTAssertTrue(app.buttons["알았어요"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.buttons["알았어요"].isEnabled)

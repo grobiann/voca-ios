@@ -252,7 +252,7 @@ struct PublicDirectoryEntry: Identifiable {
         save()
     }
     @discardableResult func addToReviewDepth(_ word: Word, at depth: Int) -> Bool {
-        let added = archive.addToReviewDepth(word, at: depth, poolSize: reviewPoolSize)
+        let added = archive.registerLearnedWordForReview(word, at: depth, poolSize: reviewPoolSize)
         if added { save() }
         return added
     }

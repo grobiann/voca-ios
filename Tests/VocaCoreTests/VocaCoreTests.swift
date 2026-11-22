@@ -1,6 +1,26 @@
 import XCTest
 @testable import VocaCore
 final class VocaCoreTests: XCTestCase {
+    func testNewlyLearnedWordWaitsUntilReviewSchedule() throws {
+        let word = Word(japanese: "猫", korean: "고양이", example: "")
+        let now = Calendar.current.startOfDay(for: Date()).addingTimeInterval(12 * 3600 + 60)
+        for interval in [0, 30, 1440, 10080] {
+            var archive = Archive()
+            archive.reviewWaitMinutes = interval
+            XCTAssertTrue(archive.registerLearnedWordForReview(word, now: now))
+            let ready = Archive.nextReviewBoundary(after: now, minutes: interval)
+            XCTAssertEqual(archive.reviewReadyAt?[word.id], ready)
+            XCTAssertEqual(archive.reviewSession(now: now).words.isEmpty, interval != 0)
+            if interval > 0 { XCTAssertTrue(archive.reviewSession(now: ready.addingTimeInterval(-1)).words.isEmpty) }
+            XCTAssertEqual(archive.reviewSession(now: ready).words.map(\.id), [word.id])
+            let restored = try JSONDecoder().decode(Archive.self, from: JSONEncoder().encode(archive))
+            XCTAssertEqual(restored.reviewReadyAt?[word.id], ready)
+            XCTAssertTrue(archive.registerLearnedWordForReview(word, now: ready))
+            XCTAssertEqual(archive.reviewDepthStacks?.flatMap(\.words).count, 1)
+            XCTAssertEqual(archive.reviewReadyAt?[word.id], Archive.nextReviewBoundary(after: ready, minutes: interval))
+        }
+    }
+
     func testReviewScoreStreakRetriesAndGraduation() throws {
         let word = Word(japanese: "猫", korean: "고양이", example: "")
         var archive = Archive()

@@ -348,6 +348,15 @@ public struct Archive: Codable, Sendable {
         }
         reviewDepthStacks = depths
     }
+    @discardableResult public mutating func registerLearnedWordForReview(_ word: Word, at depth: Int = 1,
+                                                                       poolSize: Int = Stack.poolLimit,
+                                                                       now: Date = Date()) -> Bool {
+        let added = addToReviewDepth(word, at: depth, poolSize: poolSize)
+        guard added || reviewDepth(of: word.id) != nil else { return false }
+        reviewReadyAt = reviewReadyAt ?? [:]
+        reviewReadyAt?[word.id] = Self.nextReviewBoundary(after: now, minutes: reviewWaitMinutes ?? 1440)
+        return true
+    }
     @discardableResult public mutating func addToReviewDepth(_ word: Word, at depth: Int, poolSize: Int = Stack.poolLimit) -> Bool {
         guard (1...configuredReviewDepthCount).contains(depth) else { return false }
         prepareReviewDepths()
